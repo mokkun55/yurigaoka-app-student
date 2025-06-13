@@ -14,22 +14,48 @@ export type Database = {
           content: string | null
           created_at: string
           id: number
-          limit_date: string | null
           title: string | null
+          userid: string
         }
         Insert: {
           content?: string | null
           created_at?: string
           id?: number
-          limit_date?: string | null
           title?: string | null
+          userid: string
         }
         Update: {
           content?: string | null
           created_at?: string
           id?: number
-          limit_date?: string | null
           title?: string | null
+          userid?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "todos_userid_fkey"
+            columns: ["userid"]
+            isOneToOne: false
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      users: {
+        Row: {
+          created_at: string
+          id: string
+          username: string | null
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          username?: string | null
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          username?: string | null
         }
         Relationships: []
       }

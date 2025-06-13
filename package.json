@@ -6,7 +6,8 @@
     "dev": "next dev --turbopack --port 3003",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "generate-type": "supabase gen types typescript --project-id xlzaxcwjqrgtqhfnhhik > src/utils/supabase/database.types.ts"
   },
   "dependencies": {
     "@supabase/ssr": "^0.6.1",
