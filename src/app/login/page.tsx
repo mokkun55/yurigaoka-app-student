@@ -1,17 +1,13 @@
 "use client";
 
 import React from "react";
-import { supabase } from "@/utils/supabase/client";
+import { useAuth } from "@/hooks/useAuth";
 
 export default function LoginPage() {
+  const { signInWithGoogle } = useAuth();
   const handleGoogleLogin = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
-    const { error } = await supabase.auth.signInWithOAuth({
-      provider: "google",
-      options: {
-        redirectTo: "http://localhost:3003/api/auth/callback",
-      },
-    });
+    const error = await signInWithGoogle();
     if (error) {
       console.error(error);
     }

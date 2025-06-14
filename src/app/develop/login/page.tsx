@@ -1,21 +1,14 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import { supabase } from "@/utils/supabase/client";
-import { useRouter } from "next/navigation";
+import { useAuth } from "@/hooks/useAuth";
 
 export default function LoginPage() {
-  const router = useRouter();
+  const { signInWithGoogle, signInWithEmail, signInWithStaff } = useAuth();
 
   const handleGoogleLogin = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
-    await supabase.auth.signInWithOAuth({
-      provider: "google",
-      options: {
-        redirectTo: "http://localhost:3003/api/auth/callback",
-      },
-    });
-    router.push("/");
+    await signInWithGoogle();
   };
 
   const handleEmailLogin = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -23,29 +16,11 @@ export default function LoginPage() {
     const formData = new FormData(e.target as HTMLFormElement);
     const email = formData.get("email") as string;
     const password = formData.get("password") as string;
-    const { error } = await supabase.auth.signInWithPassword({
-      email: email,
-      password: password,
-    });
-
-    if (error) {
-      console.error(error);
-    } else {
-      router.push("/");
-    }
+    await signInWithEmail(email, password);
   };
 
   const handleStaffLogin = async () => {
-    const { error } = await supabase.auth.signInWithPassword({
-      email: "staff@ktc.ac.jp",
-      password: "staff",
-    });
-
-    if (error) {
-      console.error(error);
-    } else {
-      router.push("/");
-    }
+    await signInWithStaff();
   };
 
   return (

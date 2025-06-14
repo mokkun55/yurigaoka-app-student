@@ -13,12 +13,15 @@ export function useAuth() {
   };
 
   const signInWithGoogle = async () => {
-    await supabase.auth.signInWithOAuth({
+    const { error } = await supabase.auth.signInWithOAuth({
       provider: "google",
       options: {
         redirectTo: "http://localhost:3003/api/auth/callback",
       },
     });
+    if (error) {
+      return error;
+    }
     router.push("/");
   };
 
