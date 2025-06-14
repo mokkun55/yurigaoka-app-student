@@ -7,7 +7,9 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "generate-type": "supabase gen types typescript --project-id xlzaxcwjqrgtqhfnhhik > src/utils/supabase/database.types.ts"
+    "generate-type": "supabase gen types typescript --project-id xlzaxcwjqrgtqhfnhhik > src/utils/supabase/database.types.ts",
+    "storybook": "storybook dev -p 6006",
+    "build-storybook": "storybook build"
   },
   "dependencies": {
     "@supabase/ssr": "^0.6.1",
@@ -18,12 +20,15 @@
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",
+    "@storybook/nextjs": "^9.0.9",
     "@tailwindcss/postcss": "^4",
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "eslint": "^9",
     "eslint-config-next": "15.3.3",
+    "eslint-plugin-storybook": "^9.0.9",
+    "storybook": "^9.0.9",
     "tailwindcss": "^4",
     "typescript": "^5"
   }
