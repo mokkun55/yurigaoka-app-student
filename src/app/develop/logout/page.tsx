@@ -1,15 +1,17 @@
 "use client";
 
-import { supabase } from "@/utils/supabase/client";
+import { useAuth } from "@/hooks/useAuth";
 import { redirect } from "next/navigation";
 import { useEffect } from "react";
 
 export default function Logout() {
+  const { signOut } = useAuth();
   useEffect(() => {
-    const signOut = async () => {
-      await supabase.auth.signOut();
+    const logout = async () => {
+      await signOut();
       redirect("/login");
     };
-    signOut();
+    logout();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 }
