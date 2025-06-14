@@ -49,6 +49,7 @@ export async function updateSession(request: NextRequest) {
     // TODO 開発用なので後で消す
     !request.nextUrl.pathname.startsWith("/develop")
   ) {
+    console.log("[middleware] 未認証のため /login へリダイレクト");
     const url = request.nextUrl.clone();
     url.pathname = "/login";
     return NextResponse.redirect(url);
@@ -56,9 +57,61 @@ export async function updateSession(request: NextRequest) {
 
   // 認証しているユーザー向け
   if (user && request.nextUrl.pathname.startsWith("/login")) {
+    console.log(
+      "[middleware] 認証済みユーザーが /login にアクセスしたため / へリダイレクト"
+    );
     const url = request.nextUrl.clone();
     url.pathname = "/";
     return NextResponse.redirect(url);
+  }
+
+  // 初回登録が完了していないユーザーはリダイレクトさせる（cookieでキャッシュ）
+  if (
+    user &&
+    !request.nextUrl.pathname.startsWith("/register") &&
+    !request.nextUrl.pathname.startsWith("/api") &&
+    !request.nextUrl.pathname.startsWith("/develop")
+  ) {
+    // まずcookieを参照
+    const isRegisteredCookie = request.cookies.get("is_registered")?.value;
+
+    if (isRegisteredCookie === "false") {
+      console.log(
+        "[middleware] is_registered cookieがfalseのため /register へリダイレクト"
+      );
+      // 未登録ならリダイレクト
+      const url = request.nextUrl.clone();
+      url.pathname = "/register";
+      return NextResponse.redirect(url);
+    }
+
+    if (!isRegisteredCookie) {
+      // cookieがなければDBアクセス
+      // first_nameが空の場合は初回登録とみなす
+      const { data: userData, error } = await supabase
+        .from("users")
+        .select("first_name")
+        .eq("id", user.id)
+        .single();
+      // console.log("userData", userData);
+
+      const isRegistered = !error && userData && userData.first_name;
+      // cookieに保存
+      supabaseResponse.cookies.set(
+        "is_registered",
+        isRegistered ? "true" : "false",
+        { path: "/" }
+      );
+
+      if (!isRegistered) {
+        console.log(
+          "[middleware] DB確認で未登録のため /register へリダイレクト"
+        );
+        const url = request.nextUrl.clone();
+        url.pathname = "/register";
+        return NextResponse.redirect(url);
+      }
+    }
   }
 
   // IMPORTANT: You *must* return the supabaseResponse object as it is.
