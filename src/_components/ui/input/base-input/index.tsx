@@ -2,7 +2,7 @@ import * as React from "react";
 
 import { cn } from "@/lib/utils";
 import { DynamicIcon, IconName } from "lucide-react/dynamic";
-import { Label } from "@/components/ui/label";
+import { Label } from "@/_components/ui/label";
 
 function BaseInput({
   className,

@@ -6,7 +6,7 @@ import {
   SelectContent,
   SelectItem,
 } from "./ui/select";
-import { Label } from "@/components/ui/label";
+import { Label } from "@/_components/ui/label";
 
 type Props = {
   placeholder: string;

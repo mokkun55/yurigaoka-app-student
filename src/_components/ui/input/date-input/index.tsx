@@ -3,14 +3,14 @@
 import * as React from "react";
 import { ChevronDownIcon } from "lucide-react";
 
-import { Button } from "@/components/ui/button";
-import { Calendar } from "@/components/ui/calendar";
-import { Label } from "@/components/ui/label";
+import { Button } from "@/_components/ui/button";
+import { Calendar } from "@/_components/ui/calendar";
+import { Label } from "@/_components/ui/label";
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
-} from "@/components/ui/popover";
+} from "@/_components/ui/popover";
 
 type Props = {
   id?: string;

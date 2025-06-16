@@ -1,6 +1,6 @@
 "use client";
 
-import { Button } from "@/components/ui/button";
+import { Button } from "@/_components/ui/button";
 import { useAuth } from "@/hooks/useAuth";
 
 export default function LoginPage() {
