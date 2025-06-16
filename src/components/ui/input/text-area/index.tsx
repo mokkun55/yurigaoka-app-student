@@ -1,7 +1,7 @@
 import * as React from "react";
 
 import { cn } from "@/lib/utils";
-import { Label } from "@radix-ui/react-label";
+import { Label } from "@/components/ui/label";
 
 function Textarea({
   className,
