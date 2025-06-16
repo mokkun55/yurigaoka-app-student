@@ -2,6 +2,7 @@ import * as React from "react";
 
 import { cn } from "@/lib/utils";
 import { DynamicIcon, IconName } from "lucide-react/dynamic";
+import { Label } from "@/components/ui/label";
 
 function BaseInput({
   className,
@@ -20,14 +21,7 @@ function BaseInput({
 
   return (
     <div className="flex flex-col gap-[4px]">
-      {label && (
-        <label
-          htmlFor={inputId}
-          className="text-sm font-medium text-(--sub-text)"
-        >
-          {label}
-        </label>
-      )}
+      {label && <Label htmlFor={inputId}>{label}</Label>}
       <div className="relative flex items-center">
         <input
           id={inputId}
