@@ -12,6 +12,6 @@ export default meta;
 export const Default: StoryObj<typeof Calendar22> = {
   args: {
     label: "ラベル",
-    placeholder: "日付を選択"
-  }
+    placeholder: "日付を選択",
+  },
 };

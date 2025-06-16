@@ -19,3 +19,22 @@ export const Default: StoryObj<typeof BaseSelect> = {
     ],
   },
 };
+
+export const WithLabel: StoryObj<typeof BaseSelect> = {
+  args: {
+    placeholder: "テーマ",
+
+    options: [{
+      "label": "ライト",
+      "value": "light"
+    }, {
+      "label": "ダーク",
+      "value": "dark"
+    }, {
+      "label": "システム",
+      "value": "system"
+    }],
+
+    label: "ラベル"
+  }
+};

@@ -18,21 +18,21 @@ type Props = {
   placeholder?: string;
 };
 
-export function Calendar22({ id, label, placeholder }: Props) {
+export function Calendar22({ id, label, placeholder, ...props }: Props) {
   const [open, setOpen] = React.useState(false);
   const [date, setDate] = React.useState<Date | undefined>(undefined);
 
   const autoId = React.useId();
   const inputId = id ?? autoId;
   return (
-    <div className="flex flex-col gap-[4px]">
+    <div {...props} className="flex flex-col gap-[4px]">
       {label && <Label htmlFor={inputId}>{label}</Label>}
       <Popover open={open} onOpenChange={setOpen}>
         <PopoverTrigger asChild>
           <Button
             variant="outline"
             id={inputId}
-            className="w-48 justify-between font-normal"
+            className="justify-between font-normal w-full"
           >
             {date ? date.toLocaleDateString() : placeholder}
             <ChevronDownIcon />
