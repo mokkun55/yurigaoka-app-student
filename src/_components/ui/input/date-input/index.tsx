@@ -18,7 +18,7 @@ type Props = {
   placeholder?: string;
 };
 
-export function Calendar22({ id, label, placeholder, ...props }: Props) {
+export function DateInput({ id, label, placeholder, ...props }: Props) {
   const [open, setOpen] = React.useState(false);
   const [date, setDate] = React.useState<Date | undefined>(undefined);
 
