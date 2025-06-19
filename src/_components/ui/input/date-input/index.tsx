@@ -1,11 +1,10 @@
 "use client";
 
-import * as React from "react";
+import { useState } from "react";
 import { ChevronDownIcon } from "lucide-react";
 
 import { Button } from "@/_components/ui/button";
 import { Calendar } from "@/_components/ui/calendar";
-import { Label } from "@/_components/ui/label";
 import {
   Popover,
   PopoverContent,
@@ -13,25 +12,19 @@ import {
 } from "@/_components/ui/popover";
 
 type Props = {
-  id?: string;
-  label?: string;
   placeholder?: string;
 };
 
-export function DateInput({ id, label, placeholder, ...props }: Props) {
-  const [open, setOpen] = React.useState(false);
-  const [date, setDate] = React.useState<Date | undefined>(undefined);
+export function DateInput({ placeholder, ...props }: Props) {
+  const [open, setOpen] = useState(false);
+  const [date, setDate] = useState<Date | undefined>(undefined);
 
-  const autoId = React.useId();
-  const inputId = id ?? autoId;
   return (
     <div {...props} className="flex flex-col gap-[4px]">
-      {label && <Label htmlFor={inputId}>{label}</Label>}
       <Popover open={open} onOpenChange={setOpen}>
         <PopoverTrigger asChild>
           <Button
             variant="outline"
-            id={inputId}
             className="justify-between font-normal w-full"
           >
             {date ? date.toLocaleDateString() : placeholder}

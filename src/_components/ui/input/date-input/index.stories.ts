@@ -1,17 +1,16 @@
 import { Meta, StoryObj } from "@storybook/nextjs";
-import { Calendar22 } from ".";
+import { DateInput } from ".";
 
-const meta: Meta<typeof Calendar22> = {
+const meta: Meta<typeof DateInput> = {
   title: "Input/DateInput",
-  component: Calendar22,
+  component: DateInput,
   tags: ["autodocs"],
 };
 
 export default meta;
 
-export const Default: StoryObj<typeof Calendar22> = {
+export const Default: StoryObj<typeof DateInput> = {
   args: {
-    label: "ラベル",
     placeholder: "日付を選択",
   },
 };
