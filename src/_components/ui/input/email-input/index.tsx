@@ -7,18 +7,11 @@
 import { BaseInput } from "../base-input";
 
 type Props = {
-  label: string;
   placeholder: string;
 } & React.InputHTMLAttributes<HTMLInputElement>;
 
-export default function EmailInput({ label, placeholder, ...props }: Props) {
+export default function EmailInput({ placeholder, ...props }: Props) {
   return (
-    <BaseInput
-      type="email"
-      icon="mail"
-      placeholder={placeholder}
-      label={label}
-      {...props}
-    />
+    <BaseInput type="email" icon="mail" placeholder={placeholder} {...props} />
   );
 }

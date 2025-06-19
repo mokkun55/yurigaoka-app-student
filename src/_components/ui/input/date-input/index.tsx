@@ -1,48 +1,16 @@
-"use client";
+import { BaseInput } from "../base-input";
 
-import { useState } from "react";
-import { ChevronDownIcon } from "lucide-react";
-
-import { Button } from "@/_components/ui/button";
-import { Calendar } from "@/_components/ui/calendar";
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/_components/ui/popover";
-
-type Props = {
-  placeholder?: string;
-};
-
-export function DateInput({ placeholder, ...props }: Props) {
-  const [open, setOpen] = useState(false);
-  const [date, setDate] = useState<Date | undefined>(undefined);
-
+// TODO placeholder問題どうにかする
+export function DateInput({ ...props }: React.ComponentProps<"input">) {
   return (
-    <div {...props} className="flex flex-col gap-[4px]">
-      <Popover open={open} onOpenChange={setOpen}>
-        <PopoverTrigger asChild>
-          <Button
-            variant="outline"
-            className="justify-between font-normal w-full"
-          >
-            {date ? date.toLocaleDateString() : placeholder}
-            <ChevronDownIcon />
-          </Button>
-        </PopoverTrigger>
-        <PopoverContent className="w-auto overflow-hidden p-0" align="start">
-          <Calendar
-            mode="single"
-            selected={date}
-            captionLayout="dropdown"
-            onSelect={(date) => {
-              setDate(date);
-              setOpen(false);
-            }}
-          />
-        </PopoverContent>
-      </Popover>
+    <div className="flex flex-col" {...props}>
+      <BaseInput
+        icon="calendar"
+        type="date"
+        id="date-picker"
+        defaultValue={new Date().toISOString().split("T")[0]}
+        className={`bg-background appearance-none [&::-webkit-calendar-picker-indicator]:hidden [&::-webkit-calendar-picker-indicator]:appearance-none`}
+      />
     </div>
   );
 }

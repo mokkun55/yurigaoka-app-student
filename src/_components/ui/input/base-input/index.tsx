@@ -6,7 +6,6 @@ import { DynamicIcon, IconName } from "lucide-react/dynamic";
 function BaseInput({
   className,
   type,
-
   icon,
   ...props
 }: React.ComponentProps<"input"> & {
