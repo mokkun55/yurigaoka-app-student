@@ -20,7 +20,11 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="ja">
-      <body className={`${mPlus1p.variable} antialiased`}>{children}</body>
+      <body className={`${mPlus1p.variable} antialiased flex justify-center`}>
+        <div className="w-full h-full max-w-[500px] max-h-[100vh] relative">
+          {children}
+        </div>
+      </body>
     </html>
   );
 }
