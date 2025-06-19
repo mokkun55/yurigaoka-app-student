@@ -6,7 +6,7 @@ import { Button } from "@/_components/ui/button";
 
 export default function StudentAuthPage() {
   return (
-    <div className="flex flex-col gap-4 w-[300px] content-center">
+    <div className="flex flex-col gap-4 w-full content-center justify-center">
       <div className="flex flex-col gap-2 text-center">
         <h1 className="text-2xl font-bold">寮生認証が必要です</h1>
         <p className="text-(--sub-text)">
@@ -16,7 +16,7 @@ export default function StudentAuthPage() {
         </p>
       </div>
 
-      <div className="flex flex-col gap-4">
+      <div className="flex flex-col gap-4 mx-12">
         <InputLabel label="招待コード">
           <BaseInput placeholder="例: JJXRUJN6" />
         </InputLabel>
