@@ -14,10 +14,3 @@ export const Default: StoryObj<typeof Textarea> = {
     placeholder: "テキストを入力してください",
   },
 };
-
-export const WithLabel: StoryObj<typeof Textarea> = {
-  args: {
-    placeholder: "テキストを入力してください",
-    label: "テキストエリア",
-  },
-};

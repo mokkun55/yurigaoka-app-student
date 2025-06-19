@@ -6,7 +6,6 @@ import {
   SelectContent,
   SelectItem,
 } from "./ui/select";
-import { Label } from "@/_components/ui/label";
 
 type Props = {
   placeholder: string;
@@ -18,21 +17,11 @@ type Props = {
   id?: string;
 };
 
-export const BaseSelect = ({
-  placeholder,
-  options,
-  label,
-  id,
-  ...props
-}: Props) => {
-  const autoId = React.useId();
-  const inputId = id ?? autoId;
-
+export const BaseSelect = ({ placeholder, options, ...props }: Props) => {
   return (
     <div {...props} className="flex flex-col gap-[4px]">
-      {label && <Label htmlFor={inputId}>{label}</Label>}
       <Select>
-        <SelectTrigger className="w-full" id={inputId}>
+        <SelectTrigger className="w-full">
           <SelectValue placeholder={placeholder} />
         </SelectTrigger>
         <SelectContent>

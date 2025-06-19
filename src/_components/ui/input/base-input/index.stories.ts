@@ -16,14 +16,6 @@ export const Default: Story = {
   },
 };
 
-export const WithLabel: Story = {
-  args: {
-    placeholder: "メールアドレスを入力してください",
-    id: "email",
-    label: "メールアドレス",
-  },
-};
-
 export const WithIcon: Story = {
   args: {
     placeholder: "テキストを入力してください",

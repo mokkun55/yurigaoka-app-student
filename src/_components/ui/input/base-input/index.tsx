@@ -2,29 +2,20 @@ import * as React from "react";
 
 import { cn } from "@/lib/utils";
 import { DynamicIcon, IconName } from "lucide-react/dynamic";
-import { Label } from "@/_components/ui/label";
 
 function BaseInput({
   className,
   type,
-  id,
-  label,
+
   icon,
   ...props
 }: React.ComponentProps<"input"> & {
-  label?: string;
-  id?: string;
   icon?: IconName;
 }) {
-  const autoId = React.useId();
-  const inputId = id ?? autoId;
-
   return (
     <div className="flex flex-col gap-[4px]">
-      {label && <Label htmlFor={inputId}>{label}</Label>}
       <div className="relative flex items-center">
         <input
-          id={inputId}
           type={type}
           data-slot="input"
           className={cn(
