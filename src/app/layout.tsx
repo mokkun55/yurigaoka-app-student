@@ -21,7 +21,7 @@ export default function RootLayout({
   return (
     <html lang="ja">
       <body className={`${mPlus1p.variable} antialiased flex justify-center`}>
-        <div className="w-full h-full max-w-[500px] max-h-[100vh] relative">
+        <div className="w-[100svw] h-[100svh] max-w-[500px] max-h-[100vh] relative border-r border-l border-(--border-gray)">
           {children}
         </div>
       </body>
