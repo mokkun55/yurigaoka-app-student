@@ -112,7 +112,7 @@ export default function RegisterPage() {
         </div>
 
         <Button
-          className="w-full mt-4"
+          className="w-full mt-6"
           onClick={() => {
             // TODO 実装する
             alert("登録する");
