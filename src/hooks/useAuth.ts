@@ -25,6 +25,19 @@ export function useAuth() {
     router.push("/");
   };
 
+  const getUser = async () => {
+    const {
+      data: { user },
+      error,
+    } = await supabase.auth.getUser();
+    if (error) {
+      // エラーが発生した場合はログインしていないとみなす
+      // console.error(error);
+      return null;
+    }
+    return user;
+  };
+
   // TODO 後で消す
   const signInWithEmail = async (email: string, password: string) => {
     await supabase.auth.signInWithPassword({ email, password });
@@ -40,5 +53,11 @@ export function useAuth() {
     router.push("/");
   };
 
-  return { signOut, signInWithGoogle, signInWithEmail, signInWithStaff };
+  return {
+    signOut,
+    signInWithGoogle,
+    signInWithEmail,
+    signInWithStaff,
+    getUser,
+  };
 }
