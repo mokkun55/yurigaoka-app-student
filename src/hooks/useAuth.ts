@@ -1,3 +1,4 @@
+import Cookies from "js-cookie";
 import { useRouter } from "next/navigation";
 import { supabase } from "@/utils/supabase/client";
 
@@ -7,8 +8,7 @@ export function useAuth() {
   const signOut = async () => {
     await supabase.auth.signOut();
     // cookieを削除
-    document.cookie =
-      "is_registered=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+    Cookies.remove("is_registered");
     router.push("/login");
   };
 
