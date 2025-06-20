@@ -5,33 +5,56 @@ import {
   SelectValue,
   SelectContent,
   SelectItem,
+  SelectGroup,
 } from "./ui/select";
+import { cn } from "@/lib/utils";
 
-type Props = {
-  placeholder: string;
-  options: {
-    label: string;
-    value: string;
-  }[];
-  label?: string;
-  id?: string;
+type Option = {
+  label: string;
+  value: string;
+  fullWidth?: boolean;
 };
 
-export const BaseSelect = ({ placeholder, options, ...props }: Props) => {
+export type BaseSelectProps = {
+  options: Option[];
+  placeholder?: string;
+  onChange?: (value: string) => void;
+  value?: string;
+  name?: string;
+  onBlur?: () => void;
+  disabled?: boolean;
+  className?: string;
+  fullWidth?: boolean;
+};
+
+export const BaseSelect = React.forwardRef<
+  React.ElementRef<typeof SelectTrigger>,
+  BaseSelectProps
+>(({ options, placeholder, disabled, className, fullWidth, ...props }, ref) => {
   return (
-    <div {...props} className="flex flex-col gap-[4px]">
-      <Select>
-        <SelectTrigger className="w-full">
-          <SelectValue placeholder={placeholder} />
-        </SelectTrigger>
-        <SelectContent>
+    <Select
+      onValueChange={props.onChange}
+      value={props.value}
+      name={props.name}
+      disabled={disabled}
+    >
+      <SelectTrigger
+        ref={ref}
+        className={cn({ "w-full": fullWidth }, className)}
+      >
+        <SelectValue placeholder={placeholder} />
+      </SelectTrigger>
+      <SelectContent>
+        <SelectGroup>
           {options.map((option) => (
             <SelectItem key={option.value} value={option.value}>
               {option.label}
             </SelectItem>
           ))}
-        </SelectContent>
-      </Select>
-    </div>
+        </SelectGroup>
+      </SelectContent>
+    </Select>
   );
-};
+});
+
+BaseSelect.displayName = "BaseSelect";
