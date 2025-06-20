@@ -27,6 +27,9 @@ const meta: Meta<typeof Button> = {
     asChild: {
       control: "boolean",
     },
+    fullWidth: {
+      control: "boolean",
+    },
   },
 };
 
@@ -37,6 +40,7 @@ export const Default: Story = {
   args: {
     children: "ボタン",
     variant: "default",
-    size: "default"
+    size: "default",
+    fullWidth: false,
   },
 };
