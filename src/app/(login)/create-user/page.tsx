@@ -200,52 +200,48 @@ export default function RegisterPage() {
               </InputLabel>
               <InputLabel label="学年・クラス">
                 <div className="flex w-full items-start gap-2">
-                  <div className="flex-1">
-                    <Controller
-                      name="schoolYear"
-                      control={userFormControl}
-                      render={({ field }) => (
-                        <BaseSelect
-                          {...field}
-                          placeholder="学年"
-                          options={[
-                            { label: "1年", value: "1" },
-                            { label: "2年", value: "2" },
-                            { label: "3年", value: "3" },
-                            { label: "指導寮生", value: "leader" },
-                          ]}
-                          fullWidth
-                        />
-                      )}
-                    />
-                    {userFormErrors.schoolYear && (
-                      <p className="text-red-500 text-sm mt-1">
-                        {userFormErrors.schoolYear.message}
-                      </p>
+                  <Controller
+                    name="schoolYear"
+                    control={userFormControl}
+                    render={({ field }) => (
+                      <BaseSelect
+                        {...field}
+                        placeholder="学年"
+                        options={[
+                          { label: "1年", value: "1" },
+                          { label: "2年", value: "2" },
+                          { label: "3年", value: "3" },
+                          { label: "指導寮生", value: "leader" },
+                        ]}
+                        className="w-full"
+                      />
                     )}
-                  </div>
-                  <div className="flex-1">
-                    <Controller
-                      name="className"
-                      control={userFormControl}
-                      render={({ field }) => (
-                        <BaseSelect
-                          {...field}
-                          placeholder="クラス"
-                          options={getClassOptions(watchedSchoolYear)}
-                          disabled={
-                            !watchedSchoolYear || watchedSchoolYear === "leader"
-                          }
-                          fullWidth
-                        />
-                      )}
-                    />
-                    {userFormErrors.className && (
-                      <p className="text-red-500 text-sm mt-1">
-                        {userFormErrors.className.message}
-                      </p>
+                  />
+                  {userFormErrors.schoolYear && (
+                    <p className="text-red-500 text-sm mt-1">
+                      {userFormErrors.schoolYear.message}
+                    </p>
+                  )}
+                  <Controller
+                    name="className"
+                    control={userFormControl}
+                    render={({ field }) => (
+                      <BaseSelect
+                        {...field}
+                        placeholder="クラス"
+                        options={getClassOptions(watchedSchoolYear)}
+                        disabled={
+                          !watchedSchoolYear || watchedSchoolYear === "leader"
+                        }
+                        className="w-full"
+                      />
                     )}
-                  </div>
+                  />
+                  {userFormErrors.className && (
+                    <p className="text-red-500 text-sm mt-1">
+                      {userFormErrors.className.message}
+                    </p>
+                  )}
                 </div>
               </InputLabel>
               <InputLabel label="部屋番号">
