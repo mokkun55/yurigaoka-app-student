@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { M_PLUS_1p } from "next/font/google";
 import "./globals.css";
+import { Toaster } from "react-hot-toast";
 
 const mPlus1p = M_PLUS_1p({
   weight: ["100", "300", "400", "500", "700", "800", "900"],
@@ -22,6 +23,7 @@ export default function RootLayout({
     <html lang="ja">
       <body className={`${mPlus1p.variable} antialiased flex justify-center`}>
         <div className="w-[100svw] h-[100svh] max-w-[500px] max-h-[100vh] relative border-r border-l border-(--border-gray)">
+          <Toaster />
           {children}
         </div>
       </body>

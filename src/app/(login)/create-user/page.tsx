@@ -9,6 +9,7 @@ import { BaseInput } from "@/_components/ui/input/base-input";
 import { BaseSelect } from "@/_components/ui/input/base-select";
 import SectionTitle from "@/_components/ui/section-title";
 import { Button } from "@/_components/ui/button";
+import toast from "react-hot-toast";
 
 // Zodスキーマ定義
 const invitationCodeSchema = z.object({
@@ -121,14 +122,14 @@ export default function RegisterPage() {
   ) => {
     console.log("Invitation code submitted:", data);
     // TODO: 招待コードの認証処理を実装
-    alert("認証します");
+    toast.success("認証に成功しました");
     setIsAuth(true); // 認証成功と仮定
   };
 
   const onUserFormSubmit: SubmitHandler<UserFormValues> = (data) => {
     console.log("User form submitted:", data);
     // TODO: ユーザー情報の登録処理を実装
-    alert("登録します");
+    toast.success("ユーザー情報を登録しました");
   };
 
   if (!isAuth) {
