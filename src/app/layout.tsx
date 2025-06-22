@@ -1,13 +1,13 @@
 import type { Metadata } from "next";
-import { M_PLUS_1p } from "next/font/google";
+// import { M_PLUS_1p } from "next/font/google";
 import "./globals.css";
 import { Toaster } from "react-hot-toast";
 
-const mPlus1p = M_PLUS_1p({
-  weight: ["100", "300", "400", "500", "700", "800", "900"],
-  subsets: ["latin"],
-  variable: "--font-m-plus-1p",
-});
+// const mPlus1p = M_PLUS_1p({
+//   weight: ["100", "300", "400", "500", "700", "800", "900"],
+//   subsets: ["latin"],
+//   variable: "--font-m-plus-1p",
+// });
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -21,7 +21,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="ja">
-      <body className={`${mPlus1p.variable} antialiased flex justify-center`}>
+      <body className={`antialiased flex justify-center`}>
         <div className="w-[100svw] h-[100svh] max-w-[500px] max-h-[100vh] relative border-r border-l border-(--border-gray)">
           <Toaster />
           {children}
