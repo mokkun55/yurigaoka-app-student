@@ -18,6 +18,7 @@ type Option = {
 export type BaseSelectProps = {
   options: Option[];
   placeholder?: string;
+  // eslint-disable-next-line no-unused-vars
   onChange?: (value: string) => void;
   value?: string;
   name?: string;
