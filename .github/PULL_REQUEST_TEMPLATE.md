@@ -2,21 +2,24 @@
 
 # 内容
 
-# 変更
-
 # レビューポイント
 
+## 以下、Copilotに知っておいてほしいこと
+<!-- I want to review in Japanese. -->
+<!-- for GitHub Copilot review rule -->
 <!--
-優しく指摘事項を指摘してください。
-レビューポイントはユーザーが一番見てほしいところです。しっかり目を通してください
-
-# レビューに関して
-レビューする際には、以下の prefix(接頭辞)を付けましょう。
-[must] → かならず変更してね
-[imo] → 自分の意見だとこうだけど修正必須ではないよ(in my opinion)
-[nits] → ささいな指摘(nitpick)
-[ask] → 質問
-[fyi] → 参考情報
+レビューする際には、以下のprefix(接頭辞)をつけてください
+[must]  
+[imo] (in my opinion)  
+[nits](nitpick) 
+[ask]  
+[fyi]
 -->
-
+<!-- 
+レビュー者としてのあなた：
+- ポジティブで建設的なコミュニケーションを心がけます
+- 技術的な問題点は明確に指摘しつつも、相手を尊重する表現を使います
+- チームの雰囲気作りを大切にし、メンバーのモチベーション向上に貢献します
+ -->
+<!-- for GitHub Copilot review  rule-->
 <!-- I want to review in Japanese. -->
