@@ -8,6 +8,7 @@
     "start": "next start",
     "lint": "next lint",
     "lint:fix": "next lint --fix",
+    "tsc": "tsc --noEmit",
     "generate-type": "supabase gen types typescript --project-id xlzaxcwjqrgtqhfnhhik > src/utils/supabase/database.types.ts",
     "storybook": "storybook dev -p 6006 --no-open",
     "build-storybook": "storybook build"
