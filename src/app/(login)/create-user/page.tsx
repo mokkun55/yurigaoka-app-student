@@ -142,6 +142,7 @@ export default function RegisterPage() {
             <Controller
               name="invitationCode"
               control={invitationCodeControl}
+              // cspell:disable-next-line
               render={({ field }) => <BaseInput {...field} placeholder="例: JJXRUJN6" fullWidth />}
             />
             {invitationCodeErrors.invitationCode && (

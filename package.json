@@ -11,6 +11,7 @@
     "format": "prettier --check .",
     "format:fix": "prettier --write .",
     "tsc": "tsc --noEmit",
+    "spellcheck": "cspell \"**/*.{ts,tsx,md,json}\"",
     "generate-type": "supabase gen types typescript --project-id xlzaxcwjqrgtqhfnhhik > src/utils/supabase/database.types.ts",
     "storybook": "storybook dev -p 6006 --no-open",
     "build-storybook": "storybook build"
@@ -47,6 +48,7 @@
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
+    "cspell": "^9.1.1",
     "eslint": "^9",
     "eslint-config-next": "15.3.3",
     "eslint-config-prettier": "^10.1.5",

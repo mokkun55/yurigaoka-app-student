@@ -3,17 +3,17 @@ pre-commit:
   commands:
     eslint:
       glob: '*.{js,ts,cjs,mjs,d.cts,d.mts,jsx,tsx,json,jsonc}'
-      run: pnpm run eslint --fix {staged_files}
+      run: pnpm run lint
       stage_fixed: true
 
     prettier:
       glob: '*.{js,ts,cjs,mjs,d.cts,d.mts,jsx,tsx,json,jsonc}'
-      run: pnpm run prettier --write {staged_files}
+      run: pnpm run format:fix
       stage_fixed: true
 
-    # spell-check:
-    #   glob: '*.{js,ts,cjs,mjs,d.cts,d.mts,jsx,tsx,json,jsonc}'
-    #   run: pnpm run check-spell
+    spell-check:
+      glob: '*.{js,ts,cjs,mjs,d.cts,d.mts,jsx,tsx,json,jsonc}'
+      run: pnpm run spellcheck
 
     tsc:
       glob: '*.{js,ts,tsx}'
