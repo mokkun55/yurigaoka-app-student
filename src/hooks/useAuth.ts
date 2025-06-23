@@ -1,57 +1,57 @@
-import Cookies from "js-cookie";
-import { useRouter } from "next/navigation";
-import { supabase } from "@/utils/supabase/client";
+import Cookies from 'js-cookie'
+import { useRouter } from 'next/navigation'
+import { supabase } from '@/utils/supabase/client'
 
 export function useAuth() {
-  const router = useRouter();
+  const router = useRouter()
 
   const signOut = async () => {
-    await supabase.auth.signOut();
+    await supabase.auth.signOut()
     // cookieを削除
-    Cookies.remove("is_registered");
-    router.push("/login");
-  };
+    Cookies.remove('is_registered')
+    router.push('/login')
+  }
 
   const signInWithGoogle = async () => {
     const { error } = await supabase.auth.signInWithOAuth({
-      provider: "google",
+      provider: 'google',
       options: {
         redirectTo: `${location.origin}/api/auth/callback`,
       },
-    });
+    })
     if (error) {
-      return error;
+      return error
     }
-    router.push("/");
-  };
+    router.push('/')
+  }
 
   const getUser = async () => {
     const {
       data: { user },
       error,
-    } = await supabase.auth.getUser();
+    } = await supabase.auth.getUser()
     if (error) {
       // エラーが発生した場合はログインしていないとみなす
       // console.error(error);
-      return null;
+      return null
     }
-    return user;
-  };
+    return user
+  }
 
   // TODO 後で消す
   const signInWithEmail = async (email: string, password: string) => {
-    await supabase.auth.signInWithPassword({ email, password });
-    router.push("/");
-  };
+    await supabase.auth.signInWithPassword({ email, password })
+    router.push('/')
+  }
 
   // TODO 後で消す
   const signInWithStaff = async () => {
     await supabase.auth.signInWithPassword({
-      email: "staff@ktc.ac.jp",
-      password: "staff",
-    });
-    router.push("/");
-  };
+      email: 'staff@ktc.ac.jp',
+      password: 'staff',
+    })
+    router.push('/')
+  }
 
   return {
     signOut,
@@ -59,5 +59,5 @@ export function useAuth() {
     signInWithEmail,
     signInWithStaff,
     getUser,
-  };
+  }
 }

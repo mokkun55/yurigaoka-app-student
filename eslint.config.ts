@@ -1,40 +1,33 @@
 // For more info, see https://github.com/storybookjs/eslint-plugin-storybook#configuration-flat-config-format
-import storybook from "eslint-plugin-storybook";
-import { dirname } from "path";
-import { fileURLToPath } from "url";
-import { FlatCompat } from "@eslint/eslintrc";
-import globals from "globals";
-import js from "@eslint/js";
-import prettierConfig from "eslint-config-prettier";
-import importPlugin from "eslint-plugin-import";
-import reactHooksPlugin from "eslint-plugin-react-hooks";
-import { Linter } from "eslint";
+import storybook from 'eslint-plugin-storybook'
+import { dirname } from 'path'
+import { fileURLToPath } from 'url'
+import { FlatCompat } from '@eslint/eslintrc'
+import globals from 'globals'
+import js from '@eslint/js'
+import prettierConfig from 'eslint-config-prettier'
+import importPlugin from 'eslint-plugin-import'
+import reactHooksPlugin from 'eslint-plugin-react-hooks'
+import { Linter } from 'eslint'
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
+const __filename = fileURLToPath(import.meta.url)
+const __dirname = dirname(__filename)
 
 const compat = new FlatCompat({
   baseDirectory: __dirname,
-});
+})
 
 const eslintConfig: Linter.Config[] = [
   {
-    ignores: [
-      ".next/",
-      "node_modules",
-      "dist",
-      "build",
-      "public/",
-      "src/utils/supabase/database.types.ts",
-    ],
+    ignores: ['.next/', 'node_modules', 'dist', 'build', 'public/', 'src/utils/supabase/database.types.ts'],
   },
   js.configs.recommended,
-  ...compat.extends("next/core-web-vitals", "next/typescript"),
-  ...storybook.configs["flat/recommended"],
+  ...compat.extends('next/core-web-vitals', 'next/typescript'),
+  ...storybook.configs['flat/recommended'],
   {
     plugins: {
       import: importPlugin,
-      "react-hooks": reactHooksPlugin,
+      'react-hooks': reactHooksPlugin,
     },
     languageOptions: {
       globals: {
@@ -44,23 +37,23 @@ const eslintConfig: Linter.Config[] = [
       },
     },
     rules: {
-      "no-unused-vars": ["error", { args: "all", argsIgnorePattern: "^_" }],
+      'no-unused-vars': ['error', { args: 'all', argsIgnorePattern: '^_' }],
       // "import/no-unused-modules": ["error", { unusedExports: true }],
-      "react-hooks/rules-of-hooks": "error",
-      "react-hooks/exhaustive-deps": "warn",
+      'react-hooks/rules-of-hooks': 'error',
+      'react-hooks/exhaustive-deps': 'warn',
     },
     settings: {
-      "import/resolver": {
+      'import/resolver': {
         node: {
-          extensions: [".js", ".jsx", ".ts", ".tsx"],
+          extensions: ['.js', '.jsx', '.ts', '.tsx'],
         },
       },
       react: {
-        version: "detect",
+        version: 'detect',
       },
     },
   },
   prettierConfig,
-];
+]
 
-export default eslintConfig;
+export default eslintConfig

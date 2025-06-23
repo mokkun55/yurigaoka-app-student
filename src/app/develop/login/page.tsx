@@ -1,27 +1,27 @@
-"use client";
+'use client'
 
-import { Button } from "@/_components/ui/button";
-import { useAuth } from "@/hooks/useAuth";
+import { Button } from '@/_components/ui/button'
+import { useAuth } from '@/hooks/useAuth'
 
 export default function LoginPage() {
-  const { signInWithGoogle, signInWithEmail, signInWithStaff } = useAuth();
+  const { signInWithGoogle, signInWithEmail, signInWithStaff } = useAuth()
 
   const handleGoogleLogin = async (e: React.MouseEvent<HTMLButtonElement>) => {
-    e.preventDefault();
-    await signInWithGoogle();
-  };
+    e.preventDefault()
+    await signInWithGoogle()
+  }
 
   const handleEmailLogin = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    const formData = new FormData(e.target as HTMLFormElement);
-    const email = formData.get("email") as string;
-    const password = formData.get("password") as string;
-    await signInWithEmail(email, password);
-  };
+    e.preventDefault()
+    const formData = new FormData(e.target as HTMLFormElement)
+    const email = formData.get('email') as string
+    const password = formData.get('password') as string
+    await signInWithEmail(email, password)
+  }
 
   const handleStaffLogin = async () => {
-    await signInWithStaff();
-  };
+    await signInWithStaff()
+  }
 
   return (
     <div className="flex flex-col gap-2 items-center justify-center h-screen">
@@ -34,5 +34,5 @@ export default function LoginPage() {
         <Button type="submit">メールアドレスでログイン</Button>
       </form>
     </div>
-  );
+  )
 }

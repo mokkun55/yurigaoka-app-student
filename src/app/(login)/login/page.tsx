@@ -1,18 +1,18 @@
-"use client";
+'use client'
 
-import React from "react";
-import { useAuth } from "@/hooks/useAuth";
-import { Button } from "@/_components/ui/button";
+import React from 'react'
+import { useAuth } from '@/hooks/useAuth'
+import { Button } from '@/_components/ui/button'
 
 export default function LoginPage() {
-  const { signInWithGoogle } = useAuth();
+  const { signInWithGoogle } = useAuth()
   const handleGoogleLogin = async (e: React.MouseEvent<HTMLButtonElement>) => {
-    e.preventDefault();
-    const error = await signInWithGoogle();
+    e.preventDefault()
+    const error = await signInWithGoogle()
     if (error) {
-      console.error(error);
+      console.error(error)
     }
-  };
+  }
 
   return (
     <div className="flex flex-col gap-4 w-[300px] justify-center">
@@ -23,10 +23,8 @@ export default function LoginPage() {
 
       <div className="flex flex-col gap-2">
         <Button onClick={handleGoogleLogin}>Googleでログイン</Button>
-        <p className="text-center">
-          学校から配布されたGoogleアカウント(ktc.ac.jp)でログインしてください
-        </p>
+        <p className="text-center">学校から配布されたGoogleアカウント(ktc.ac.jp)でログインしてください</p>
       </div>
     </div>
-  );
+  )
 }

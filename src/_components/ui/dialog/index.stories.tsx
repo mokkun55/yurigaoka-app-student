@@ -1,4 +1,4 @@
-import { Button } from "@/_components/ui/button";
+import { Button } from '@/_components/ui/button'
 
 import {
   Dialog,
@@ -9,9 +9,9 @@ import {
   DialogTitle,
   DialogTrigger,
   DialogClose,
-} from "@/_components/ui/dialog";
+} from '@/_components/ui/dialog'
 
-import type { Meta, StoryObj } from "@storybook/nextjs";
+import type { Meta, StoryObj } from '@storybook/nextjs'
 
 const DialogMock = () => {
   return (
@@ -23,10 +23,9 @@ const DialogMock = () => {
         <DialogHeader>
           <DialogTitle>ダイアログタイトル</DialogTitle>
           <DialogDescription>
-            ダイアログの説明文 Lorem ipsum dolor sit amet consectetur
-            adipisicing elit. Quod eveniet, magnam cumque saepe unde, veritatis,
-            qui reprehenderit quaerat atque laborum repellat? Laboriosam
-            necessitatibus suscipit odit molestiae minus amet cum.
+            ダイアログの説明文 Lorem ipsum dolor sit amet consectetur adipisicing elit. Quod eveniet, magnam cumque
+            saepe unde, veritatis, qui reprehenderit quaerat atque laborum repellat? Laboriosam necessitatibus suscipit
+            odit molestiae minus amet cum.
           </DialogDescription>
         </DialogHeader>
         <DialogFooter className="flex flex-col gap-2">
@@ -39,20 +38,20 @@ const DialogMock = () => {
         </DialogFooter>
       </DialogContent>
     </Dialog>
-  );
-};
+  )
+}
 
 const meta = {
-  title: "Dialog",
+  title: 'Dialog',
   component: DialogMock,
-  tags: ["autodocs"],
-} satisfies Meta<typeof DialogMock>;
+  tags: ['autodocs'],
+} satisfies Meta<typeof DialogMock>
 
-export default meta;
-type Story = StoryObj<typeof meta>;
+export default meta
+type Story = StoryObj<typeof meta>
 
 export const Default: Story = {
   args: {
     // propsをここに追加
   },
-};
+}

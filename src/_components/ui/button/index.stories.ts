@@ -1,46 +1,39 @@
-import type { Meta, StoryObj } from "@storybook/nextjs";
-import { Button } from ".";
+import type { Meta, StoryObj } from '@storybook/nextjs'
+import { Button } from '.'
 
 const meta: Meta<typeof Button> = {
-  title: "Button",
+  title: 'Button',
   component: Button,
-  tags: ["autodocs"],
+  tags: ['autodocs'],
   args: {
-    children: "ボタン",
+    children: 'ボタン',
   },
   argTypes: {
     variant: {
-      control: "select",
-      options: [
-        "default",
-        "destructive",
-        "outline",
-        "secondary",
-        "ghost",
-        "link",
-      ],
+      control: 'select',
+      options: ['default', 'destructive', 'outline', 'secondary', 'ghost', 'link'],
     },
     size: {
-      control: "select",
-      options: ["default", "sm", "lg", "icon"],
+      control: 'select',
+      options: ['default', 'sm', 'lg', 'icon'],
     },
     asChild: {
-      control: "boolean",
+      control: 'boolean',
     },
     fullWidth: {
-      control: "boolean",
+      control: 'boolean',
     },
   },
-};
+}
 
-export default meta;
-type Story = StoryObj<typeof Button>;
+export default meta
+type Story = StoryObj<typeof Button>
 
 export const Default: Story = {
   args: {
-    children: "ボタン",
-    variant: "default",
-    size: "default",
+    children: 'ボタン',
+    variant: 'default',
+    size: 'default',
     fullWidth: false,
   },
-};
+}

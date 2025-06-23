@@ -1,16 +1,16 @@
-import { Meta, StoryObj } from "@storybook/nextjs";
-import { Textarea } from ".";
+import { Meta, StoryObj } from '@storybook/nextjs'
+import { Textarea } from '.'
 
 const meta: Meta<typeof Textarea> = {
-  title: "Input/Textarea",
+  title: 'Input/Textarea',
   component: Textarea,
-  tags: ["autodocs"],
-};
+  tags: ['autodocs'],
+}
 
-export default meta;
+export default meta
 
 export const Default: StoryObj<typeof Textarea> = {
   args: {
-    placeholder: "テキストを入力してください",
+    placeholder: 'テキストを入力してください',
   },
-};
+}
