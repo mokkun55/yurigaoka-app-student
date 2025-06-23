@@ -4,14 +4,12 @@
   storybookには追加しない
 */
 
-import { BaseInput } from "../base-input";
+import { BaseInput } from '../base-input'
 
 type Props = {
-  placeholder: string;
-} & React.InputHTMLAttributes<HTMLInputElement>;
+  placeholder: string
+} & React.InputHTMLAttributes<HTMLInputElement>
 
 export default function EmailInput({ placeholder, ...props }: Props) {
-  return (
-    <BaseInput type="email" icon="mail" placeholder={placeholder} {...props} />
-  );
+  return <BaseInput type="email" icon="mail" placeholder={placeholder} {...props} />
 }

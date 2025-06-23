@@ -1,14 +1,14 @@
-import type { Meta, StoryObj } from "@storybook/nextjs";
+import type { Meta, StoryObj } from '@storybook/nextjs'
 
-import { TimeInput } from "./index";
+import { TimeInput } from './index'
 
 const meta = {
-  title: "Input/TimeInput",
+  title: 'Input/TimeInput',
   component: TimeInput,
-} satisfies Meta<typeof TimeInput>;
+} satisfies Meta<typeof TimeInput>
 
-export default meta;
+export default meta
 
-type Story = StoryObj<typeof meta>;
+type Story = StoryObj<typeof meta>
 
-export const Default: Story = {};
+export const Default: Story = {}

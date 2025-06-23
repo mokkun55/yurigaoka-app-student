@@ -1,63 +1,58 @@
-"use client";
+'use client'
 
-import { useState, useEffect } from "react";
-import { useForm, Controller, SubmitHandler } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { z } from "zod";
-import InputLabel from "@/_components/ui/input-label";
-import { BaseInput } from "@/_components/ui/input/base-input";
-import { BaseSelect } from "@/_components/ui/input/base-select";
-import SectionTitle from "@/_components/ui/section-title";
-import { Button } from "@/_components/ui/button";
-import toast from "react-hot-toast";
+import { useState, useEffect } from 'react'
+import { useForm, Controller, SubmitHandler } from 'react-hook-form'
+import { zodResolver } from '@hookform/resolvers/zod'
+import { z } from 'zod'
+import InputLabel from '@/_components/ui/input-label'
+import { BaseInput } from '@/_components/ui/input/base-input'
+import { BaseSelect } from '@/_components/ui/input/base-select'
+import SectionTitle from '@/_components/ui/section-title'
+import { Button } from '@/_components/ui/button'
+import toast from 'react-hot-toast'
 
 // Zodスキーマ定義
 const invitationCodeSchema = z.object({
   invitationCode: z
     .string()
-    .length(7, "招待コードは7桁で入力してください")
-    .regex(/^[A-Z0-9]+$/, "招待コードは英数字のみで入力してください"),
-});
+    .length(7, '招待コードは7桁で入力してください')
+    .regex(/^[A-Z0-9]+$/, '招待コードは英数字のみで入力してください'),
+})
 
 const userFormSchema = z
   .object({
-    name: z.string().min(1, "氏名を入力してください"),
-    schoolYear: z.string().min(1, "学年を選択してください"),
+    name: z.string().min(1, '氏名を入力してください'),
+    schoolYear: z.string().min(1, '学年を選択してください'),
     className: z.string().optional(),
     roomNumber: z
       .string()
-      .length(4, "部屋番号は4桁で入力してください")
-      .regex(/^\d+$/, "部屋番号は数字で入力してください"),
-    parentName: z.string().min(1, "保護者氏名を入力してください"),
-    homeAddressName: z.string().min(1, "登録名を入力してください"),
-    homeAddressAddress: z.string().min(1, "住所を入力してください"),
-    homeAddressTel: z
-      .string()
-      .regex(
-        /^[0-9]{10,11}$/,
-        "電話番号はハイフンなしの10桁または11桁で入力してください"
-      ),
+      .length(4, '部屋番号は4桁で入力してください')
+      .regex(/^\d+$/, '部屋番号は数字で入力してください'),
+    parentName: z.string().min(1, '保護者氏名を入力してください'),
+    homeAddressName: z.string().min(1, '登録名を入力してください'),
+    homeAddressAddress: z.string().min(1, '住所を入力してください'),
+    homeAddressTel: z.string().regex(/^[0-9]{10,11}$/, '電話番号はハイフンなしの10桁または11桁で入力してください'),
   })
   .refine(
     (data) => {
-      if (data.schoolYear === "leader") {
-        return true;
+      if (data.schoolYear === 'leader') {
+        return true
       }
-      return typeof data.className === "string" && data.className.length > 0;
+      return typeof data.className === 'string' && data.className.length > 0
     },
     {
-      message: "クラスを選択してください",
-      path: ["className"],
+      message: 'クラスを選択してください',
+      path: ['className'],
     }
-  );
+  )
 
 // フォームの型定義
-type InvitationCodeValues = z.infer<typeof invitationCodeSchema>;
-type UserFormValues = z.infer<typeof userFormSchema>;
+type InvitationCodeValues = z.infer<typeof invitationCodeSchema>
+type UserFormValues = z.infer<typeof userFormSchema>
 
 export default function RegisterPage() {
   // 寮生認証のフラグ
-  const [isAuth, setIsAuth] = useState(false);
+  const [isAuth, setIsAuth] = useState(false)
 
   const {
     control: invitationCodeControl,
@@ -65,8 +60,8 @@ export default function RegisterPage() {
     formState: { errors: invitationCodeErrors },
   } = useForm<InvitationCodeValues>({
     resolver: zodResolver(invitationCodeSchema),
-    defaultValues: { invitationCode: "" },
-  });
+    defaultValues: { invitationCode: '' },
+  })
 
   const {
     control: userFormControl,
@@ -77,60 +72,58 @@ export default function RegisterPage() {
   } = useForm<UserFormValues>({
     resolver: zodResolver(userFormSchema),
     defaultValues: {
-      name: "",
-      schoolYear: "",
-      className: "",
-      roomNumber: "",
-      parentName: "",
-      homeAddressName: "",
-      homeAddressAddress: "",
-      homeAddressTel: "",
+      name: '',
+      schoolYear: '',
+      className: '',
+      roomNumber: '',
+      parentName: '',
+      homeAddressName: '',
+      homeAddressAddress: '',
+      homeAddressTel: '',
     },
-  });
+  })
 
-  const watchedSchoolYear = watch("schoolYear");
+  const watchedSchoolYear = watch('schoolYear')
 
   useEffect(() => {
-    setValue("className", "");
-  }, [watchedSchoolYear, setValue]);
+    setValue('className', '')
+  }, [watchedSchoolYear, setValue])
 
   const getClassOptions = (year: string | undefined) => {
     switch (year) {
-      case "1":
-      case "2":
+      case '1':
+      case '2':
         return [
-          { label: "1組", value: "1" },
-          { label: "2組", value: "2" },
-          { label: "3組", value: "3" },
-          { label: "4組", value: "4" },
-          { label: "5組", value: "5" },
-        ];
-      case "3":
+          { label: '1組', value: '1' },
+          { label: '2組', value: '2' },
+          { label: '3組', value: '3' },
+          { label: '4組', value: '4' },
+          { label: '5組', value: '5' },
+        ]
+      case '3':
         return [
-          { label: "I組", value: "I" },
-          { label: "M組", value: "M" },
-          { label: "E組", value: "E" },
-          { label: "CA組", value: "CA" },
-        ];
+          { label: 'I組', value: 'I' },
+          { label: 'M組', value: 'M' },
+          { label: 'E組', value: 'E' },
+          { label: 'CA組', value: 'CA' },
+        ]
       default:
-        return [];
+        return []
     }
-  };
+  }
 
-  const onInvitationCodeSubmit: SubmitHandler<InvitationCodeValues> = (
-    data
-  ) => {
-    console.log("Invitation code submitted:", data);
+  const onInvitationCodeSubmit: SubmitHandler<InvitationCodeValues> = (data) => {
+    console.log('Invitation code submitted:', data)
     // TODO: 招待コードの認証処理を実装
-    toast.success("認証に成功しました");
-    setIsAuth(true); // 認証成功と仮定
-  };
+    toast.success('認証に成功しました')
+    setIsAuth(true) // 認証成功と仮定
+  }
 
   const onUserFormSubmit: SubmitHandler<UserFormValues> = (data) => {
-    console.log("User form submitted:", data);
+    console.log('User form submitted:', data)
     // TODO: ユーザー情報の登録処理を実装
-    toast.success("ユーザー情報を登録しました");
-  };
+    toast.success('ユーザー情報を登録しました')
+  }
 
   if (!isAuth) {
     return (
@@ -144,28 +137,22 @@ export default function RegisterPage() {
           </p>
         </div>
 
-        <form
-          onSubmit={handleInvitationCodeSubmit(onInvitationCodeSubmit)}
-          className="flex flex-col gap-4 mx-12"
-        >
+        <form onSubmit={handleInvitationCodeSubmit(onInvitationCodeSubmit)} className="flex flex-col gap-4 mx-12">
           <InputLabel label="招待コード">
             <Controller
               name="invitationCode"
               control={invitationCodeControl}
-              render={({ field }) => (
-                <BaseInput {...field} placeholder="例: JJXRUJN6" fullWidth />
-              )}
+              // cspell:disable-next-line
+              render={({ field }) => <BaseInput {...field} placeholder="例: JJXRUJN6" fullWidth />}
             />
             {invitationCodeErrors.invitationCode && (
-              <p className="text-red-500 text-sm mt-1">
-                {invitationCodeErrors.invitationCode.message}
-              </p>
+              <p className="text-red-500 text-sm mt-1">{invitationCodeErrors.invitationCode.message}</p>
             )}
           </InputLabel>
           <Button type="submit">認証する</Button>
         </form>
       </div>
-    );
+    )
   }
 
   if (isAuth) {
@@ -185,19 +172,9 @@ export default function RegisterPage() {
                 <Controller
                   name="name"
                   control={userFormControl}
-                  render={({ field }) => (
-                    <BaseInput
-                      {...field}
-                      placeholder="例: 山田太郎"
-                      fullWidth
-                    />
-                  )}
+                  render={({ field }) => <BaseInput {...field} placeholder="例: 山田太郎" fullWidth />}
                 />
-                {userFormErrors.name && (
-                  <p className="text-red-500 text-sm mt-1">
-                    {userFormErrors.name.message}
-                  </p>
-                )}
+                {userFormErrors.name && <p className="text-red-500 text-sm mt-1">{userFormErrors.name.message}</p>}
               </InputLabel>
               <InputLabel label="学年・クラス">
                 <div className="flex w-full items-start gap-2">
@@ -210,19 +187,17 @@ export default function RegisterPage() {
                           {...field}
                           placeholder="学年"
                           options={[
-                            { label: "1年", value: "1" },
-                            { label: "2年", value: "2" },
-                            { label: "3年", value: "3" },
-                            { label: "指導寮生", value: "leader" },
+                            { label: '1年', value: '1' },
+                            { label: '2年', value: '2' },
+                            { label: '3年', value: '3' },
+                            { label: '指導寮生', value: 'leader' },
                           ]}
                           className="w-full"
                         />
                       )}
                     />
                     {userFormErrors.schoolYear && (
-                      <p className="text-red-500 text-sm mt-1">
-                        {userFormErrors.schoolYear.message}
-                      </p>
+                      <p className="text-red-500 text-sm mt-1">{userFormErrors.schoolYear.message}</p>
                     )}
                   </div>
                   <div className="w-full">
@@ -234,17 +209,13 @@ export default function RegisterPage() {
                           {...field}
                           placeholder="クラス"
                           options={getClassOptions(watchedSchoolYear)}
-                          disabled={
-                            !watchedSchoolYear || watchedSchoolYear === "leader"
-                          }
+                          disabled={!watchedSchoolYear || watchedSchoolYear === 'leader'}
                           className="w-full"
                         />
                       )}
                     />
                     {userFormErrors.className && (
-                      <p className="text-red-500 text-sm mt-1">
-                        {userFormErrors.className.message}
-                      </p>
+                      <p className="text-red-500 text-sm mt-1">{userFormErrors.className.message}</p>
                     )}
                   </div>
                 </div>
@@ -253,37 +224,20 @@ export default function RegisterPage() {
                 <Controller
                   name="roomNumber"
                   control={userFormControl}
-                  render={({ field }) => (
-                    <BaseInput
-                      {...field}
-                      placeholder="例: 2001"
-                      type="number"
-                      fullWidth
-                    />
-                  )}
+                  render={({ field }) => <BaseInput {...field} placeholder="例: 2001" type="number" fullWidth />}
                 />
                 {userFormErrors.roomNumber && (
-                  <p className="text-red-500 text-sm mt-1">
-                    {userFormErrors.roomNumber.message}
-                  </p>
+                  <p className="text-red-500 text-sm mt-1">{userFormErrors.roomNumber.message}</p>
                 )}
               </InputLabel>
               <InputLabel label="保護者氏名">
                 <Controller
                   name="parentName"
                   control={userFormControl}
-                  render={({ field }) => (
-                    <BaseInput
-                      {...field}
-                      placeholder="例: 山田花子"
-                      fullWidth
-                    />
-                  )}
+                  render={({ field }) => <BaseInput {...field} placeholder="例: 山田花子" fullWidth />}
                 />
                 {userFormErrors.parentName && (
-                  <p className="text-red-500 text-sm mt-1">
-                    {userFormErrors.parentName.message}
-                  </p>
+                  <p className="text-red-500 text-sm mt-1">{userFormErrors.parentName.message}</p>
                 )}
               </InputLabel>
             </div>
@@ -299,51 +253,30 @@ export default function RegisterPage() {
                 <Controller
                   name="homeAddressName"
                   control={userFormControl}
-                  render={({ field }) => (
-                    <BaseInput {...field} placeholder="例: 実家" fullWidth />
-                  )}
+                  render={({ field }) => <BaseInput {...field} placeholder="例: 実家" fullWidth />}
                 />
                 {userFormErrors.homeAddressName && (
-                  <p className="text-red-500 text-sm mt-1">
-                    {userFormErrors.homeAddressName.message}
-                  </p>
+                  <p className="text-red-500 text-sm mt-1">{userFormErrors.homeAddressName.message}</p>
                 )}
               </InputLabel>
               <InputLabel label="住所">
                 <Controller
                   name="homeAddressAddress"
                   control={userFormControl}
-                  render={({ field }) => (
-                    <BaseInput
-                      {...field}
-                      placeholder="例: 大阪府大阪市中央区"
-                      fullWidth
-                    />
-                  )}
+                  render={({ field }) => <BaseInput {...field} placeholder="例: 大阪府大阪市中央区" fullWidth />}
                 />
                 {userFormErrors.homeAddressAddress && (
-                  <p className="text-red-500 text-sm mt-1">
-                    {userFormErrors.homeAddressAddress.message}
-                  </p>
+                  <p className="text-red-500 text-sm mt-1">{userFormErrors.homeAddressAddress.message}</p>
                 )}
               </InputLabel>
               <InputLabel label="電話番号(ハイフン無し)">
                 <Controller
                   name="homeAddressTel"
                   control={userFormControl}
-                  render={({ field }) => (
-                    <BaseInput
-                      {...field}
-                      placeholder="例: 09012345678"
-                      type="tel"
-                      fullWidth
-                    />
-                  )}
+                  render={({ field }) => <BaseInput {...field} placeholder="例: 09012345678" type="tel" fullWidth />}
                 />
                 {userFormErrors.homeAddressTel && (
-                  <p className="text-red-500 text-sm mt-1">
-                    {userFormErrors.homeAddressTel.message}
-                  </p>
+                  <p className="text-red-500 text-sm mt-1">{userFormErrors.homeAddressTel.message}</p>
                 )}
               </InputLabel>
             </div>
@@ -354,6 +287,6 @@ export default function RegisterPage() {
           </Button>
         </form>
       </div>
-    );
+    )
   }
 }

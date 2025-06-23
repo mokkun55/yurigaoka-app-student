@@ -1,24 +1,24 @@
-import type { Meta, StoryObj } from "@storybook/nextjs";
+import type { Meta, StoryObj } from '@storybook/nextjs'
 
-import Index from "./index";
+import Index from './index'
 
 const meta = {
-  title: "section-title",
+  title: 'section-title',
   component: Index,
   argTypes: {
     isMargin: {
-      control: "boolean",
+      control: 'boolean',
       defaultValue: true,
     },
   },
-} satisfies Meta<typeof Index>;
+} satisfies Meta<typeof Index>
 
-export default meta;
+export default meta
 
-type Story = StoryObj<typeof meta>;
+type Story = StoryObj<typeof meta>
 
 export const Default: Story = {
   args: {
-    title: "セクションタイトル",
+    title: 'セクションタイトル',
   },
-};
+}

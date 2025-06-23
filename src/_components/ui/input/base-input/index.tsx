@@ -1,27 +1,26 @@
-import * as React from "react";
+import * as React from 'react'
 
-import { cn } from "@/lib/utils";
-import { DynamicIcon, IconName } from "lucide-react/dynamic";
+import { cn } from '@/lib/utils'
+import { DynamicIcon, IconName } from 'lucide-react/dynamic'
 
-export interface InputProps
-  extends React.InputHTMLAttributes<HTMLInputElement> {
-  icon?: IconName;
-  fullWidth?: boolean;
+export interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
+  icon?: IconName
+  fullWidth?: boolean
 }
 
 const BaseInput = React.forwardRef<HTMLInputElement, InputProps>(
   ({ className, type, icon, fullWidth, ...props }, ref) => {
     return (
-      <div className={cn("flex flex-col gap-[4px]", { "w-full": fullWidth })}>
+      <div className={cn('flex flex-col gap-[4px]', { 'w-full': fullWidth })}>
         <div className="relative flex items-center">
           <input
             type={type}
             data-slot="input"
             className={cn(
-              "file:text-foreground placeholder:text-muted-foreground selection:bg-primary selection:text-primary-foreground dark:bg-input/30 border-input flex h-9 w-full min-w-0 rounded-md border bg-transparent px-3 py-1 text-base shadow-xs transition-[color,box-shadow] outline-none file:inline-flex file:h-7 file:border-0 file:bg-transparent file:text-sm file:font-medium disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 md:text-sm",
-              "focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px]",
-              "aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive",
-              icon ? "pr-[42px]" : "",
+              'file:text-foreground placeholder:text-muted-foreground selection:bg-primary selection:text-primary-foreground dark:bg-input/30 border-input flex h-9 w-full min-w-0 rounded-md border bg-transparent px-3 py-1 text-base shadow-xs transition-[color,box-shadow] outline-none file:inline-flex file:h-7 file:border-0 file:bg-transparent file:text-sm file:font-medium disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 md:text-sm',
+              'focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px]',
+              'aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive',
+              icon ? 'pr-[42px]' : '',
               className
             )}
             ref={ref}
@@ -34,9 +33,9 @@ const BaseInput = React.forwardRef<HTMLInputElement, InputProps>(
           )}
         </div>
       </div>
-    );
+    )
   }
-);
-BaseInput.displayName = "BaseInput";
+)
+BaseInput.displayName = 'BaseInput'
 
-export { BaseInput };
+export { BaseInput }

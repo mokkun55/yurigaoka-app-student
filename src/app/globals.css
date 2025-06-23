@@ -1,11 +1,10 @@
-@import "tailwindcss";
-@import "tw-animate-css";
-@import "./variables.css";
+@import 'tailwindcss';
+@import 'tw-animate-css';
+@import './variables.css';
 
 body {
   @apply bg-background text-foreground;
-  font-family: var(--font-m-plus-1p), "M PLUS 1p", ui-sans-serif, system-ui,
-    sans-serif;
+  font-family: var(--font-m-plus-1p), 'M PLUS 1p', ui-sans-serif, system-ui, sans-serif;
 }
 
 @custom-variant dark (&:is(.dark *));

@@ -1,9 +1,9 @@
-import { Label } from "../../label";
-import { Checkbox } from "../ui/base-checkbox";
+import { Label } from '../../label'
+import { Checkbox } from '../ui/base-checkbox'
 
 type Props = {
-  label: string;
-};
+  label: string
+}
 
 export const CheckboxField = ({ label }: Props) => {
   return (
@@ -13,5 +13,5 @@ export const CheckboxField = ({ label }: Props) => {
         <span>{label}</span>
       </Label>
     </div>
-  );
-};
+  )
+}

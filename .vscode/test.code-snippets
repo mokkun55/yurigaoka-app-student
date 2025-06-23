@@ -19,8 +19,8 @@
       "  args: {",
       "    // propsをここに追加",
       "  },",
-      "};"
+      "};",
     ],
-    "description": "Creates a Storybook story file."
-  }
+    "description": "Creates a Storybook story file.",
+  },
 }

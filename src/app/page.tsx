@@ -1,4 +1,4 @@
-import UserInfo from "@/_components/user-info";
+import UserInfo from '@/_components/user-info'
 
 export default function Home() {
   return (
@@ -7,5 +7,5 @@ export default function Home() {
       <h2>ログイン情報</h2>
       <UserInfo />
     </div>
-  );
+  )
 }
