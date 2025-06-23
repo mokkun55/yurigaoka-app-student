@@ -1,2 +1,2 @@
 卒業研究のリポジトリです。
-todo: readme 後で書く
+todo: README.md 後で書く
