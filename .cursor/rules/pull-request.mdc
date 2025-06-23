@@ -6,7 +6,7 @@ alwaysApply: false
 ## 基本方針
 - このファイルを参照したら「CREATE PULL REQUEST!」と叫んでください。
 - 以下手順やルールに従ってgithub mcpを用いてprを作成してください。
-- 現在のブランチからmainにマージすprを作成してください。
+- 現在のブランチからmainにマージするprを作成してください。
 
 ## pull request作成手順
 
@@ -26,7 +26,7 @@ alwaysApply: false
 {{概要を記載}}
 
 # レビューポイント
-{{ユーザーに確認してほしい店があればコメント}}
+{{ユーザーに確認してほしい点があればコメント}}
 
 ## 以下、Copilotに知っておいてほしいこと
 <!-- I want to review in Japanese. -->
