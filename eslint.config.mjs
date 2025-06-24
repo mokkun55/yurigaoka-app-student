@@ -17,7 +17,7 @@ const compat = new FlatCompat({
   baseDirectory: __dirname,
 })
 
-const eslintConfig: Linter.Config[] = [
+const eslintConfig = [
   {
     ignores: ['.next/', 'node_modules', 'dist', 'build', 'public/', 'src/utils/supabase/database.types.ts'],
   },
