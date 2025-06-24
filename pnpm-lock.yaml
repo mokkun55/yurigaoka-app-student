@@ -77,6 +77,9 @@ importers:
       '@eslint/eslintrc':
         specifier: ^3
         version: 3.3.1
+      '@eslint/js':
+        specifier: ^9.29.0
+        version: 9.29.0
       '@storybook/nextjs':
         specifier: ^9.0.11
         version: 9.0.11(esbuild@0.25.5)(next@15.3.3(@babel/core@7.27.4)(react-dom@19.1.0(react@19.1.0))(react@19.1.0))(react-dom@19.1.0(react@19.1.0))(react@19.1.0)(storybook@9.0.11(@testing-library/dom@10.4.0)(prettier@3.6.0))(type-fest@2.19.0)(typescript@5.8.3)(webpack-hot-middleware@2.26.1)(webpack@5.99.9(esbuild@0.25.5))
@@ -1326,6 +1329,11 @@ packages:
   '@eslint/js@9.28.0':
     resolution:
       { integrity: sha512-fnqSjGWd/CoIp4EXIxWVK/sHA6DOHN4+8Ix2cX5ycOY7LG0UY8nHCU5pIp2eaE1Mc7Qd8kHspYNzYXT2ojPLzg== }
+    engines: { node: ^18.18.0 || ^20.9.0 || >=21.1.0 }
+
+  '@eslint/js@9.29.0':
+    resolution:
+      { integrity: sha512-3PIF4cBw/y+1u2EazflInpV+lYsSG0aByVIQzAgb1m1MhHFSbqTyNqtBKHgWf/9Ykud+DhILS9EGkmekVhbKoQ== }
     engines: { node: ^18.18.0 || ^20.9.0 || >=21.1.0 }
 
   '@eslint/object-schema@2.1.6':
@@ -7110,6 +7118,8 @@ snapshots:
       - supports-color
 
   '@eslint/js@9.28.0': {}
+
+  '@eslint/js@9.29.0': {}
 
   '@eslint/object-schema@2.1.6': {}
 

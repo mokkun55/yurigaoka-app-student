@@ -13,7 +13,7 @@ pre-commit:
 
     spell-check:
       glob: '*.{js,ts,cjs,mjs,d.cts,d.mts,jsx,tsx,json,jsonc}'
-      run: pnpm run spellcheck
+      run: pnpm cspell "src/**/*.{ts,tsx,md,json}"
 
     tsc:
       glob: '*.{js,ts,tsx}'
