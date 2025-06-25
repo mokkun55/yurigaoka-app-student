@@ -90,6 +90,8 @@ export async function registerUser(registerFormData: UserFormValues) {
         club_id: fetchClubId,
         is_leader: false,
         room_number: Number(registerFormData.roomNumber),
+        parent_name: registerFormData.parentName,
+        phone_number: Number(registerFormData.emergencyTel),
       })
       .eq('id', userData.user.id)
       .select()

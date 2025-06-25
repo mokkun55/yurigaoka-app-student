@@ -58,6 +58,8 @@ export type Database = {
           grade_id: number | null
           id: string
           is_leader: boolean | null
+          parent_name: string | null
+          phone_number: number | null
           room_number: number | null
         }
         Insert: {
@@ -66,6 +68,8 @@ export type Database = {
           grade_id?: number | null
           id?: string
           is_leader?: boolean | null
+          parent_name?: string | null
+          phone_number?: number | null
           room_number?: number | null
         }
         Update: {
@@ -74,6 +78,8 @@ export type Database = {
           grade_id?: number | null
           id?: string
           is_leader?: boolean | null
+          parent_name?: string | null
+          phone_number?: number | null
           room_number?: number | null
         }
         Relationships: [

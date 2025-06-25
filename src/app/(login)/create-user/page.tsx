@@ -38,7 +38,7 @@ const userFormSchema = z.object({
     .regex(/^[^\s ]+$/, '名字と名前の間に空白を入れずに入力してください'),
   homeAddressName: z.string().min(1, '登録名を入力してください'),
   homeAddressAddress: z.string().min(1, '住所を入力してください'),
-  homeAddressTel: z.string().regex(/^[0-9]{10,11}$/, '電話番号はハイフンなしの10桁または11桁で入力してください'),
+  emergencyTel: z.string().regex(/^[0-9]{10,11}$/, '電話番号はハイフンなしの10桁または11桁で入力してください'),
 })
 
 // フォームの型定義
@@ -75,7 +75,7 @@ export default function RegisterPage() {
       parentName: '',
       homeAddressName: '',
       homeAddressAddress: '',
-      homeAddressTel: '',
+      emergencyTel: '',
     },
   })
 
@@ -257,6 +257,16 @@ export default function RegisterPage() {
                   <p className="text-red-500 text-sm mt-1">{userFormErrors.parentName.message}</p>
                 )}
               </InputLabel>
+              <InputLabel label="緊急連絡先">
+                <Controller
+                  name="emergencyTel"
+                  control={userFormControl}
+                  render={({ field }) => <BaseInput {...field} placeholder="例: 09012345678" type="tel" fullWidth />}
+                />
+                {userFormErrors.emergencyTel && (
+                  <p className="text-red-500 text-sm mt-1">{userFormErrors.emergencyTel.message}</p>
+                )}
+              </InputLabel>
             </div>
           </div>
 
@@ -286,16 +296,6 @@ export default function RegisterPage() {
                 />
                 {userFormErrors.homeAddressAddress && (
                   <p className="text-red-500 text-sm mt-1">{userFormErrors.homeAddressAddress.message}</p>
-                )}
-              </InputLabel>
-              <InputLabel label="電話番号(ハイフン無し)">
-                <Controller
-                  name="homeAddressTel"
-                  control={userFormControl}
-                  render={({ field }) => <BaseInput {...field} placeholder="例: 09012345678" type="tel" fullWidth />}
-                />
-                {userFormErrors.homeAddressTel && (
-                  <p className="text-red-500 text-sm mt-1">{userFormErrors.homeAddressTel.message}</p>
                 )}
               </InputLabel>
             </div>
