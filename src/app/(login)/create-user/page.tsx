@@ -20,31 +20,26 @@ const invitationCodeSchema = z.object({
     .regex(/^[A-Z0-9]+$/, '招待コードは英数字のみで入力してください'),
 })
 
-const userFormSchema = z
-  .object({
-    name: z
-      .string()
-      .min(1, '氏名を入力してください')
-      .regex(/^[^\s ]+$/, '名字と名前の間に空白を入れずに入力してください'),
-    schoolYear: z.string().min(1, '学年を選択してください'),
-    className: z.string().optional(),
-    club: z.enum(['soft_tennis', 'soccer', 'others', 'none']).optional(),
-    roomNumber: z
-      .string()
-      .length(4, '部屋番号は4桁で入力してください')
-      .regex(/^\d+$/, '部屋番号は数字で入力してください'),
-    parentName: z
-      .string()
-      .min(1, '保護者氏名を入力してください')
-      .regex(/^[^\s ]+$/, '名字と名前の間に空白を入れずに入力してください'),
-    homeAddressName: z.string().min(1, '登録名を入力してください'),
-    homeAddressAddress: z.string().min(1, '住所を入力してください'),
-    homeAddressTel: z.string().regex(/^[0-9]{10,11}$/, '電話番号はハイフンなしの10桁または11桁で入力してください'),
-  })
-  .refine((data) => typeof data.className === 'string' && data.className.length > 0, {
-    message: 'クラスを選択してください',
-    path: ['className'],
-  })
+const userFormSchema = z.object({
+  name: z
+    .string()
+    .min(1, '氏名を入力してください')
+    .regex(/^[^\s ]+$/, '名字と名前の間に空白を入れずに入力してください'),
+  gradeName: z.string().min(1, '学年を選択してください'),
+  className: z.string().min(1, 'クラスを選択してください'),
+  club: z.enum(['ソフトテニス部', 'サッカー部', 'none']).optional(),
+  roomNumber: z
+    .string()
+    .length(4, '部屋番号は4桁で入力してください')
+    .regex(/^\d+$/, '部屋番号は数字で入力してください'),
+  parentName: z
+    .string()
+    .min(1, '保護者氏名を入力してください')
+    .regex(/^[^\s ]+$/, '名字と名前の間に空白を入れずに入力してください'),
+  homeAddressName: z.string().min(1, '登録名を入力してください'),
+  homeAddressAddress: z.string().min(1, '住所を入力してください'),
+  homeAddressTel: z.string().regex(/^[0-9]{10,11}$/, '電話番号はハイフンなしの10桁または11桁で入力してください'),
+})
 
 // フォームの型定義
 export type InvitationCodeValues = z.infer<typeof invitationCodeSchema>
@@ -73,7 +68,7 @@ export default function RegisterPage() {
     resolver: zodResolver(userFormSchema),
     defaultValues: {
       name: '',
-      schoolYear: '',
+      gradeName: '',
       className: '',
       club: undefined,
       roomNumber: '',
@@ -84,11 +79,11 @@ export default function RegisterPage() {
     },
   })
 
-  const watchedSchoolYear = watch('schoolYear')
+  const watchedGradeName = watch('gradeName')
 
   useEffect(() => {
     setValue('className', '')
-  }, [watchedSchoolYear, setValue])
+  }, [watchedGradeName, setValue])
 
   const getClassOptions = (year: string | undefined) => {
     switch (year) {
@@ -183,25 +178,25 @@ export default function RegisterPage() {
                 <div className="flex w-full items-start gap-2">
                   <div className="w-full">
                     <Controller
-                      name="schoolYear"
+                      name="gradeName"
                       control={userFormControl}
                       render={({ field }) => (
                         <BaseSelect
                           {...field}
                           placeholder="学年"
                           options={[
-                            { label: '1年', value: '1' },
-                            { label: '2年', value: '2' },
-                            { label: '3年', value: '3' },
-                            { label: '4年', value: '4' },
-                            { label: '5年', value: '5' },
+                            { label: '1年生', value: '1' },
+                            { label: '2年生', value: '2' },
+                            { label: '3年生', value: '3' },
+                            { label: '4年生', value: '4' },
+                            { label: '5年生', value: '5' },
                           ]}
                           className="w-full"
                         />
                       )}
                     />
-                    {userFormErrors.schoolYear && (
-                      <p className="text-red-500 text-sm mt-1">{userFormErrors.schoolYear.message}</p>
+                    {userFormErrors.gradeName && (
+                      <p className="text-red-500 text-sm mt-1">{userFormErrors.gradeName.message}</p>
                     )}
                   </div>
                   <div className="w-full">
@@ -212,8 +207,8 @@ export default function RegisterPage() {
                         <BaseSelect
                           {...field}
                           placeholder="クラス"
-                          options={getClassOptions(watchedSchoolYear)}
-                          disabled={!watchedSchoolYear || watchedSchoolYear === 'leader'}
+                          options={getClassOptions(watchedGradeName)}
+                          disabled={!watchedGradeName || watchedGradeName === 'leader'}
                           className="w-full"
                         />
                       )}
@@ -233,10 +228,9 @@ export default function RegisterPage() {
                       {...field}
                       placeholder="部活を選択"
                       options={[
-                        { label: 'ソフトテニス部', value: 'soft_tennis' },
-                        { label: 'サッカー部', value: 'soccer' },
-                        { label: 'その他(上記以外)', value: 'others' },
-                        { label: 'クラブに入っていない', value: 'none' },
+                        { label: 'ソフトテニス部', value: 'ソフトテニス部' },
+                        { label: 'サッカー部', value: 'サッカー部' },
+                        { label: 'それ以外 または 未所属', value: 'none' },
                       ]}
                       className="w-full"
                     />

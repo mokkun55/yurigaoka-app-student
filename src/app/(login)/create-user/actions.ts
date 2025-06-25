@@ -34,18 +34,62 @@ export async function registerUser(registerFormData: UserFormValues) {
       throw new Error(userError.message)
     }
 
+    // 学年の取得
+    const fetchGradeIdByGradeName = async (gradeName: string) => {
+      const { data: grade, error: gradeError } = await supabase
+        .from('grades')
+        .select('id')
+        .eq('name', gradeName)
+        .single()
+      if (gradeError) {
+        throw new Error(gradeError.message)
+      }
+      return grade.id
+    }
+
+    // クラスの取得
+    const fetchClassIdByClassName = async (className: string) => {
+      const { data: classes, error: classesError } = await supabase
+        .from('classes')
+        .select('id')
+        .eq('name', className)
+        .single()
+      if (classesError) {
+        throw new Error(classesError.message)
+      }
+      return classes.id
+    }
+
+    // クラブの取得
+    const fetchClubIdByClubName = async (clubName: string) => {
+      const { data: club, error: clubError } = await supabase.from('clubs').select('id').eq('name', clubName).single()
+      if (clubError) {
+        throw new Error(clubError.message)
+      }
+      return club.id
+    }
+
+    if (!registerFormData.gradeName || !registerFormData.className) {
+      throw new Error('学年またはクラスが未入力です')
+    }
+
+    // 学年 クラス クラブの取得
+    const fetchGradeId = await fetchGradeIdByGradeName(registerFormData.gradeName)
+    const fetchClassId = await fetchClassIdByClassName(registerFormData.className)
+    const fetchClubId =
+      registerFormData.club && registerFormData.club !== 'none'
+        ? await fetchClubIdByClubName(registerFormData.club)
+        : null
+
     // studentsテーブルにデータを追加(更新)
     const { data: student, error: studentError } = await supabase
       .from('students')
       .update({
-        // TODO
-        grade_id: 1,
-        class_id: 1,
-        // TODO あとで追加
-        // まずは name から idを取得しないといけない かも...?
-        // てかまずnullも許容
-        // club_id: 0,
+        grade_id: fetchGradeId,
+        class_id: fetchClassId,
+        club_id: fetchClubId,
         is_leader: false,
+        room_number: Number(registerFormData.roomNumber),
       })
       .eq('id', userData.user.id)
       .select()
@@ -60,6 +104,8 @@ export async function registerUser(registerFormData: UserFormValues) {
     console.error('ユーザー登録エラー:', error)
     throw error
   }
+
+  // TODO 帰省先の登録
 }
 
 export async function verifyInvitationCode(data: InvitationCodeValues) {

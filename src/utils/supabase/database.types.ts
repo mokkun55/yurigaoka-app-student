@@ -58,6 +58,7 @@ export type Database = {
           grade_id: number | null
           id: string
           is_leader: boolean | null
+          room_number: number | null
         }
         Insert: {
           class_id?: number | null
@@ -65,6 +66,7 @@ export type Database = {
           grade_id?: number | null
           id?: string
           is_leader?: boolean | null
+          room_number?: number | null
         }
         Update: {
           class_id?: number | null
@@ -72,6 +74,7 @@ export type Database = {
           grade_id?: number | null
           id?: string
           is_leader?: boolean | null
+          room_number?: number | null
         }
         Relationships: [
           {
