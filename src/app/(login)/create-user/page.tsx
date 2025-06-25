@@ -28,6 +28,7 @@ const userFormSchema = z
       .regex(/^[^\s ]+$/, '名字と名前の間に空白を入れずに入力してください'),
     schoolYear: z.string().min(1, '学年を選択してください'),
     className: z.string().optional(),
+    club: z.string().optional(),
     roomNumber: z
       .string()
       .length(4, '部屋番号は4桁で入力してください')
@@ -74,6 +75,7 @@ export default function RegisterPage() {
       name: '',
       schoolYear: '',
       className: '',
+      club: '',
       roomNumber: '',
       parentName: '',
       homeAddressName: '',
@@ -221,6 +223,25 @@ export default function RegisterPage() {
                     )}
                   </div>
                 </div>
+              </InputLabel>
+              <InputLabel label="部活（任意）">
+                <Controller
+                  name="club"
+                  control={userFormControl}
+                  render={({ field }) => (
+                    <BaseSelect
+                      {...field}
+                      placeholder="部活を選択"
+                      options={[
+                        { label: 'ソフトテニス部', value: 'soft_tennis' },
+                        { label: 'サッカー部', value: 'soccer' },
+                        { label: 'その他(上記以外)', value: 'others' },
+                        { label: 'クラブに入っていない', value: 'none' },
+                      ]}
+                      className="w-full"
+                    />
+                  )}
+                />
               </InputLabel>
               <InputLabel label="部屋番号">
                 <Controller
