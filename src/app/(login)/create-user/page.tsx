@@ -175,7 +175,7 @@ export default function RegisterPage() {
                 <Controller
                   name="name"
                   control={userFormControl}
-                  render={({ field }) => <BaseInput {...field} placeholder="例: 山田太郎" fullWidth />}
+                  render={({ field }) => <BaseInput {...field} placeholder="例: 高専太郎" fullWidth />}
                 />
                 {userFormErrors.name && <p className="text-red-500 text-sm mt-1">{userFormErrors.name.message}</p>}
               </InputLabel>
@@ -257,7 +257,7 @@ export default function RegisterPage() {
                 <Controller
                   name="parentName"
                   control={userFormControl}
-                  render={({ field }) => <BaseInput {...field} placeholder="例: 山田花子" fullWidth />}
+                  render={({ field }) => <BaseInput {...field} placeholder="例: 高専花子" fullWidth />}
                 />
                 {userFormErrors.parentName && (
                   <p className="text-red-500 text-sm mt-1">{userFormErrors.parentName.message}</p>
