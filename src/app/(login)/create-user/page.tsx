@@ -40,18 +40,10 @@ const userFormSchema = z
     homeAddressAddress: z.string().min(1, '住所を入力してください'),
     homeAddressTel: z.string().regex(/^[0-9]{10,11}$/, '電話番号はハイフンなしの10桁または11桁で入力してください'),
   })
-  .refine(
-    (data) => {
-      if (data.schoolYear === 'leader') {
-        return true
-      }
-      return typeof data.className === 'string' && data.className.length > 0
-    },
-    {
-      message: 'クラスを選択してください',
-      path: ['className'],
-    }
-  )
+  .refine((data) => typeof data.className === 'string' && data.className.length > 0, {
+    message: 'クラスを選択してください',
+    path: ['className'],
+  })
 
 // フォームの型定義
 export type InvitationCodeValues = z.infer<typeof invitationCodeSchema>
@@ -108,6 +100,8 @@ export default function RegisterPage() {
           { label: '5組', value: '5' },
         ]
       case '3':
+      case '4':
+      case '5':
         return [
           { label: 'I組', value: 'I' },
           { label: 'M組', value: 'M' },
@@ -197,7 +191,8 @@ export default function RegisterPage() {
                             { label: '1年', value: '1' },
                             { label: '2年', value: '2' },
                             { label: '3年', value: '3' },
-                            { label: '指導寮生', value: 'leader' },
+                            { label: '4年', value: '4' },
+                            { label: '5年', value: '5' },
                           ]}
                           className="w-full"
                         />
