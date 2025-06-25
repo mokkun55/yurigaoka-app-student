@@ -60,6 +60,38 @@ export async function updateSession(request: NextRequest) {
   }
 
   // 初回登録が完了していないユーザーはリダイレクトさせる（cookieでキャッシュ）
+  // TODO 現在開発中のため一旦コメントアウト
+  /*
+  if (
+    user &&
+    request.nextUrl.pathname.startsWith('/create-user')
+  ) {
+    // まずcookieを参照
+    const isRegisteredCookie = request.cookies.get('is_registered')?.value
+
+    if (isRegisteredCookie === 'true') {
+      console.log('[middleware] is_registered cookieがtrueのため / へリダイレクト')
+      const url = request.nextUrl.clone()
+      url.pathname = '/'
+      return NextResponse.redirect(url)
+    }
+
+    if (!isRegisteredCookie) {
+      // cookieがなければDBアクセス
+      const { data: userData, error } = await supabase.from('users').select('name').eq('id', user.id).single()
+      const isRegistered = !error && userData && userData.name
+      supabaseResponse.cookies.set('is_registered', isRegistered ? 'true' : 'false', { path: '/' })
+      if (isRegistered) {
+        console.log('[middleware] DB確認で登録済みのため / へリダイレクト')
+        const url = request.nextUrl.clone()
+        url.pathname = '/'
+        return NextResponse.redirect(url)
+      }
+    }
+  }
+  */
+
+  // 初回登録が完了していないユーザーはリダイレクトさせる（cookieでキャッシュ）
   if (
     user &&
     !request.nextUrl.pathname.startsWith('/create-user') &&
