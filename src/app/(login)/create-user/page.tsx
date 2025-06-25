@@ -28,7 +28,7 @@ const userFormSchema = z
       .regex(/^[^\s ]+$/, '名字と名前の間に空白を入れずに入力してください'),
     schoolYear: z.string().min(1, '学年を選択してください'),
     className: z.string().optional(),
-    club: z.string().optional(),
+    club: z.enum(['soft_tennis', 'soccer', 'others', 'none']).optional(),
     roomNumber: z
       .string()
       .length(4, '部屋番号は4桁で入力してください')
@@ -75,7 +75,7 @@ export default function RegisterPage() {
       name: '',
       schoolYear: '',
       className: '',
-      club: '',
+      club: undefined,
       roomNumber: '',
       parentName: '',
       homeAddressName: '',
