@@ -10,6 +10,7 @@ import { BaseSelect } from '@/_components/ui/input/base-select'
 import SectionTitle from '@/_components/ui/section-title'
 import { Button } from '@/_components/ui/button'
 import toast from 'react-hot-toast'
+import { registerUser, verifyInvitationCode } from './actions'
 
 // Zodスキーマ定義
 const invitationCodeSchema = z.object({
@@ -53,8 +54,8 @@ const userFormSchema = z
   )
 
 // フォームの型定義
-type InvitationCodeValues = z.infer<typeof invitationCodeSchema>
-type UserFormValues = z.infer<typeof userFormSchema>
+export type InvitationCodeValues = z.infer<typeof invitationCodeSchema>
+export type UserFormValues = z.infer<typeof userFormSchema>
 
 export default function RegisterPage() {
   // 寮生認証のフラグ
@@ -118,16 +119,16 @@ export default function RegisterPage() {
     }
   }
 
-  const onInvitationCodeSubmit: SubmitHandler<InvitationCodeValues> = (data) => {
-    console.log('Invitation code submitted:', data)
-    // TODO: 招待コードの認証処理を実装
+  const onInvitationCodeSubmit: SubmitHandler<InvitationCodeValues> = async (data) => {
+    await verifyInvitationCode(data)
+    // TODO エラーハンドリング
     toast.success('認証に成功しました')
-    setIsAuth(true) // 認証成功と仮定
+    setIsAuth(true)
   }
 
-  const onUserFormSubmit: SubmitHandler<UserFormValues> = (data) => {
-    console.log('User form submitted:', data)
-    // TODO: ユーザー情報の登録処理を実装
+  const onUserFormSubmit: SubmitHandler<UserFormValues> = async (data) => {
+    await registerUser(data)
+    // TODO エラーハンドリング
     toast.success('ユーザー情報を登録しました')
   }
 
