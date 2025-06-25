@@ -12,7 +12,7 @@
     "format:fix": "prettier --write .",
     "tsc": "tsc --noEmit",
     "spellcheck": "cspell \"src/**/*.{ts,tsx,md,json}\"",
-    "generate-type": "supabase gen types typescript --project-id xlzaxcwjqrgtqhfnhhik > src/utils/supabase/database.types.ts",
+    "generate-type": "supabase gen types typescript --project-id zlegzzyoyxusajiwckbs > src/utils/supabase/database.types.ts",
     "storybook": "storybook dev -p 6006 --no-open",
     "build-storybook": "storybook build"
   },

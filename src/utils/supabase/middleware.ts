@@ -80,11 +80,11 @@ export async function updateSession(request: NextRequest) {
 
     if (!isRegisteredCookie) {
       // cookieがなければDBアクセス
-      // first_nameが空の場合は初回登録とみなす
-      const { data: userData, error } = await supabase.from('users').select('first_name').eq('id', user.id).single()
+      // nameが空の場合は初回登録とみなす
+      const { data: userData, error } = await supabase.from('users').select('name').eq('id', user.id).single()
       // console.log("userData", userData);
 
-      const isRegistered = !error && userData && userData.first_name
+      const isRegistered = !error && userData && userData.name
       // cookieに保存
       supabaseResponse.cookies.set('is_registered', isRegistered ? 'true' : 'false', { path: '/' })
 
