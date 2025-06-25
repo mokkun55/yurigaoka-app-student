@@ -21,14 +21,20 @@ const invitationCodeSchema = z.object({
 
 const userFormSchema = z
   .object({
-    name: z.string().min(1, '氏名を入力してください'),
+    name: z
+      .string()
+      .min(1, '氏名を入力してください')
+      .regex(/^[^\s ]+$/, '名字と名前の間に空白を入れずに入力してください'),
     schoolYear: z.string().min(1, '学年を選択してください'),
     className: z.string().optional(),
     roomNumber: z
       .string()
       .length(4, '部屋番号は4桁で入力してください')
       .regex(/^\d+$/, '部屋番号は数字で入力してください'),
-    parentName: z.string().min(1, '保護者氏名を入力してください'),
+    parentName: z
+      .string()
+      .min(1, '保護者氏名を入力してください')
+      .regex(/^[^\s ]+$/, '名字と名前の間に空白を入れずに入力してください'),
     homeAddressName: z.string().min(1, '登録名を入力してください'),
     homeAddressAddress: z.string().min(1, '住所を入力してください'),
     homeAddressTel: z.string().regex(/^[0-9]{10,11}$/, '電話番号はハイフンなしの10桁または11桁で入力してください'),
