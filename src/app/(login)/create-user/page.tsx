@@ -286,7 +286,9 @@ export default function RegisterPage() {
                 <Controller
                   name="homeAddressAddress"
                   control={userFormControl}
-                  render={({ field }) => <BaseInput {...field} placeholder="例: 大阪府大阪市中央区" fullWidth />}
+                  render={({ field }) => (
+                    <BaseInput {...field} placeholder="例: 三重県名張市春日丘７番町１" fullWidth />
+                  )}
                 />
                 {userFormErrors.homeAddressAddress && (
                   <p className="text-red-500 text-sm mt-1">{userFormErrors.homeAddressAddress.message}</p>
