@@ -107,7 +107,22 @@ export async function registerUser(registerFormData: UserFormValues) {
     throw error
   }
 
-  // TODO 帰省先の登録
+  // 帰省先の登録
+  const { data: home, error: homeError } = await supabase
+    .from('homes')
+    .insert({
+      user_id: userData.user.id,
+      name: registerFormData.homeAddressName,
+      address: registerFormData.homeAddressAddress,
+      created_at: new Date().toISOString(),
+      updated_at: new Date().toISOString(),
+    })
+    .select()
+    .single()
+  if (homeError) {
+    throw new Error(homeError.message)
+  }
+  console.log('home', home)
 }
 
 export async function verifyInvitationCode(data: InvitationCodeValues) {
