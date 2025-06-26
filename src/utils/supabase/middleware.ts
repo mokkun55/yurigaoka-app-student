@@ -6,6 +6,9 @@ const loginPaths = ['/login', '/create-user', '/auth', '/api', '/develop']
 const createUserPaths = ['/create-user']
 const registerExcludePaths = ['/create-user', '/register', '/api', '/develop']
 
+// is_registeredクッキーの有効期限（秒）
+const IS_REGISTERED_COOKIE_MAX_AGE = 300
+
 export async function updateSession(request: NextRequest) {
   let supabaseResponse = NextResponse.next({
     request,
@@ -72,7 +75,10 @@ export async function updateSession(request: NextRequest) {
       // cookieがなければDBアクセス
       const { data: userData, error } = await supabase.from('users').select('name').eq('id', user.id).single()
       const isRegistered = !error && userData && userData.name
-      supabaseResponse.cookies.set('is_registered', isRegistered ? 'true' : 'false', { path: '/', maxAge: 300 })
+      supabaseResponse.cookies.set('is_registered', isRegistered ? 'true' : 'false', {
+        path: '/',
+        maxAge: IS_REGISTERED_COOKIE_MAX_AGE,
+      })
       if (isRegistered) {
         console.log('[middleware] DB確認で登録済みのため / へリダイレクト')
         const url = request.nextUrl.clone()
@@ -103,7 +109,10 @@ export async function updateSession(request: NextRequest) {
 
       const isRegistered = !error && userData && userData.name
       // cookieに保存
-      supabaseResponse.cookies.set('is_registered', isRegistered ? 'true' : 'false', { path: '/', maxAge: 300 })
+      supabaseResponse.cookies.set('is_registered', isRegistered ? 'true' : 'false', {
+        path: '/',
+        maxAge: IS_REGISTERED_COOKIE_MAX_AGE,
+      })
 
       if (!isRegistered) {
         console.log('[middleware] DB確認で未登録のため /create-user へリダイレクト')
