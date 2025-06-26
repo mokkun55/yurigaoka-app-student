@@ -1,6 +1,11 @@
 import { createServerClient } from '@supabase/ssr'
 import { NextResponse, type NextRequest } from 'next/server'
 
+// 判定用パス配列（関数外で定義して再利用）
+const loginPaths = ['/login', '/create-user', '/auth', '/api', '/develop']
+const createUserPaths = ['/create-user']
+const registerExcludePaths = ['/create-user', '/register', '/api', '/develop']
+
 export async function updateSession(request: NextRequest) {
   let supabaseResponse = NextResponse.next({
     request,
@@ -34,11 +39,6 @@ export async function updateSession(request: NextRequest) {
   const {
     data: { user },
   } = await supabase.auth.getUser()
-
-  // 判定用パス配列
-  const loginPaths = ['/login', '/create-user', '/auth', '/api', '/develop']
-  const createUserPaths = ['/create-user']
-  const registerExcludePaths = ['/create-user', '/register', '/api', '/develop']
 
   // 認証していないユーザー向け
   if (!user && !loginPaths.some((path) => request.nextUrl.pathname.startsWith(path))) {
