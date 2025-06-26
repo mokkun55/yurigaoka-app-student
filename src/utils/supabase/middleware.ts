@@ -39,7 +39,8 @@ export async function updateSession(request: NextRequest) {
   if (
     !user &&
     !request.nextUrl.pathname.startsWith('/login') &&
-    !request.nextUrl.pathname.startsWith('/create-user') &&
+    !request.nextUrl.pathname.startsWith('/student/create-user') &&
+    !request.nextUrl.pathname.startsWith('/teacher/create-user') &&
     !request.nextUrl.pathname.startsWith('/auth') &&
     !request.nextUrl.pathname.startsWith('/api') &&
     // TODO 開発用なので後で消す
@@ -60,7 +61,11 @@ export async function updateSession(request: NextRequest) {
   }
 
   // 初回登録が完了していないユーザーはリダイレクトさせる（cookieでキャッシュ）
-  if (user && request.nextUrl.pathname.startsWith('/create-user')) {
+  if (
+    user &&
+    (request.nextUrl.pathname.startsWith('/student/create-user') ||
+      request.nextUrl.pathname.startsWith('/teacher/create-user'))
+  ) {
     // まずcookieを参照
     const isRegisteredCookie = request.cookies.get('is_registered')?.value
 
@@ -88,7 +93,8 @@ export async function updateSession(request: NextRequest) {
   // 初回登録が完了していないユーザーはリダイレクトさせる（cookieでキャッシュ）
   if (
     user &&
-    !request.nextUrl.pathname.startsWith('/create-user') &&
+    !request.nextUrl.pathname.startsWith('/student/create-user') &&
+    !request.nextUrl.pathname.startsWith('/teacher/create-user') &&
     !request.nextUrl.pathname.startsWith('/register') &&
     !request.nextUrl.pathname.startsWith('/api') &&
     !request.nextUrl.pathname.startsWith('/develop')
@@ -97,10 +103,10 @@ export async function updateSession(request: NextRequest) {
     const isRegisteredCookie = request.cookies.get('is_registered')?.value
 
     if (isRegisteredCookie === 'false') {
-      console.log('[middleware] is_registered cookieがfalseのため /create-user へリダイレクト')
-      // 未登録ならリダイレクト
+      console.log('[middleware] is_registered cookieがfalseのため /student/create-user へリダイレクト')
+      // 未登録ならリダイレクト（デフォルトは生徒用に）
       const url = request.nextUrl.clone()
-      url.pathname = '/create-user'
+      url.pathname = '/student/create-user'
       return NextResponse.redirect(url)
     }
 
@@ -115,9 +121,9 @@ export async function updateSession(request: NextRequest) {
       supabaseResponse.cookies.set('is_registered', isRegistered ? 'true' : 'false', { path: '/' })
 
       if (!isRegistered) {
-        console.log('[middleware] DB確認で未登録のため /create-user へリダイレクト')
+        console.log('[middleware] DB確認で未登録のため /student/create-user へリダイレクト')
         const url = request.nextUrl.clone()
-        url.pathname = '/create-user'
+        url.pathname = '/student/create-user'
         return NextResponse.redirect(url)
       }
     }
