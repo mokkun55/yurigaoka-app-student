@@ -3,33 +3,146 @@ export type Json = string | number | boolean | null | { [key: string]: Json | un
 export type Database = {
   public: {
     Tables: {
-      todos: {
+      classes: {
         Row: {
-          content: string | null
-          created_at: string
           id: number
-          title: string | null
-          userid: string
+          name: string
         }
         Insert: {
-          content?: string | null
-          created_at?: string
           id?: number
-          title?: string | null
-          userid: string
+          name: string
         }
         Update: {
-          content?: string | null
+          id?: number
+          name?: string
+        }
+        Relationships: []
+      }
+      clubs: {
+        Row: {
+          id: number
+          name: string
+          short_name: string
+        }
+        Insert: {
+          id?: number
+          name: string
+          short_name: string
+        }
+        Update: {
+          id?: number
+          name?: string
+          short_name?: string
+        }
+        Relationships: []
+      }
+      grades: {
+        Row: {
+          id: number
+          name: string
+        }
+        Insert: {
+          id?: number
+          name: string
+        }
+        Update: {
+          id?: number
+          name?: string
+        }
+        Relationships: []
+      }
+      homes: {
+        Row: {
+          address: string
+          created_at: string
+          id: number
+          name: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          address?: string
           created_at?: string
           id?: number
-          title?: string | null
-          userid?: string
+          name?: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          address?: string
+          created_at?: string
+          id?: number
+          name?: string
+          updated_at?: string
+          user_id?: string
         }
         Relationships: [
           {
-            foreignKeyName: 'todos_userid_fkey'
-            columns: ['userid']
+            foreignKeyName: 'homes_user_id_fkey'
+            columns: ['user_id']
             isOneToOne: false
+            referencedRelation: 'users'
+            referencedColumns: ['id']
+          },
+        ]
+      }
+      students: {
+        Row: {
+          class_id: number | null
+          club_id: number | null
+          grade_id: number | null
+          id: string
+          is_leader: boolean | null
+          parent_name: string | null
+          phone_number: number | null
+          room_number: number | null
+        }
+        Insert: {
+          class_id?: number | null
+          club_id?: number | null
+          grade_id?: number | null
+          id?: string
+          is_leader?: boolean | null
+          parent_name?: string | null
+          phone_number?: number | null
+          room_number?: number | null
+        }
+        Update: {
+          class_id?: number | null
+          club_id?: number | null
+          grade_id?: number | null
+          id?: string
+          is_leader?: boolean | null
+          parent_name?: string | null
+          phone_number?: number | null
+          room_number?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: 'students_class_id_fkey'
+            columns: ['class_id']
+            isOneToOne: false
+            referencedRelation: 'classes'
+            referencedColumns: ['id']
+          },
+          {
+            foreignKeyName: 'students_club_id_fkey'
+            columns: ['club_id']
+            isOneToOne: false
+            referencedRelation: 'clubs'
+            referencedColumns: ['id']
+          },
+          {
+            foreignKeyName: 'students_grade_id_fkey'
+            columns: ['grade_id']
+            isOneToOne: false
+            referencedRelation: 'grades'
+            referencedColumns: ['id']
+          },
+          {
+            foreignKeyName: 'students_id_fkey'
+            columns: ['id']
+            isOneToOne: true
             referencedRelation: 'users'
             referencedColumns: ['id']
           },
@@ -39,17 +152,23 @@ export type Database = {
         Row: {
           created_at: string
           id: string
-          username: string | null
+          is_deleted: boolean | null
+          name: string | null
+          role: string
         }
         Insert: {
           created_at?: string
           id?: string
-          username?: string | null
+          is_deleted?: boolean | null
+          name?: string | null
+          role: string
         }
         Update: {
           created_at?: string
           id?: string
-          username?: string | null
+          is_deleted?: boolean | null
+          name?: string | null
+          role?: string
         }
         Relationships: []
       }
