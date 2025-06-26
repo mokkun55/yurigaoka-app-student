@@ -1,6 +1,14 @@
 import { createServerClient } from '@supabase/ssr'
 import { NextResponse, type NextRequest } from 'next/server'
 
+// 判定用パス配列（関数外で定義して再利用）
+const loginPaths = ['/login', '/student/create-user', '/teacher/create-user', '/auth', '/api', '/develop']
+const createUserPaths = ['/student/create-user', '/teacher/create-user']
+const registerExcludePaths = ['/student/create-user', '/teacher/create-user', '/register', '/api', '/develop']
+
+// is_registeredクッキーの有効期限（秒）
+const IS_REGISTERED_COOKIE_MAX_AGE = 300
+
 export async function updateSession(request: NextRequest) {
   let supabaseResponse = NextResponse.next({
     request,
@@ -36,16 +44,7 @@ export async function updateSession(request: NextRequest) {
   } = await supabase.auth.getUser()
 
   // 認証していないユーザー向け
-  if (
-    !user &&
-    !request.nextUrl.pathname.startsWith('/login') &&
-    !request.nextUrl.pathname.startsWith('/student/create-user') &&
-    !request.nextUrl.pathname.startsWith('/teacher/create-user') &&
-    !request.nextUrl.pathname.startsWith('/auth') &&
-    !request.nextUrl.pathname.startsWith('/api') &&
-    // TODO 開発用なので後で消す
-    !request.nextUrl.pathname.startsWith('/develop')
-  ) {
+  if (!user && !loginPaths.some((path) => request.nextUrl.pathname.startsWith(path))) {
     console.log('[middleware] 未認証のため /login へリダイレクト')
     const url = request.nextUrl.clone()
     url.pathname = '/login'
@@ -61,11 +60,7 @@ export async function updateSession(request: NextRequest) {
   }
 
   // 初回登録が完了していないユーザーはリダイレクトさせる（cookieでキャッシュ）
-  if (
-    user &&
-    (request.nextUrl.pathname.startsWith('/student/create-user') ||
-      request.nextUrl.pathname.startsWith('/teacher/create-user'))
-  ) {
+  if (user && createUserPaths.some((path) => request.nextUrl.pathname.startsWith(path))) {
     // まずcookieを参照
     const isRegisteredCookie = request.cookies.get('is_registered')?.value
 
@@ -80,7 +75,10 @@ export async function updateSession(request: NextRequest) {
       // cookieがなければDBアクセス
       const { data: userData, error } = await supabase.from('users').select('name').eq('id', user.id).single()
       const isRegistered = !error && userData && userData.name
-      supabaseResponse.cookies.set('is_registered', isRegistered ? 'true' : 'false', { path: '/' })
+      supabaseResponse.cookies.set('is_registered', isRegistered ? 'true' : 'false', {
+        path: '/',
+        maxAge: IS_REGISTERED_COOKIE_MAX_AGE,
+      })
       if (isRegistered) {
         console.log('[middleware] DB確認で登録済みのため / へリダイレクト')
         const url = request.nextUrl.clone()
@@ -91,14 +89,7 @@ export async function updateSession(request: NextRequest) {
   }
 
   // 初回登録が完了していないユーザーはリダイレクトさせる（cookieでキャッシュ）
-  if (
-    user &&
-    !request.nextUrl.pathname.startsWith('/student/create-user') &&
-    !request.nextUrl.pathname.startsWith('/teacher/create-user') &&
-    !request.nextUrl.pathname.startsWith('/register') &&
-    !request.nextUrl.pathname.startsWith('/api') &&
-    !request.nextUrl.pathname.startsWith('/develop')
-  ) {
+  if (user && !registerExcludePaths.some((path) => request.nextUrl.pathname.startsWith(path))) {
     // まずcookieを参照
     const isRegisteredCookie = request.cookies.get('is_registered')?.value
 
@@ -118,7 +109,10 @@ export async function updateSession(request: NextRequest) {
 
       const isRegistered = !error && userData && userData.name
       // cookieに保存
-      supabaseResponse.cookies.set('is_registered', isRegistered ? 'true' : 'false', { path: '/' })
+      supabaseResponse.cookies.set('is_registered', isRegistered ? 'true' : 'false', {
+        path: '/',
+        maxAge: IS_REGISTERED_COOKIE_MAX_AGE,
+      })
 
       if (!isRegistered) {
         console.log('[middleware] DB確認で未登録のため /student/create-user へリダイレクト')
