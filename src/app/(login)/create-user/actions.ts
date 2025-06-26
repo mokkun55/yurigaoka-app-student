@@ -125,7 +125,31 @@ export async function registerUser(registerFormData: UserFormValues) {
   console.log('home', home)
 }
 
-export async function verifyInvitationCode(data: InvitationCodeValues) {
-  console.log('サーバーで受け取った招待コード:', data)
-  // ここでDB登録などを行う
+export async function verifyInvitationCode(inviteFormData: InvitationCodeValues) {
+  console.log('サーバーで受け取った招待コード:', inviteFormData)
+  const supabase = await createClient()
+  // codeがinvite_codeテーブルに存在するかチェック
+  const { data: invite, error: inviteError } = await supabase
+    .from('invite_code')
+    .select('*')
+    .eq('code', inviteFormData.invitationCode)
+    .single()
+
+  if (!invite) {
+    throw new Error('招待コードが無効です')
+  }
+
+  if (inviteError) {
+    console.error('招待エラー', inviteError)
+    throw new Error('招待エラーが発生しました')
+  }
+  // use_countをインクリメント
+  const { error: updateError } = await supabase
+    .from('invite_code')
+    .update({ use_count: invite.use_count + 1 })
+    .eq('id', invite.id)
+  if (updateError) {
+    throw new Error('招待コードの使用回数更新に失敗しました')
+  }
+  return true
 }
