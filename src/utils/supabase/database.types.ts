@@ -86,6 +86,27 @@ export type Database = {
           },
         ]
       }
+      invite_code: {
+        Row: {
+          code: string
+          created_at: string
+          id: number
+          use_count: number
+        }
+        Insert: {
+          code?: string
+          created_at?: string
+          id?: number
+          use_count?: number
+        }
+        Update: {
+          code?: string
+          created_at?: string
+          id?: number
+          use_count?: number
+        }
+        Relationships: []
+      }
       students: {
         Row: {
           class_id: number | null

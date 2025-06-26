@@ -115,8 +115,12 @@ export default function RegisterPage() {
       await verifyInvitationCode(data)
       toast.success('認証に成功しました')
       setIsAuth(true)
-    } catch (error) {
-      toast.error('認証に失敗しました')
+    } catch (error: unknown) {
+      if (error instanceof Error && error.message === '招待コードが無効です') {
+        toast.error(error.message)
+      } else {
+        toast.error('認証に失敗しました')
+      }
       console.error('認証に失敗しました', error)
     }
   }
