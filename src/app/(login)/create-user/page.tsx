@@ -13,6 +13,8 @@ import toast from 'react-hot-toast'
 import { registerUser, verifyInvitationCode } from './actions'
 import { useRouter } from 'next/navigation'
 import Cookies from 'js-cookie'
+import { useTransition } from 'react'
+import LoadingSpinner from '@/_components/ui/loading-spinner'
 
 // Zodスキーマ定義
 const invitationCodeSchema = z.object({
@@ -114,31 +116,38 @@ export default function RegisterPage() {
     }
   }
 
-  const onInvitationCodeSubmit: SubmitHandler<InvitationCodeValues> = async (data) => {
-    try {
-      await verifyInvitationCode(data)
-      toast.success('認証に成功しました')
-      setIsAuth(true)
-    } catch (error: unknown) {
-      if (error instanceof Error && error.message === '招待コードが無効です') {
-        toast.error(error.message)
-      } else {
-        toast.error('認証に失敗しました')
+  const [isPending, startTransition] = useTransition()
+  const [isVerifying, startVerifyingTransition] = useTransition()
+
+  const onInvitationCodeSubmit: SubmitHandler<InvitationCodeValues> = (data) => {
+    startVerifyingTransition(async () => {
+      try {
+        await verifyInvitationCode(data)
+        toast.success('認証に成功しました')
+        setIsAuth(true)
+      } catch (error: unknown) {
+        if (error instanceof Error && error.message === '招待コードが無効です') {
+          toast.error(error.message)
+        } else {
+          toast.error('認証に失敗しました')
+        }
+        console.error('認証に失敗しました', error)
       }
-      console.error('認証に失敗しました', error)
-    }
+    })
   }
 
-  const onUserFormSubmit: SubmitHandler<UserFormValues> = async (data) => {
-    try {
-      await registerUser(data)
-      toast.success('ユーザー情報を登録しました')
-      Cookies.set('is_registered', 'true')
-      await router.push('/')
-    } catch (error) {
-      toast.error('ユーザー情報の登録に失敗しました')
-      console.error('ユーザー情報の登録に失敗しました', error)
-    }
+  const onUserFormSubmit: SubmitHandler<UserFormValues> = (data) => {
+    startTransition(async () => {
+      try {
+        await registerUser(data)
+        toast.success('ユーザー情報を登録しました')
+        Cookies.set('is_registered', 'true')
+        await router.push('/')
+      } catch (error) {
+        toast.error('ユーザー情報の登録に失敗しました')
+        console.error('ユーザー情報の登録に失敗しました', error)
+      }
+    })
   }
 
   if (!isAuth) {
@@ -165,7 +174,9 @@ export default function RegisterPage() {
               <p className="text-red-500 text-sm mt-1">{invitationCodeErrors.invitationCode.message}</p>
             )}
           </InputLabel>
-          <Button type="submit">認証する</Button>
+          <Button type="submit" disabled={isVerifying}>
+            {isVerifying ? <LoadingSpinner size={20} /> : '認証する'}
+          </Button>
         </form>
       </div>
     )
@@ -319,8 +330,8 @@ export default function RegisterPage() {
             </div>
           </div>
 
-          <Button className="w-full mt-6" type="submit">
-            登録する
+          <Button className="w-full mt-6" type="submit" disabled={isPending}>
+            {isPending ? <LoadingSpinner size={20} /> : '登録する'}
           </Button>
         </form>
       </div>
