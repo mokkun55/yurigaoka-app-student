@@ -12,6 +12,7 @@ import { Button } from '@/_components/ui/button'
 import toast from 'react-hot-toast'
 import { registerUser, verifyInvitationCode } from './actions'
 import { useRouter } from 'next/navigation'
+import Cookies from 'js-cookie'
 
 // Zodスキーマ定義
 const invitationCodeSchema = z.object({
@@ -132,7 +133,8 @@ export default function RegisterPage() {
     try {
       await registerUser(data)
       toast.success('ユーザー情報を登録しました')
-      router.push('/')
+      Cookies.set('is_registered', 'true')
+      await router.push('/')
     } catch (error) {
       toast.error('ユーザー情報の登録に失敗しました')
       console.error('ユーザー情報の登録に失敗しました', error)

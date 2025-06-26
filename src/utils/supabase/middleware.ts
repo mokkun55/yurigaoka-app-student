@@ -60,12 +60,7 @@ export async function updateSession(request: NextRequest) {
   }
 
   // 初回登録が完了していないユーザーはリダイレクトさせる（cookieでキャッシュ）
-  // TODO 現在開発中のため一旦コメントアウト
-  /*
-  if (
-    user &&
-    request.nextUrl.pathname.startsWith('/create-user')
-  ) {
+  if (user && request.nextUrl.pathname.startsWith('/create-user')) {
     // まずcookieを参照
     const isRegisteredCookie = request.cookies.get('is_registered')?.value
 
@@ -89,7 +84,6 @@ export async function updateSession(request: NextRequest) {
       }
     }
   }
-  */
 
   // 初回登録が完了していないユーザーはリダイレクトさせる（cookieでキャッシュ）
   if (
