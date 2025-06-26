@@ -111,16 +111,24 @@ export default function RegisterPage() {
   }
 
   const onInvitationCodeSubmit: SubmitHandler<InvitationCodeValues> = async (data) => {
-    await verifyInvitationCode(data)
-    // TODO エラーハンドリング
-    toast.success('認証に成功しました')
-    setIsAuth(true)
+    try {
+      await verifyInvitationCode(data)
+      toast.success('認証に成功しました')
+      setIsAuth(true)
+    } catch (error) {
+      toast.error('認証に失敗しました')
+      console.error('認証に失敗しました', error)
+    }
   }
 
   const onUserFormSubmit: SubmitHandler<UserFormValues> = async (data) => {
-    await registerUser(data)
-    // TODO エラーハンドリング
-    toast.success('ユーザー情報を登録しました')
+    try {
+      await registerUser(data)
+      toast.success('ユーザー情報を登録しました')
+    } catch (error) {
+      toast.error('ユーザー情報の登録に失敗しました')
+      console.error('ユーザー情報の登録に失敗しました', error)
+    }
   }
 
   if (!isAuth) {

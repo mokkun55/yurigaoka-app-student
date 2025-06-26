@@ -20,7 +20,7 @@ export async function registerUser(registerFormData: UserFormValues) {
   try {
     // ユーザー情報をupdate
     // MEMO: ユーザー情報はユーザー登録時に作成されるため、upsertではなくupdateを使用する
-    const { data: user, error: userError } = await supabase
+    const { data: user, error: userUpdateError } = await supabase
       .from('users')
       .update({
         name: registerFormData.name, // これはformから取得したユーザー名
@@ -30,8 +30,8 @@ export async function registerUser(registerFormData: UserFormValues) {
       .eq('id', userData.user.id) // idはDBから取得してきたuserId
       .select()
       .single()
-    if (userError) {
-      throw new Error(userError.message)
+    if (userUpdateError) {
+      throw new Error(userUpdateError.message)
     }
 
     // 学年の取得
