@@ -11,6 +11,7 @@ import SectionTitle from '@/_components/ui/section-title'
 import { Button } from '@/_components/ui/button'
 import toast from 'react-hot-toast'
 import { registerUser, verifyInvitationCode } from './actions'
+import { useRouter } from 'next/navigation'
 
 // Zodスキーマ定義
 const invitationCodeSchema = z.object({
@@ -46,6 +47,8 @@ export type InvitationCodeValues = z.infer<typeof invitationCodeSchema>
 export type UserFormValues = z.infer<typeof userFormSchema>
 
 export default function RegisterPage() {
+  const router = useRouter()
+
   // 寮生認証のフラグ
   const [isAuth, setIsAuth] = useState(false)
 
@@ -129,6 +132,7 @@ export default function RegisterPage() {
     try {
       await registerUser(data)
       toast.success('ユーザー情報を登録しました')
+      router.push('/')
     } catch (error) {
       toast.error('ユーザー情報の登録に失敗しました')
       console.error('ユーザー情報の登録に失敗しました', error)
