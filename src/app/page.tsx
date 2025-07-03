@@ -19,11 +19,15 @@ export default function Home() {
         <div className="flex flex-col justify-center gap-2">
           <div className="flex gap-2 w-full">
             <ApplicationCard
-              href="/absence"
+              href="/absence/home"
               icons={[<House size={32} key="house" />, <Utensils size={32} key="utensils" />]}
               text="帰省・欠食届を出す"
             />
-            <ApplicationCard href="/absence" icons={[<Utensils size={32} key="utensils" />]} text="欠食届のみを出す" />
+            <ApplicationCard
+              href="/absence/meal"
+              icons={[<Utensils size={32} key="utensils" />]}
+              text="欠食届のみを出す"
+            />
           </div>
           <Link
             href="/history"
