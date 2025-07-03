@@ -6,14 +6,18 @@ import { useRouter } from 'next/navigation'
 type Props = {
   title: string
   type?: 'back' | 'close' | 'none'
+  closeUrl?: string
 }
 
-export default function Header({ title, type = 'none' }: Props) {
+export default function Header({ title, type = 'none', closeUrl }: Props) {
   const router = useRouter()
 
   const handleIconClick = () => {
     if (type === 'back') {
       router.back()
+    }
+    if (type === 'close') {
+      router.push(closeUrl ?? '/')
     }
   }
 

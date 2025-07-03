@@ -8,18 +8,19 @@ import InputLabel from '@/_components/ui/input-label'
 import { BaseSelect } from '@/_components/ui/input/base-select'
 import { Button } from '@/_components/ui/button'
 import { CheckboxField } from '@/_components/ui/checkbox/checkbox-field'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { DateInput } from '@/_components/ui/input/date-input'
 import { TimeInput } from '@/_components/ui/input/time-input'
 import { submitHomecomingForm } from './actions'
+import fetchHomeList from '../hooks/use-fetch-home-list'
+import { Database } from '@/utils/supabase/database.types'
 
-const destinationValues = ['実家', '親戚', '友人宅', 'その他'] as const
 const homecomingFormSchema = z.object({
   startDate: z.string().min(1, '開始日を選択してください'),
   endDate: z.string().min(1, '終了日を選択してください'),
   departureTime: z.string().min(1, '出発予定時刻を入力してください'),
   returnTime: z.string().min(1, '帰寮予定時刻を入力してください'),
-  destination: z.enum(destinationValues, { required_error: '帰省先を選択してください' }),
+  destination: z.string().min(1, '帰省先を選択してください'),
   reason: z.string().min(1, '理由を入力してください'),
   mealDepartureBreakfast: z.boolean().optional(),
   mealDepartureDinner: z.boolean().optional(),
@@ -29,14 +30,18 @@ const homecomingFormSchema = z.object({
 
 export type HomecomingFormValues = z.infer<typeof homecomingFormSchema>
 
-const destinationPresets = [
-  { label: '実家', value: '実家' },
-  { label: '親戚', value: '親戚' },
-  { label: '友人宅', value: '友人宅' },
-  { label: 'その他', value: 'その他' },
-]
-
 export default function AbsenceHome() {
+  const [homes, setHomes] = useState<Database['public']['Tables']['homes']['Row'][]>([])
+
+  useEffect(() => {
+    const fetchHomes = async () => {
+      const data = await fetchHomeList()
+      setHomes(data || [])
+    }
+
+    fetchHomes()
+  }, [])
+
   const {
     control,
     handleSubmit,
@@ -48,7 +53,7 @@ export default function AbsenceHome() {
       endDate: '',
       departureTime: '',
       returnTime: '',
-      destination: undefined,
+      destination: '',
       reason: '',
       mealDepartureBreakfast: false,
       mealDepartureDinner: false,
@@ -61,7 +66,11 @@ export default function AbsenceHome() {
 
   const onSubmit: SubmitHandler<HomecomingFormValues> = async (data) => {
     setIsSubmitting(true)
-    await submitHomecomingForm(data)
+    const parsedData = {
+      ...data,
+      destination: JSON.parse(data.destination),
+    }
+    await submitHomecomingForm(parsedData)
     setIsSubmitting(false)
   }
 
@@ -108,7 +117,11 @@ export default function AbsenceHome() {
             render={({ field }) => (
               <BaseSelect
                 {...field}
-                options={destinationPresets}
+                value={field.value ?? ''}
+                options={homes.map((home) => ({
+                  label: home.name,
+                  value: JSON.stringify({ name: home.name, address: home.address }),
+                }))}
                 placeholder="プリセットから選択してください"
                 fullWidth
               />
