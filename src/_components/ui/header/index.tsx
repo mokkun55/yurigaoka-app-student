@@ -1,29 +1,17 @@
 'use client'
 
 import { X, ChevronLeft } from 'lucide-react'
-import { useRouter } from 'next/navigation'
 
 type Props = {
   title: string
   type?: 'back' | 'close' | 'none'
-  closeUrl?: string
+  onClick?: () => void
 }
 
-export default function Header({ title, type = 'none', closeUrl }: Props) {
-  const router = useRouter()
-
-  const handleIconClick = () => {
-    if (type === 'back') {
-      router.back()
-    }
-    if (type === 'close') {
-      router.push(closeUrl ?? '/')
-    }
-  }
-
+export default function Header({ title, type = 'none', onClick }: Props) {
   return (
     <div className="flex items-center bg-white h-12 border-b border-(--border-gray) relative">
-      <button className="p-4 cursor-pointer" onClick={handleIconClick}>
+      <button className="p-4 cursor-pointer" onClick={onClick}>
         {type === 'back' && <ChevronLeft size={24} />}
         {type === 'close' && <X size={24} />}
       </button>
