@@ -136,12 +136,11 @@ export default function AbsenceHome() {
               <Controller
                 name="mealDepartureBreakfast"
                 control={control}
-                render={({ field: { onChange, name, ref, value, ...rest } }) => (
+                render={({ field: { onChange, name, value, ...rest } }) => (
                   <CheckboxField
                     checked={value}
                     onCheckedChange={onChange}
                     name={name}
-                    inputRef={ref}
                     label="朝食を欠食する"
                     disabled={rest.disabled}
                   />
@@ -152,12 +151,11 @@ export default function AbsenceHome() {
               <Controller
                 name="mealDepartureDinner"
                 control={control}
-                render={({ field: { onChange, name, ref, value, ...rest } }) => (
+                render={({ field: { onChange, name, value, ...rest } }) => (
                   <CheckboxField
                     checked={value}
                     onCheckedChange={onChange}
                     name={name}
-                    inputRef={ref}
                     label="夕食を欠食する"
                     disabled={rest.disabled}
                   />
@@ -172,12 +170,11 @@ export default function AbsenceHome() {
               <Controller
                 name="mealReturnBreakfast"
                 control={control}
-                render={({ field: { onChange, name, ref, value, ...rest } }) => (
+                render={({ field: { onChange, name, value, ...rest } }) => (
                   <CheckboxField
                     checked={value}
                     onCheckedChange={onChange}
                     name={name}
-                    inputRef={ref}
                     label="朝食を欠食する"
                     disabled={rest.disabled}
                   />
@@ -188,12 +185,11 @@ export default function AbsenceHome() {
               <Controller
                 name="mealReturnDinner"
                 control={control}
-                render={({ field: { onChange, name, ref, value, ...rest } }) => (
+                render={({ field: { onChange, name, value, ...rest } }) => (
                   <CheckboxField
                     checked={value}
                     onCheckedChange={onChange}
                     name={name}
-                    inputRef={ref}
                     label="夕食を欠食する"
                     disabled={rest.disabled}
                   />

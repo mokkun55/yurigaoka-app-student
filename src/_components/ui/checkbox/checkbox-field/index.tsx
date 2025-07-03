@@ -9,10 +9,10 @@ type Props = {
   name?: string
   disabled?: boolean
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  inputRef?: React.Ref<any>
+  inputRef?: React.Ref<HTMLButtonElement>
 }
 
-export const CheckboxField = React.forwardRef<HTMLInputElement, Props>(
+export const CheckboxField = React.forwardRef<HTMLButtonElement, Props>(
   ({ label, checked, onCheckedChange, name, disabled, inputRef }, ref) => {
     return (
       <div className="flex items-center gap-2 border border-(--border-gray) rounded-md p-2 w-full">
