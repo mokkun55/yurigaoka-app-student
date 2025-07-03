@@ -4,7 +4,6 @@ import { supabase } from '@/utils/supabase/client'
 
 export function useAuth() {
   const router = useRouter()
-  const url = process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3003'
 
   const signOut = async () => {
     await supabase.auth.signOut()
@@ -17,13 +16,12 @@ export function useAuth() {
     const { error } = await supabase.auth.signInWithOAuth({
       provider: 'google',
       options: {
-        redirectTo: `${url}/api/auth/callback`,
+        redirectTo: `${location.origin}/api/auth/callback`,
       },
     })
     if (error) {
       return error
     }
-    router.push('/')
   }
 
   const getUser = async () => {
