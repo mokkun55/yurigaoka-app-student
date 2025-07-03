@@ -5,10 +5,9 @@ import * as React from 'react'
 type Props = {
   label: string
   checked?: boolean
-  onCheckedChange?: () => void
+  onCheckedChange?: (_checked: boolean) => void
   name?: string
   disabled?: boolean
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   inputRef?: React.Ref<HTMLButtonElement>
 }
 
@@ -20,7 +19,7 @@ export const CheckboxField = React.forwardRef<HTMLButtonElement, Props>(
           <Checkbox
             className="border-black border-[2px] rounded-sm w-5 h-5"
             checked={checked}
-            onCheckedChange={onCheckedChange}
+            onCheckedChange={(value) => onCheckedChange?.(value === true)}
             name={name}
             disabled={disabled}
             ref={inputRef || ref}
