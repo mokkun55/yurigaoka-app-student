@@ -11,6 +11,7 @@ import { CheckboxField } from '@/_components/ui/checkbox/checkbox-field'
 import { useState } from 'react'
 import { DateInput } from '@/_components/ui/input/date-input'
 import { TimeInput } from '@/_components/ui/input/time-input'
+import { submitHomecomingForm } from './actions'
 
 const destinationValues = ['実家', '親戚', '友人宅', 'その他'] as const
 const homecomingFormSchema = z.object({
@@ -26,7 +27,7 @@ const homecomingFormSchema = z.object({
   mealReturnDinner: z.boolean().optional(),
 })
 
-type HomecomingFormValues = z.infer<typeof homecomingFormSchema>
+export type HomecomingFormValues = z.infer<typeof homecomingFormSchema>
 
 const destinationPresets = [
   { label: '実家', value: '実家' },
@@ -60,8 +61,7 @@ export default function AbsenceHome() {
 
   const onSubmit: SubmitHandler<HomecomingFormValues> = async (data) => {
     setIsSubmitting(true)
-    // ここでAPI送信など
-    alert(JSON.stringify(data, null, 2))
+    await submitHomecomingForm(data)
     setIsSubmitting(false)
   }
 
