@@ -14,19 +14,40 @@ import { TimeInput } from '@/_components/ui/input/time-input'
 import { submitHomecomingForm } from './actions'
 import fetchHomeList from '../hooks/use-fetch-home-list'
 import { Database } from '@/utils/supabase/database.types'
+import LoadingSpinner from '@/_components/ui/loading-spinner'
 
-const homecomingFormSchema = z.object({
-  startDate: z.string().min(1, '開始日を選択してください'),
-  endDate: z.string().min(1, '終了日を選択してください'),
-  departureTime: z.string().min(1, '出発予定時刻を入力してください'),
-  returnTime: z.string().min(1, '帰寮予定時刻を入力してください'),
-  destination: z.string().min(1, '帰省先を選択してください'),
-  reason: z.string().min(1, '理由を入力してください'),
-  mealDepartureBreakfast: z.boolean().optional(),
-  mealDepartureDinner: z.boolean().optional(),
-  mealReturnBreakfast: z.boolean().optional(),
-  mealReturnDinner: z.boolean().optional(),
-})
+const homecomingFormSchema = z
+  .object({
+    startDate: z.string().min(1, '開始日を選択してください'),
+    endDate: z.string().min(1, '終了日を選択してください'),
+    departureTime: z.string().min(1, '出発予定時刻を入力してください'),
+    returnTime: z.string().min(1, '帰寮予定時刻を入力してください'),
+    destination: z.string().min(1, '帰省先を選択してください'),
+    reason: z.string().min(1, '理由を入力してください'),
+    mealDepartureBreakfast: z.boolean().optional(),
+    mealDepartureDinner: z.boolean().optional(),
+    mealReturnBreakfast: z.boolean().optional(),
+    mealReturnDinner: z.boolean().optional(),
+  })
+  .refine((data) => new Date(data.startDate) < new Date(data.endDate), {
+    message: '開始日は終了日より前の日付を選択してください',
+    path: ['startDate'],
+  })
+  .refine((data) => data.startDate !== data.endDate, {
+    message: '開始日と終了日が同じ日付になっています',
+    path: ['endDate'],
+  })
+  .refine(
+    (data) => {
+      const today = new Date()
+      const start = new Date(data.startDate)
+      today.setHours(0, 0, 0, 0)
+      const threeDaysLater = new Date(today)
+      threeDaysLater.setDate(today.getDate() + 3)
+      return start >= threeDaysLater
+    },
+    { message: '帰省届は3日前までに提出してください', path: ['startDate'] }
+  )
 
 export type HomecomingFormValues = z.infer<typeof homecomingFormSchema>
 
@@ -44,6 +65,8 @@ export default function AbsenceHome() {
     fetchHomes()
   }, [])
 
+  const today = new Date().toISOString().slice(0, 10)
+
   const {
     control,
     handleSubmit,
@@ -51,8 +74,8 @@ export default function AbsenceHome() {
   } = useForm<HomecomingFormValues>({
     resolver: zodResolver(homecomingFormSchema),
     defaultValues: {
-      startDate: '',
-      endDate: '',
+      startDate: today,
+      endDate: today,
       departureTime: '',
       returnTime: '',
       destination: '',
@@ -73,7 +96,6 @@ export default function AbsenceHome() {
   }
 
   // 送信
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars, no-unused-vars
   const onSubmit: SubmitHandler<HomecomingFormValues> = async (data) => {
     setIsSubmitting(true)
     const parsedData = {
@@ -223,8 +245,9 @@ export default function AbsenceHome() {
               </label>
             </div>
           </InputLabel>
+          <p className="text-sm text-(--sub-text)">※期間中の欠食は自動で欠食されます</p>
           <Button className="w-full mt-4" type="submit" disabled={isSubmitting}>
-            {isSubmitting ? '送信中...' : '確認する'}
+            確認する
           </Button>
         </form>
       </div>
@@ -291,8 +314,13 @@ export default function AbsenceHome() {
           </div>
 
           <div className="flex flex-col gap-2">
-            <Button className="w-full font-bold" type="submit" disabled={isSubmitting}>
-              この内容で提出する
+            <Button
+              className="w-full font-bold"
+              type="submit"
+              disabled={isSubmitting}
+              onClick={() => onSubmit(formValues)}
+            >
+              {isSubmitting ? <LoadingSpinner /> : 'この内容で提出する'}
             </Button>
             <Button
               className="w-full font-bold"
