@@ -110,36 +110,26 @@ export default function AbsenceHome() {
     return (
       <div className="bg-white h-full">
         <Header title="帰省届を出す" type="close" />
-        <form onSubmit={handleSubmit(onConfirm)} className="flex flex-col gap-4 px-4 py-2">
-          <InputLabel label="帰省日">
-            <div className="flex gap-2 w-full items-center">
-              <div className="w-full">
-                <Controller name="startDate" control={control} render={({ field }) => <DateInput {...field} />} />
-              </div>
-              <span className="mx-1">〜</span>
-              <div className="w-full">
-                <Controller name="endDate" control={control} render={({ field }) => <DateInput {...field} />} />
-              </div>
-            </div>
-            {(errors.startDate || errors.endDate) && (
-              <div className="text-red-500 text-xs mt-1">{errors.startDate?.message || errors.endDate?.message}</div>
-            )}
-          </InputLabel>
-          <div className="flex gap-2 w-full">
+        <form onSubmit={handleSubmit(onConfirm)} className="flex flex-col gap-4 p-3">
+          <div className="flex gap-2">
+            <InputLabel label="開始日" className="w-full">
+              <Controller name="startDate" control={control} render={({ field }) => <DateInput {...field} />} />
+            </InputLabel>
+
+            <InputLabel label="終了日" className="w-full">
+              <Controller name="endDate" control={control} render={({ field }) => <DateInput {...field} />} />
+            </InputLabel>
+          </div>
+          {(errors.startDate || errors.endDate) && (
+            <div className="text-red-500 text-xs mt-1">{errors.startDate?.message || errors.endDate?.message}</div>
+          )}
+          <div className="flex gap-2">
             <InputLabel label="出発予定時刻" className="w-full">
-              <Controller
-                name="departureTime"
-                control={control}
-                render={({ field }) => <TimeInput {...field} className="w-full" />}
-              />
+              <Controller name="departureTime" control={control} render={({ field }) => <TimeInput {...field} />} />
               {errors.departureTime && <div className="text-red-500 text-xs mt-1">{errors.departureTime.message}</div>}
             </InputLabel>
             <InputLabel label="帰寮予定時刻" className="w-full">
-              <Controller
-                name="returnTime"
-                control={control}
-                render={({ field }) => <TimeInput {...field} className="w-full" />}
-              />
+              <Controller name="returnTime" control={control} render={({ field }) => <TimeInput {...field} />} />
               {errors.returnTime && <div className="text-red-500 text-xs mt-1">{errors.returnTime.message}</div>}
             </InputLabel>
           </div>
