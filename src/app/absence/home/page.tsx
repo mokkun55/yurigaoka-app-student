@@ -16,6 +16,28 @@ import fetchHomeList from '../hooks/use-fetch-home-list'
 import { Database } from '@/utils/supabase/database.types'
 import LoadingSpinner from '@/_components/ui/loading-spinner'
 import dayjs from 'dayjs'
+import { useRouter } from 'next/navigation'
+
+// 門限時刻を変数で定義
+const LIMIT_MORNING = '07:39'
+const LIMIT_NIGHT = '20:29'
+
+// 分単位で時刻比較する関数
+const toMinutes = (time: string) => {
+  const [h, m] = time.split(':').map(Number)
+  return h * 60 + m
+}
+
+// 特別な事情が必要かどうか判定する共通関数
+const isSpecialReasonRequired = (dep?: string, ret?: string) => {
+  // 出発が朝より早い、または夜より遅い
+  const depEarly = dep && toMinutes(dep) < toMinutes(LIMIT_MORNING)
+  const depLate = dep && toMinutes(dep) >= toMinutes(LIMIT_NIGHT)
+  // 帰寮が夜より遅い、または朝より早い
+  const retLate = ret && toMinutes(ret) > toMinutes(LIMIT_NIGHT)
+  const retEarly = ret && toMinutes(ret) <= toMinutes(LIMIT_MORNING)
+  return !!(depEarly || depLate || retEarly || retLate)
+}
 
 const homecomingFormSchema = z
   .object({
@@ -52,11 +74,7 @@ const homecomingFormSchema = z
   )
   .refine(
     (data) => {
-      const dep = data.departureTime
-      const ret = data.returnTime
-      const depEarly = dep && dep < '07:40'
-      const retLate = ret && ret > '11:00'
-      if (depEarly || retLate) {
+      if (isSpecialReasonRequired(data.departureTime, data.returnTime)) {
         return data.specialReason && data.specialReason.trim().length > 0
       }
       return true
@@ -70,6 +88,7 @@ const homecomingFormSchema = z
 export type HomecomingFormValues = z.infer<typeof homecomingFormSchema>
 
 export default function AbsenceHome() {
+  const router = useRouter()
   const [homes, setHomes] = useState<Database['public']['Tables']['homes']['Row'][]>([])
   const [formValues, setFormValues] = useState<HomecomingFormValues | undefined>(undefined)
   const [isConfirm, setIsConfirm] = useState<boolean>(false)
@@ -98,12 +117,12 @@ export default function AbsenceHome() {
       departureTime: '',
       returnTime: '',
       destination: '',
+      specialReason: '',
       reason: '',
       mealDepartureBreakfast: false,
       mealDepartureDinner: false,
       mealReturnBreakfast: false,
       mealReturnDinner: false,
-      specialReason: '',
     },
   })
 
@@ -129,12 +148,12 @@ export default function AbsenceHome() {
   // 特別な事情の表示判定
   const departureTime = watch('departureTime')
   const returnTime = watch('returnTime')
-  const showSpecialReason = (departureTime && departureTime < '07:40') || (returnTime && returnTime > '11:00')
+  const showSpecialReason = isSpecialReasonRequired(departureTime, returnTime)
 
   if (!isConfirm) {
     return (
       <div className="bg-white h-full">
-        <Header title="帰省届を出す" type="close" />
+        <Header title="帰省届を出す" type="close" onClick={() => router.push('/')} />
         <form onSubmit={handleSubmit(onConfirm)} className="flex flex-col gap-4 p-3">
           <div className="flex gap-2">
             <InputLabel label="開始日" className="w-full">
@@ -325,12 +344,16 @@ export default function AbsenceHome() {
             <div className="text-base text-(--main-text)">{formValues.reason}</div>
           </InputLabel>
 
-          {((formValues.departureTime && formValues.departureTime < '07:40') ||
-            (formValues.returnTime && formValues.returnTime > '11:00')) && (
-            <InputLabel label="特別な事情">
-              <div className="text-base">{formValues.specialReason}</div>
-            </InputLabel>
-          )}
+          {(() => {
+            if (isSpecialReasonRequired(formValues.departureTime, formValues.returnTime)) {
+              return (
+                <InputLabel label="特別な事情">
+                  <div className="text-base">{formValues.specialReason}</div>
+                </InputLabel>
+              )
+            }
+            return null
+          })()}
 
           <InputLabel label={`帰省日 (${dayjs(formValues.startDate).format('MM/DD')}) の欠食`}>
             <div>
