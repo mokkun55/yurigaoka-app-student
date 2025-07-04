@@ -15,6 +15,7 @@ import { submitHomecomingForm } from './actions'
 import fetchHomeList from '../hooks/use-fetch-home-list'
 import { Database } from '@/utils/supabase/database.types'
 import LoadingSpinner from '@/_components/ui/loading-spinner'
+import dayjs from 'dayjs'
 
 const homecomingFormSchema = z
   .object({
@@ -28,6 +29,7 @@ const homecomingFormSchema = z
     mealDepartureDinner: z.boolean().optional(),
     mealReturnBreakfast: z.boolean().optional(),
     mealReturnDinner: z.boolean().optional(),
+    specialReason: z.string().optional(),
   })
   .refine((data) => new Date(data.startDate) < new Date(data.endDate), {
     message: '開始日は終了日より前の日付を選択してください',
@@ -48,13 +50,29 @@ const homecomingFormSchema = z
     },
     { message: '帰省届は3日前までに提出してください', path: ['startDate'] }
   )
+  .refine(
+    (data) => {
+      const dep = data.departureTime
+      const ret = data.returnTime
+      const depEarly = dep && dep < '07:40'
+      const retLate = ret && ret > '11:00'
+      if (depEarly || retLate) {
+        return data.specialReason && data.specialReason.trim().length > 0
+      }
+      return true
+    },
+    {
+      message: '特別な事情を入力してください',
+      path: ['specialReason'],
+    }
+  )
 
 export type HomecomingFormValues = z.infer<typeof homecomingFormSchema>
 
 export default function AbsenceHome() {
   const [homes, setHomes] = useState<Database['public']['Tables']['homes']['Row'][]>([])
   const [formValues, setFormValues] = useState<HomecomingFormValues | undefined>(undefined)
-  const [isConfirm, setIsConfirm] = useState(false)
+  const [isConfirm, setIsConfirm] = useState<boolean>(false)
 
   useEffect(() => {
     const fetchHomes = async () => {
@@ -71,6 +89,7 @@ export default function AbsenceHome() {
     control,
     handleSubmit,
     formState: { errors },
+    watch,
   } = useForm<HomecomingFormValues>({
     resolver: zodResolver(homecomingFormSchema),
     defaultValues: {
@@ -84,6 +103,7 @@ export default function AbsenceHome() {
       mealDepartureDinner: false,
       mealReturnBreakfast: false,
       mealReturnDinner: false,
+      specialReason: '',
     },
   })
 
@@ -106,6 +126,11 @@ export default function AbsenceHome() {
     setIsSubmitting(false)
   }
 
+  // 特別な事情の表示判定
+  const departureTime = watch('departureTime')
+  const returnTime = watch('returnTime')
+  const showSpecialReason = (departureTime && departureTime < '07:40') || (returnTime && returnTime > '11:00')
+
   if (!isConfirm) {
     return (
       <div className="bg-white h-full">
@@ -123,15 +148,25 @@ export default function AbsenceHome() {
           {(errors.startDate || errors.endDate) && (
             <div className="text-red-500 text-xs mt-1">{errors.startDate?.message || errors.endDate?.message}</div>
           )}
-          <div className="flex gap-2">
-            <InputLabel label="出発予定時刻" className="w-full">
-              <Controller name="departureTime" control={control} render={({ field }) => <TimeInput {...field} />} />
-              {errors.departureTime && <div className="text-red-500 text-xs mt-1">{errors.departureTime.message}</div>}
-            </InputLabel>
-            <InputLabel label="帰寮予定時刻" className="w-full">
-              <Controller name="returnTime" control={control} render={({ field }) => <TimeInput {...field} />} />
-              {errors.returnTime && <div className="text-red-500 text-xs mt-1">{errors.returnTime.message}</div>}
-            </InputLabel>
+          <div className="flex flex-col gap-2">
+            <div className="flex gap-2">
+              <InputLabel label="出発予定時刻" className="w-full">
+                <Controller name="departureTime" control={control} render={({ field }) => <TimeInput {...field} />} />
+                {errors.departureTime && (
+                  <div className="text-red-500 text-xs mt-1">{errors.departureTime.message}</div>
+                )}
+              </InputLabel>
+              <InputLabel label="帰寮予定時刻" className="w-full">
+                <Controller name="returnTime" control={control} render={({ field }) => <TimeInput {...field} />} />
+                {errors.returnTime && <div className="text-red-500 text-xs mt-1">{errors.returnTime.message}</div>}
+              </InputLabel>
+            </div>
+            {showSpecialReason && (
+              <div className="text-(--warn-text) bg-(--warn-background) border-(--warn-border) rounded-md p-2 text-[12px] font-[700]">
+                <p>出発または帰省時刻が門限を過ぎています。</p>
+                <p>特別な事情を記入してください。</p>
+              </div>
+            )}
           </div>
           <InputLabel label="帰省先">
             <Controller
@@ -166,6 +201,22 @@ export default function AbsenceHome() {
             />
             {errors.reason && <div className="text-red-500 text-xs mt-1">{errors.reason.message}</div>}
           </InputLabel>
+          {showSpecialReason && (
+            <InputLabel label="特別な事情">
+              <Controller
+                name="specialReason"
+                control={control}
+                render={({ field }) => (
+                  <textarea
+                    {...field}
+                    className="w-full border rounded p-2 min-h-[48px]"
+                    placeholder="特別な事情を入力してください"
+                  />
+                )}
+              />
+              {errors.specialReason && <div className="text-red-500 text-xs mt-1">{errors.specialReason.message}</div>}
+            </InputLabel>
+          )}
           {/* TODO 朝 朝 とチェックつけると 自動で間の夕の欠食にするような処理 or バリデーション */}
           <InputLabel label="帰省日の食事">
             <div className="flex flex-col gap-2">
@@ -254,9 +305,10 @@ export default function AbsenceHome() {
           </div>
 
           <InputLabel label="帰省期間">
-            <div className="text-2xl font-bold">
-              {formValues.startDate} {formValues.departureTime} <span className="font-normal">〜</span>
-              {formValues.endDate} {formValues.returnTime}
+            <div className="text-base font-bold">
+              {dayjs(formValues.startDate).format('YYYY/MM/DD')} {formValues.departureTime}
+              <span className="font-normal mx-2">〜</span>
+              {dayjs(formValues.endDate).format('YYYY/MM/DD')} {formValues.returnTime}
             </div>
           </InputLabel>
 
@@ -270,28 +322,23 @@ export default function AbsenceHome() {
           </InputLabel>
 
           <InputLabel label="帰省理由">
-            <div className="text-2xl text-(--main-text)">{formValues.reason}</div>
+            <div className="text-base text-(--main-text)">{formValues.reason}</div>
           </InputLabel>
 
-          {/* TODO <InputLabel label="特別な事情">
-            <div className="text-base text-(--sub-text)">{formValues.specialReason}</div>
-          </InputLabel> */}
+          {((formValues.departureTime && formValues.departureTime < '07:40') ||
+            (formValues.returnTime && formValues.returnTime > '11:00')) && (
+            <InputLabel label="特別な事情">
+              <div className="text-base">{formValues.specialReason}</div>
+            </InputLabel>
+          )}
 
-          <InputLabel label="欠食期間">
-            <div className="text-base text-(--main-text)">
-              {formValues.startDate} {} <span className="font-normal">〜</span>
-              {formValues.endDate} {}
-            </div>
-          </InputLabel>
-
-          {/* 欠食情報の表示を追加 */}
-          <InputLabel label="帰省日の欠食">
+          <InputLabel label={`帰省日 (${dayjs(formValues.startDate).format('MM/DD')}) の欠食`}>
             <div>
               朝食: {formValues.mealDepartureBreakfast ? '欠食' : '喫食'} ／ 夕食:{' '}
               {formValues.mealDepartureDinner ? '欠食' : '喫食'}
             </div>
           </InputLabel>
-          <InputLabel label="帰寮日の欠食">
+          <InputLabel label={`帰寮日 (${dayjs(formValues.endDate).format('MM/DD')}) の欠食`}>
             <div>
               朝食: {formValues.mealReturnBreakfast ? '欠食' : '喫食'} ／ 夕食:{' '}
               {formValues.mealReturnDinner ? '欠食' : '喫食'}
