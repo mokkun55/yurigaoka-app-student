@@ -17,6 +17,9 @@ import { Database } from '@/utils/supabase/database.types'
 import LoadingSpinner from '@/_components/ui/loading-spinner'
 import dayjs from 'dayjs'
 import { useRouter } from 'next/navigation'
+import { toast } from 'react-hot-toast'
+
+// TODO 平日は帰らせないなどの仕組みも追加する
 
 // 門限時刻を変数で定義
 const LIMIT_MORNING = '07:39'
@@ -141,7 +144,16 @@ export default function AbsenceHome() {
       ...data,
       destination: JSON.parse(data.destination),
     }
-    await submitHomecomingForm(parsedData)
+    try {
+      await submitHomecomingForm(parsedData)
+      toast.success('提出しました')
+      router.push('/')
+    } catch (e) {
+      console.error(e)
+      toast.error('提出に失敗しました')
+    } finally {
+      setIsSubmitting(false)
+    }
     setIsSubmitting(false)
   }
 
@@ -306,7 +318,7 @@ export default function AbsenceHome() {
             </div>
           </InputLabel>
           <p className="text-sm text-(--sub-text)">※期間中の欠食は自動で欠食されます</p>
-          <Button className="w-full mt-4" type="submit" disabled={isSubmitting}>
+          <Button className="w-full mt-4" type="submit">
             確認する
           </Button>
         </form>
@@ -380,7 +392,13 @@ export default function AbsenceHome() {
               disabled={isSubmitting}
               onClick={() => onSubmit(formValues)}
             >
-              {isSubmitting ? <LoadingSpinner /> : 'この内容で提出する'}
+              {isSubmitting ? (
+                <>
+                  <LoadingSpinner /> 提出中...
+                </>
+              ) : (
+                'この内容で提出する'
+              )}
             </Button>
             <Button
               className="w-full font-bold"
