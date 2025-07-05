@@ -2,9 +2,9 @@ import { createServerClient } from '@supabase/ssr'
 import { NextResponse, type NextRequest } from 'next/server'
 
 // 判定用パス配列（関数外で定義して再利用）
-const loginPaths = ['/login', '/student/create-user', '/teacher/create-user', '/auth', '/api', '/develop']
-const createUserPaths = ['/student/create-user', '/teacher/create-user']
-const registerExcludePaths = ['/student/create-user', '/teacher/create-user', '/register', '/api', '/develop']
+const loginPaths = ['/login', '/create-user', '/teacher/create-user', '/auth', '/api', '/develop']
+const createUserPaths = ['/create-user', '/teacher/create-user']
+const registerExcludePaths = ['/create-user', '/teacher/create-user', '/register', '/api', '/develop']
 
 // is_registeredクッキーの有効期限（秒）
 const IS_REGISTERED_COOKIE_MAX_AGE = 300
@@ -94,10 +94,10 @@ export async function updateSession(request: NextRequest) {
     const isRegisteredCookie = request.cookies.get('is_registered')?.value
 
     if (isRegisteredCookie === 'false') {
-      console.log('[middleware] is_registered cookieがfalseのため /student/create-user へリダイレクト')
+      console.log('[middleware] is_registered cookieがfalseのため /create-user へリダイレクト')
       // 未登録ならリダイレクト（デフォルトは生徒用に）
       const url = request.nextUrl.clone()
-      url.pathname = '/student/create-user'
+      url.pathname = '/create-user'
       return NextResponse.redirect(url)
     }
 
@@ -115,9 +115,9 @@ export async function updateSession(request: NextRequest) {
       })
 
       if (!isRegistered) {
-        console.log('[middleware] DB確認で未登録のため /student/create-user へリダイレクト')
+        console.log('[middleware] DB確認で未登録のため /create-user へリダイレクト')
         const url = request.nextUrl.clone()
-        url.pathname = '/student/create-user'
+        url.pathname = '/create-user'
         return NextResponse.redirect(url)
       }
     }
