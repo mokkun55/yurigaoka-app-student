@@ -14,7 +14,7 @@ export default async function Home() {
 
       <div className="p-4 gap-4 flex flex-col text-center">
         <div>
-          <h1 className="text-2xl font-bold">こんにちは{user?.name}さん</h1>
+          <h1 className="text-2xl font-bold">こんにちは{user!.name}さん</h1>
           <p className="text-sm text-(--sub-text)">今日も一日頑張りましょう</p>
         </div>
 
