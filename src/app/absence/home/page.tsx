@@ -18,6 +18,9 @@ import LoadingSpinner from '@/_components/ui/loading-spinner'
 import dayjs from 'dayjs'
 import { useRouter } from 'next/navigation'
 import { toast } from 'react-hot-toast'
+import ja from 'dayjs/locale/ja'
+
+dayjs.locale(ja)
 
 // TODO 平日は帰らせないなどの仕組みも追加する
 
@@ -90,6 +93,12 @@ const homecomingFormSchema = z
 
 export type HomecomingFormValues = z.infer<typeof homecomingFormSchema>
 
+// YYYY/MM/DD(ddd) 形式で日付を表示する関数
+const formatDateWithWeekday = (dateStr: string) => {
+  if (!dateStr) return ''
+  return dayjs(dateStr).format('YYYY/MM/DD(ddd)')
+}
+
 export default function AbsenceHome() {
   const router = useRouter()
   const [homes, setHomes] = useState<Database['public']['Tables']['homes']['Row'][]>([])
@@ -105,7 +114,7 @@ export default function AbsenceHome() {
     fetchHomes()
   }, [])
 
-  const today = new Date().toISOString().slice(0, 10)
+  const today = dayjs().format('YYYY-MM-DD')
 
   const {
     control,
@@ -248,7 +257,7 @@ export default function AbsenceHome() {
             </InputLabel>
           )}
           {/* TODO 朝 朝 とチェックつけると 自動で間の夕の欠食にするような処理 or バリデーション */}
-          <InputLabel label={`帰省日（${dayjs(watch('startDate')).format('MM/DD')}）の食事`}>
+          <InputLabel label={`帰省日（${formatDateWithWeekday(watch('startDate'))}）の食事`}>
             <div className="flex gap-4">
               <Controller
                 name="mealDepartureBreakfast"
@@ -278,7 +287,7 @@ export default function AbsenceHome() {
               />
             </div>
           </InputLabel>
-          <InputLabel label={`帰寮日（${dayjs(watch('endDate')).format('MM/DD')}）の食事`}>
+          <InputLabel label={`帰寮日（${formatDateWithWeekday(watch('endDate'))}）の食事`}>
             <div className="flex gap-4">
               <Controller
                 name="mealReturnBreakfast"
@@ -328,9 +337,9 @@ export default function AbsenceHome() {
 
           <InputLabel label="帰省期間">
             <div className="text-base font-bold">
-              {dayjs(formValues.startDate).format('YYYY/MM/DD')} {formValues.departureTime}
+              {formatDateWithWeekday(formValues.startDate)} {formValues.departureTime}
               <span className="font-normal mx-2">〜</span>
-              {dayjs(formValues.endDate).format('YYYY/MM/DD')} {formValues.returnTime}
+              {formatDateWithWeekday(formValues.endDate)} {formValues.returnTime}
             </div>
           </InputLabel>
 
@@ -358,13 +367,13 @@ export default function AbsenceHome() {
             return null
           })()}
 
-          <InputLabel label={`帰省日（${dayjs(formValues.startDate).format('MM/DD')}）の食事`}>
+          <InputLabel label={`帰省日（${formatDateWithWeekday(formValues.startDate)}）の食事`}>
             <div>
               朝食: {formValues.mealDepartureBreakfast ? '欠食' : '喫食'} ／ 夕食:{' '}
               {formValues.mealDepartureDinner ? '欠食' : '喫食'}
             </div>
           </InputLabel>
-          <InputLabel label={`帰寮日（${dayjs(formValues.endDate).format('MM/DD')}）の食事`}>
+          <InputLabel label={`帰寮日（${formatDateWithWeekday(formValues.endDate)}）の食事`}>
             <div>
               朝食: {formValues.mealReturnBreakfast ? '欠食' : '喫食'} ／ 夕食:{' '}
               {formValues.mealReturnDinner ? '欠食' : '喫食'}

@@ -9,11 +9,11 @@ export async function submitHomecomingForm(data: HomecomingFormValues) {
   const supabase = await createClient()
   // ユーザーID取得
   const { data: userData, error: userError } = await supabase.auth.getUser()
-  if (!userData.user) {
-    throw new Error('ユーザーが見つかりません')
-  }
   if (userError) {
     throw new Error(userError.message)
+  }
+  if (!userData.user) {
+    throw new Error('ユーザーが見つかりません')
   }
 
   // destination（帰省先）はJSON文字列またはオブジェクトなので型ガード

@@ -23,45 +23,57 @@ const mealFormSchema = z
   .object({
     startDate: z.string().min(1, '開始日を選択してください'),
     endDate: z.string().min(1, '終了日を選択してください'),
-    breakfast: z.boolean().optional(), // 1日用
-    dinner: z.boolean().optional(), // 1日用
-    startBreakfast: z.boolean().optional(), // 複数日用
-    startDinner: z.boolean().optional(), // 複数日用
-    endBreakfast: z.boolean().optional(), // 複数日用
-    endDinner: z.boolean().optional(), // 複数日用
+    breakfast: z.boolean().optional(),
+    dinner: z.boolean().optional(),
+    startBreakfast: z.boolean().optional(),
+    startDinner: z.boolean().optional(),
+    endBreakfast: z.boolean().optional(),
+    endDinner: z.boolean().optional(),
     reason: z.string().min(1, '理由を入力してください'),
+    meals: z.any().optional(),
   })
-  .refine((data) => new Date(data.startDate) <= new Date(data.endDate), {
-    message: '開始日は終了日より前または同じ日付を選択してください',
-    path: ['startDate'],
-  })
-  .refine(
-    (data) => {
-      const today = new Date()
-      const start = new Date(data.startDate)
-      today.setHours(0, 0, 0, 0)
-      const threeDaysLater = new Date(today)
-      threeDaysLater.setDate(today.getDate() + 3)
-      return start >= threeDaysLater
-    },
-    {
-      message: '欠食届は3日前までに提出してください',
-      path: ['startDate'],
+  .superRefine((data, ctx) => {
+    // 開始日 <= 終了日
+    if (new Date(data.startDate) > new Date(data.endDate)) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        path: ['startDate'],
+        message: '開始日は終了日より前または同じ日付を選択してください',
+      })
     }
-  )
-  .refine(
-    (data) => {
-      if (data.startDate === data.endDate) {
-        return data.breakfast || data.dinner
-      } else {
-        return data.startBreakfast || data.startDinner || data.endBreakfast || data.endDinner
+
+    // 3日前までに提出
+    const today = new Date()
+    today.setHours(0, 0, 0, 0)
+    const threeDaysLater = new Date(today)
+    threeDaysLater.setDate(today.getDate() + 3)
+    if (new Date(data.startDate) < threeDaysLater) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        path: ['startDate'],
+        message: '欠食届は3日前までに提出してください',
+      })
+    }
+
+    // 食事選択
+    if (data.startDate === data.endDate) {
+      if (!data.breakfast && !data.dinner) {
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          path: ['meals'],
+          message: 'いずれかの食事を選択してください',
+        })
       }
-    },
-    {
-      message: 'いずれかの食事を選択してください',
-      path: ['breakfast'],
+    } else {
+      if (!data.startBreakfast && !data.startDinner && !data.endBreakfast && !data.endDinner) {
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          path: ['meals'],
+          message: 'いずれかの食事を選択してください',
+        })
+      }
     }
-  )
+  })
 
 export type MealFormValues = z.infer<typeof mealFormSchema>
 
@@ -71,7 +83,7 @@ export default function Meal() {
   const [isConfirm, setIsConfirm] = useState(false)
   const [isSubmitting, setIsSubmitting] = useState(false)
 
-  const today = new Date().toISOString().slice(0, 10)
+  const today = dayjs().format('YYYY-MM-DD')
 
   const {
     control,
@@ -118,7 +130,7 @@ export default function Meal() {
 
   const formatDateWithWeekday = (dateStr: string) => {
     if (!dateStr) return ''
-    return dayjs(dateStr).format('MM月DD日')
+    return dayjs(dateStr).format('YYYY/MM/DD(dd)')
   }
 
   if (!isConfirm) {
@@ -137,6 +149,7 @@ export default function Meal() {
           {(errors.startDate || errors.endDate) && (
             <div className="text-red-500 text-xs mt-1">{errors.startDate?.message || errors.endDate?.message}</div>
           )}
+          {errors.root && <div className="text-red-500 text-xs mt-1">{errors.root.message}</div>}
           {isOneDay ? (
             <InputLabel label="欠食する食事">
               <div className="flex gap-4">
@@ -167,6 +180,9 @@ export default function Meal() {
                   )}
                 />
               </div>
+              {errors.meals && typeof errors.meals.message === 'string' && (
+                <div className="text-red-500 text-xs mt-1">{errors.meals.message}</div>
+              )}
               {errors.breakfast && <div className="text-red-500 text-xs mt-1">{errors.breakfast.message}</div>}
             </InputLabel>
           ) : (
@@ -231,6 +247,9 @@ export default function Meal() {
                   />
                 </div>
               </InputLabel>
+              {errors.meals && typeof errors.meals.message === 'string' && (
+                <div className="text-red-500 text-xs mt-1">{errors.meals.message}</div>
+              )}
               {errors.breakfast && <div className="text-red-500 text-xs mt-1">{errors.breakfast.message}</div>}
             </>
           )}
@@ -258,7 +277,15 @@ export default function Meal() {
 
   if (isConfirm && formValues) {
     const isOneDay = formValues.startDate === formValues.endDate
-    const periodValue = `${formatDateWithWeekday(formValues.startDate)}〜${formatDateWithWeekday(formValues.endDate)}`
+    const periodValue = isOneDay ? (
+      formatDateWithWeekday(formValues.startDate)
+    ) : (
+      <>
+        <span>{formatDateWithWeekday(formValues.startDate)}</span>
+        <span className="mx-1">〜</span>
+        <span>{formatDateWithWeekday(formValues.endDate)}</span>
+      </>
+    )
     const meals = isOneDay
       ? [
           {

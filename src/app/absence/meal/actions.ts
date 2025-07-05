@@ -7,11 +7,11 @@ import { TablesInsert } from '@/utils/supabase/database.types'
 export async function submitMealForm(data: MealFormValues) {
   const supabase = await createClient()
   const { data: userData, error: userError } = await supabase.auth.getUser()
-  if (!userData.user) {
-    throw new Error('ユーザーが見つかりません')
-  }
   if (userError) {
     throw new Error(userError.message)
+  }
+  if (!userData.user) {
+    throw new Error('ユーザーが見つかりません')
   }
 
   const insertData: TablesInsert<'absences'> = {

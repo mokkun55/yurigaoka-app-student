@@ -7,7 +7,7 @@ import Header from '@/_components/ui/header'
 export type ConfirmAbsenceDialogProps = {
   title: string
   periodLabel: string
-  periodValue: string
+  periodValue: React.ReactNode
   meals: Array<{ label: string; value: string }>
   reasonLabel: string
   reasonValue: string
