@@ -1,6 +1,9 @@
 import { createServerClient } from '@supabase/ssr'
 import { NextResponse, type NextRequest } from 'next/server'
 
+// 開発用ミドルウェア無効化モード
+const devMode = false
+
 // 判定用パス配列（関数外で定義して再利用）
 const loginPaths = ['/login', '/create-user', '/teacher/create-user', '/auth', '/api', '/develop']
 const createUserPaths = ['/create-user', '/teacher/create-user']
@@ -10,6 +13,11 @@ const registerExcludePaths = ['/create-user', '/teacher/create-user', '/register
 const IS_REGISTERED_COOKIE_MAX_AGE = 300
 
 export async function updateSession(request: NextRequest) {
+  if (devMode) {
+    console.log('[middleware] 開発用ミドルウェア無効化モード')
+    return NextResponse.next({ request })
+  }
+
   let supabaseResponse = NextResponse.next({
     request,
   })
