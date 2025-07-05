@@ -21,7 +21,7 @@ export async function submitMealForm(data: MealFormValues) {
     start_date: data.startDate,
     end_date: data.endDate,
     reason: data.reason,
-    meal_departure_breakfast: isOneDay ? data.breakfast : data.startBreakfast,
+    meal_departure_breakfast: isOneDay ? data.breakfast : (data.startBreakfast ?? null),
     meal_departure_dinner: isOneDay ? data.dinner : data.startDinner,
     meal_return_breakfast: isOneDay ? null : data.endBreakfast,
     meal_return_dinner: isOneDay ? null : data.endDinner,
