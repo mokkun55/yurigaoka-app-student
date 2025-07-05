@@ -248,72 +248,64 @@ export default function AbsenceHome() {
             </InputLabel>
           )}
           {/* TODO 朝 朝 とチェックつけると 自動で間の夕の欠食にするような処理 or バリデーション */}
-          <InputLabel label="帰省日の食事">
-            <div className="flex flex-col gap-2">
-              <label className="flex items-center gap-2">
-                <Controller
-                  name="mealDepartureBreakfast"
-                  control={control}
-                  render={({ field: { onChange, name, value, ...rest } }) => (
-                    <CheckboxField
-                      checked={value}
-                      onCheckedChange={onChange}
-                      name={name}
-                      label="朝食を欠食する"
-                      disabled={rest.disabled}
-                    />
-                  )}
-                />
-              </label>
-              <label className="flex items-center gap-2">
-                <Controller
-                  name="mealDepartureDinner"
-                  control={control}
-                  render={({ field: { onChange, name, value, ...rest } }) => (
-                    <CheckboxField
-                      checked={value}
-                      onCheckedChange={onChange}
-                      name={name}
-                      label="夕食を欠食する"
-                      disabled={rest.disabled}
-                    />
-                  )}
-                />
-              </label>
+          <InputLabel label={`帰省日（${dayjs(watch('startDate')).format('MM/DD')}）の食事`}>
+            <div className="flex gap-4">
+              <Controller
+                name="mealDepartureBreakfast"
+                control={control}
+                render={({ field: { onChange, name, value, ...rest } }) => (
+                  <CheckboxField
+                    checked={value}
+                    onCheckedChange={onChange}
+                    name={name}
+                    label="朝食を欠食する"
+                    disabled={rest.disabled}
+                  />
+                )}
+              />
+              <Controller
+                name="mealDepartureDinner"
+                control={control}
+                render={({ field: { onChange, name, value, ...rest } }) => (
+                  <CheckboxField
+                    checked={value}
+                    onCheckedChange={onChange}
+                    name={name}
+                    label="夕食を欠食する"
+                    disabled={rest.disabled}
+                  />
+                )}
+              />
             </div>
           </InputLabel>
-          <InputLabel label="帰寮日の食事">
-            <div className="flex flex-col gap-2">
-              <label className="flex items-center gap-2">
-                <Controller
-                  name="mealReturnBreakfast"
-                  control={control}
-                  render={({ field: { onChange, name, value, ...rest } }) => (
-                    <CheckboxField
-                      checked={value}
-                      onCheckedChange={onChange}
-                      name={name}
-                      label="朝食を欠食する"
-                      disabled={rest.disabled}
-                    />
-                  )}
-                />
-              </label>
-              <label className="flex items-center gap-2">
-                <Controller
-                  name="mealReturnDinner"
-                  control={control}
-                  render={({ field: { onChange, name, value, ...rest } }) => (
-                    <CheckboxField
-                      checked={value}
-                      onCheckedChange={onChange}
-                      name={name}
-                      label="夕食を欠食する"
-                      disabled={rest.disabled}
-                    />
-                  )}
-                />
-              </label>
+          <InputLabel label={`帰寮日（${dayjs(watch('endDate')).format('MM/DD')}）の食事`}>
+            <div className="flex gap-4">
+              <Controller
+                name="mealReturnBreakfast"
+                control={control}
+                render={({ field: { onChange, name, value, ...rest } }) => (
+                  <CheckboxField
+                    checked={value}
+                    onCheckedChange={onChange}
+                    name={name}
+                    label="朝食を欠食する"
+                    disabled={rest.disabled}
+                  />
+                )}
+              />
+              <Controller
+                name="mealReturnDinner"
+                control={control}
+                render={({ field: { onChange, name, value, ...rest } }) => (
+                  <CheckboxField
+                    checked={value}
+                    onCheckedChange={onChange}
+                    name={name}
+                    label="夕食を欠食する"
+                    disabled={rest.disabled}
+                  />
+                )}
+              />
             </div>
           </InputLabel>
           <p className="text-sm text-(--sub-text)">※期間中の欠食は自動で欠食されます</p>
@@ -366,13 +358,13 @@ export default function AbsenceHome() {
             return null
           })()}
 
-          <InputLabel label={`帰省日 (${dayjs(formValues.startDate).format('MM/DD')}) の欠食`}>
+          <InputLabel label={`帰省日（${dayjs(formValues.startDate).format('MM/DD')}）の食事`}>
             <div>
               朝食: {formValues.mealDepartureBreakfast ? '欠食' : '喫食'} ／ 夕食:{' '}
               {formValues.mealDepartureDinner ? '欠食' : '喫食'}
             </div>
           </InputLabel>
-          <InputLabel label={`帰寮日 (${dayjs(formValues.endDate).format('MM/DD')}) の欠食`}>
+          <InputLabel label={`帰寮日（${dayjs(formValues.endDate).format('MM/DD')}）の食事`}>
             <div>
               朝食: {formValues.mealReturnBreakfast ? '欠食' : '喫食'} ／ 夕食:{' '}
               {formValues.mealReturnDinner ? '欠食' : '喫食'}
