@@ -6,16 +6,16 @@ export type Database = {
       absences: {
         Row: {
           created_at: string
-          departure_time: string
+          departure_time: string | null
           end_date: string
-          home_id: number
+          home_id: number | null
           id: number
           meal_departure_breakfast: boolean | null
           meal_departure_dinner: boolean | null
           meal_return_breakfast: boolean | null
           meal_return_dinner: boolean | null
           reason: string
-          return_time: string
+          return_time: string | null
           special_reason: string | null
           start_date: string
           type: string
@@ -24,16 +24,16 @@ export type Database = {
         }
         Insert: {
           created_at?: string
-          departure_time: string
+          departure_time?: string | null
           end_date: string
-          home_id: number
+          home_id?: number | null
           id?: number
           meal_departure_breakfast?: boolean | null
           meal_departure_dinner?: boolean | null
           meal_return_breakfast?: boolean | null
           meal_return_dinner?: boolean | null
           reason: string
-          return_time: string
+          return_time?: string | null
           special_reason?: string | null
           start_date: string
           type: string
@@ -42,16 +42,16 @@ export type Database = {
         }
         Update: {
           created_at?: string
-          departure_time?: string
+          departure_time?: string | null
           end_date?: string
-          home_id?: number
+          home_id?: number | null
           id?: number
           meal_departure_breakfast?: boolean | null
           meal_departure_dinner?: boolean | null
           meal_return_breakfast?: boolean | null
           meal_return_dinner?: boolean | null
           reason?: string
-          return_time?: string
+          return_time?: string | null
           special_reason?: string | null
           start_date?: string
           type?: string
