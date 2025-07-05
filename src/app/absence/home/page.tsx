@@ -19,6 +19,7 @@ import dayjs from 'dayjs'
 import { useRouter } from 'next/navigation'
 import { toast } from 'react-hot-toast'
 import ja from 'dayjs/locale/ja'
+import { formatDateWithWeekday } from '@/utils/dateUtils'
 
 dayjs.locale(ja)
 
@@ -92,12 +93,6 @@ const homecomingFormSchema = z
   )
 
 export type HomecomingFormValues = z.infer<typeof homecomingFormSchema>
-
-// YYYY/MM/DD(ddd) 形式で日付を表示する関数
-const formatDateWithWeekday = (dateStr: string) => {
-  if (!dateStr) return ''
-  return dayjs(dateStr).format('YYYY/MM/DD(ddd)')
-}
 
 export default function AbsenceHome() {
   const router = useRouter()
@@ -338,7 +333,7 @@ export default function AbsenceHome() {
           <InputLabel label="帰省期間">
             <div className="text-base font-bold">
               {formatDateWithWeekday(formValues.startDate)} {formValues.departureTime}
-              <span className="font-normal mx-2">〜</span>
+              <span className="mx-2">〜</span>
               {formatDateWithWeekday(formValues.endDate)} {formValues.returnTime}
             </div>
           </InputLabel>

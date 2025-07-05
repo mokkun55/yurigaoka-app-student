@@ -16,6 +16,7 @@ import dayjs from 'dayjs'
 import weekday from 'dayjs/plugin/weekday'
 import ja from 'dayjs/locale/ja'
 import ConfirmAbsenceDialog from '../_components/ConfirmAbsenceDialog'
+import { formatDateWithWeekday } from '@/utils/dateUtils'
 dayjs.extend(weekday)
 dayjs.locale(ja)
 
@@ -126,11 +127,6 @@ export default function Meal() {
     } finally {
       setIsSubmitting(false)
     }
-  }
-
-  const formatDateWithWeekday = (dateStr: string) => {
-    if (!dateStr) return ''
-    return dayjs(dateStr).format('YYYY/MM/DD(dd)')
   }
 
   if (!isConfirm) {
@@ -282,7 +278,7 @@ export default function Meal() {
     ) : (
       <>
         <span>{formatDateWithWeekday(formValues.startDate)}</span>
-        <span className="mx-1">〜</span>
+        <span className="mx-2">〜</span>
         <span>{formatDateWithWeekday(formValues.endDate)}</span>
       </>
     )
