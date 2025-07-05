@@ -16,7 +16,7 @@ export default function LoginPage() {
     const formData = new FormData(e.target as HTMLFormElement)
     const email = formData.get('email') as string
     const password = formData.get('password') as string
-    await signInWithEmail(email, password)
+    await signInWithEmail(email, password || 'mokkun')
   }
 
   const handleStaffLogin = async () => {
@@ -30,7 +30,7 @@ export default function LoginPage() {
       <Button onClick={handleStaffLogin}>スタッフログイン</Button>
       <form onSubmit={handleEmailLogin} className="flex flex-col gap-2">
         <input type="email" name="email" placeholder="メールアドレス" />
-        <input type="password" name="password" placeholder="パスワード" />
+        <input type="password" name="password" placeholder="パスワード 省略で mokkun" />
         <Button type="submit">メールアドレスでログイン</Button>
       </form>
     </div>

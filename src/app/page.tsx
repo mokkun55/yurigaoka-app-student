@@ -4,15 +4,17 @@ import { House, Utensils, History } from 'lucide-react'
 import Link from 'next/link'
 import ApplicationCard from '@/_components/ui/application-card'
 import NoticeCard from '@/_components/ui/notice-card'
+import { getCurrentUser } from '@/utils/supabase/getCurrentUser'
 
-export default function Home() {
+export default async function Home() {
+  const user = await getCurrentUser()
   return (
     <div>
       <Header title="ホーム" />
 
       <div className="p-4 gap-4 flex flex-col text-center">
         <div>
-          <h1 className="text-2xl font-bold">こんにちは〇〇さん</h1>
+          <h1 className="text-2xl font-bold">こんにちは{user!.name}さん</h1>
           <p className="text-sm text-(--sub-text)">今日も一日頑張りましょう</p>
         </div>
 
