@@ -60,13 +60,6 @@ export type Database = {
         }
         Relationships: [
           {
-            foreignKeyName: 'absences_destination_id_fkey'
-            columns: ['home_id']
-            isOneToOne: false
-            referencedRelation: 'homes'
-            referencedColumns: ['id']
-          },
-          {
             foreignKeyName: 'absences_home_id_fkey'
             columns: ['home_id']
             isOneToOne: false
