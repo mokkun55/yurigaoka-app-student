@@ -154,7 +154,6 @@ export default function AbsenceHome() {
     } finally {
       setIsSubmitting(false)
     }
-    setIsSubmitting(false)
   }
 
   // 特別な事情の表示判定
