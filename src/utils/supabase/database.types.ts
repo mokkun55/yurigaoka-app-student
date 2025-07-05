@@ -3,6 +3,85 @@ export type Json = string | number | boolean | null | { [key: string]: Json | un
 export type Database = {
   public: {
     Tables: {
+      absences: {
+        Row: {
+          created_at: string
+          departure_time: string
+          end_date: string
+          home_id: number
+          id: number
+          meal_departure_breakfast: boolean | null
+          meal_departure_dinner: boolean | null
+          meal_return_breakfast: boolean | null
+          meal_return_dinner: boolean | null
+          reason: string
+          return_time: string
+          special_reason: string | null
+          start_date: string
+          type: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          departure_time: string
+          end_date: string
+          home_id: number
+          id?: number
+          meal_departure_breakfast?: boolean | null
+          meal_departure_dinner?: boolean | null
+          meal_return_breakfast?: boolean | null
+          meal_return_dinner?: boolean | null
+          reason: string
+          return_time: string
+          special_reason?: string | null
+          start_date: string
+          type: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          departure_time?: string
+          end_date?: string
+          home_id?: number
+          id?: number
+          meal_departure_breakfast?: boolean | null
+          meal_departure_dinner?: boolean | null
+          meal_return_breakfast?: boolean | null
+          meal_return_dinner?: boolean | null
+          reason?: string
+          return_time?: string
+          special_reason?: string | null
+          start_date?: string
+          type?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: 'absences_home_id_fkey'
+            columns: ['home_id']
+            isOneToOne: false
+            referencedRelation: 'homes'
+            referencedColumns: ['id']
+          },
+          {
+            foreignKeyName: 'absences_user_id_fkey'
+            columns: ['user_id']
+            isOneToOne: false
+            referencedRelation: 'users'
+            referencedColumns: ['id']
+          },
+          {
+            foreignKeyName: 'absences_user_id_fkey1'
+            columns: ['user_id']
+            isOneToOne: false
+            referencedRelation: 'users'
+            referencedColumns: ['id']
+          },
+        ]
+      }
       classes: {
         Row: {
           id: number

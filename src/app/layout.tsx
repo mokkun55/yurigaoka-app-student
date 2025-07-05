@@ -1,13 +1,9 @@
 import type { Metadata } from 'next'
-// import { M_PLUS_1p } from "next/font/google";
 import './globals.css'
 import { Toaster } from 'react-hot-toast'
+import dayjs from 'dayjs'
 
-// const mPlus1p = M_PLUS_1p({
-//   weight: ["100", "300", "400", "500", "700", "800", "900"],
-//   subsets: ["latin"],
-//   variable: "--font-m-plus-1p",
-// });
+dayjs.locale('ja')
 
 export const metadata: Metadata = {
   title: 'Create Next App',
