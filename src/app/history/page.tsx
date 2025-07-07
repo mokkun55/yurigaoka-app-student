@@ -14,7 +14,7 @@ export default function HistoryPage() {
       <Header title="申請履歴" type="back" onClick={() => router.back()} />
       <div className="p-3">
         <p className="text-center text-sm">申請履歴をクリックで詳細を見ることができます</p>
-        <div className="mt-3 flex flex-col gap-4 overflow-y-auto max-h-[calc(100vh-200px)]">
+        <div className="mt-3 flex flex-col gap-4 overflow-y-auto max-h-[calc(100vh-200px)] no-scrollbar">
           {Array.from({ length: 10 }).map((_, index) => {
             const type = index % 2 === 0 ? 'homecoming' : 'meal'
             if (type === 'homecoming') {
