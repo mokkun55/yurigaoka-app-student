@@ -2,6 +2,20 @@
 @import 'tw-animate-css';
 @import './variables.css';
 
+:root {
+  .no-scrollbar {
+    /* Firefox */
+    scrollbar-width: none;
+    /* IE, Edge */
+    -ms-overflow-style: none;
+  }
+
+  /* Chrome, Safari, Edge */
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+}
+
 body {
   @apply bg-background text-foreground;
   font-family: var(--font-m-plus-1p), 'M PLUS 1p', ui-sans-serif, system-ui, sans-serif;
