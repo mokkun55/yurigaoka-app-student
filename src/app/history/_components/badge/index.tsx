@@ -36,5 +36,5 @@ export default function Badge({ type, size }: Props) {
       break
   }
 
-  return <div className={`rounded ${color} ${sizeClass} font-bold w-fit rounded-full`}>{text}</div>
+  return <div className={`${color} ${sizeClass} font-bold w-fit rounded-full`}>{text}</div>
 }
