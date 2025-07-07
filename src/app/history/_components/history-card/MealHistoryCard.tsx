@@ -4,10 +4,10 @@ import dayjs from 'dayjs'
 
 type Props = {
   status: 'pending' | 'approved' | 'rejected' | 'canceled'
-  createdAt: string
+  createdAt: Date | string
   period: {
-    startDate: Date
-    endDate: Date
+    startDate: Date | string
+    endDate: Date | string
   }
   meal: {
     startDate: {
@@ -48,7 +48,7 @@ export default function MealHistoryCard({ status, createdAt, period, meal }: Pro
             <ForkKnife width={16} height={16} />
           </div>
           <div className="flex items-center gap-2">
-            <p className="text-sm">申請日: {createdAt}</p>
+            <p className="text-sm">申請日: {dayjs(createdAt).format('YYYY/MM/DD')}</p>
           </div>
         </div>
         {/* 右 */}
@@ -60,13 +60,23 @@ export default function MealHistoryCard({ status, createdAt, period, meal }: Pro
       <div className="flex flex-col gap-2">
         <p className="text-base font-bold">欠食届</p>
         <div className="flex flex-col text-(--sub-text)">
-          <p>
-            欠食期間: {dayjs(period.startDate).format('YYYY/MM/DD')} {meal.startDate.morning && '朝食'}
-            {meal.startDate.evening && '夕食'}
-            <span className="mx-1">~</span>
-            {dayjs(period.endDate).format('YYYY/MM/DD')} {meal.endDate.morning && '朝食'}
-            {meal.endDate.evening && '夕食'}
-          </p>
+          {dayjs(period.startDate).isSame(dayjs(period.endDate), 'day') ? (
+            <p>
+              欠食日: {dayjs(period.startDate).format('YYYY/MM/DD')}
+              {meal.startDate.morning && ' 朝食'}
+              {meal.startDate.evening && ' 夕食'}
+            </p>
+          ) : (
+            <p>
+              欠食期間: {dayjs(period.startDate).format('YYYY/MM/DD')}
+              {meal.startDate.morning && ' 朝食'}
+              {meal.startDate.evening && ' 夕食'}
+              <span className="mx-1">~</span>
+              {dayjs(period.endDate).format('YYYY/MM/DD')}
+              {meal.endDate.morning && ' 朝食'}
+              {meal.endDate.evening && ' 夕食'}
+            </p>
+          )}
         </div>
       </div>
     </div>

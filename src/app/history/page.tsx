@@ -71,8 +71,8 @@ export default async function HistoryPage() {
                     status={status}
                     createdAt={absence.created_at}
                     period={{
-                      startDate: new Date(absence.start_date ?? absence.created_at),
-                      endDate: new Date(absence.end_date ?? absence.created_at),
+                      startDate: absence.start_date ?? absence.created_at,
+                      endDate: absence.end_date ?? absence.created_at,
                     }}
                     homecoming={{
                       id: String(absence.home_id ?? ''),
@@ -91,8 +91,8 @@ export default async function HistoryPage() {
                     status={status}
                     createdAt={absence.created_at}
                     period={{
-                      startDate: new Date(absence.start_date ?? absence.created_at),
-                      endDate: new Date(absence.end_date ?? absence.created_at),
+                      startDate: absence.start_date ?? absence.created_at,
+                      endDate: absence.end_date ?? absence.created_at,
                     }}
                     meal={{
                       startDate: { morning: mealDepartureBreakfast, evening: mealDepartureDinner },
