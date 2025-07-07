@@ -45,6 +45,7 @@
     "pnpm-lock.yaml",
     "components.json",
     "public/**",
-    "**/*.ico"
+    "**/*.ico",
+    "src/utils/supabase/database.types.ts"
   ]
 }
