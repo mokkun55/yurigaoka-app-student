@@ -39,7 +39,7 @@ const ConfirmAbsenceDialog: React.FC<ConfirmAbsenceDialogProps> = ({
 }) => {
   return (
     <div className="bg-white h-full w-full max-w-screen overflow-x-hidden">
-      <Header title={title} type="back" onClick={onBack} />
+      <Header title={title} type="back" />
       <div className="p-3 gap-4 flex flex-col">
         <div className="text-center bg-(--red) rounded-lg px-4 py-3 text-white font-bold text-lg">
           <p>本当に以下の内容で大丈夫ですか？</p>

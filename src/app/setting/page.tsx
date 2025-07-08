@@ -9,7 +9,7 @@ export default function Setting() {
   const router = useRouter()
   return (
     <div>
-      <Header title="設定" type="back" onClick={() => router.back()} />
+      <Header title="設定" type="back" />
       <div className="p-3">
         {/* TODO 現在は仮置き */}
         <h1>設定</h1>
