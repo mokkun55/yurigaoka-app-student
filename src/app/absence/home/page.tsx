@@ -168,7 +168,6 @@ export default function AbsenceHome() {
   if (!isConfirm) {
     return (
       <div className="bg-white h-full">
-        <Header title="帰省届を出す" type="close" />
         <form onSubmit={handleSubmit(onConfirm)} className="flex flex-col gap-4 p-3">
           <div className="flex gap-2">
             <InputLabel label="開始日" className="w-full">

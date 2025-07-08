@@ -14,7 +14,7 @@ export default function Header({ title, type = 'none', customUrl, onClick }: Pro
   const router = useRouter()
 
   return (
-    <div className="flex items-center bg-white h-12 border-b border-(--border-gray) relative">
+    <div className="flex items-center bg-white min-h-14 border-b border-(--border-gray) sticky top-0">
       {type !== 'none' && (
         <button
           className="p-4 cursor-pointer"
