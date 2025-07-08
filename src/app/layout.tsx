@@ -18,7 +18,7 @@ export default function RootLayout({
   return (
     <html lang="ja">
       <body className={`antialiased flex justify-center`}>
-        <div className="w-[100svw] h-[100svh] max-w-[500px] max-h-[100vh] relative border-r border-l border-(--border-gray)">
+        <div className="w-[100svw] h-[100svh] max-w-[500px] max-h-[100vh] relative border-r border-l border-(--border-gray) flex flex-col">
           <Toaster />
           {children}
         </div>

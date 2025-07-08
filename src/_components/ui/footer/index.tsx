@@ -7,7 +7,7 @@ type Props = {
 
 export default function Footer({ activeTab }: Props) {
   return (
-    <div className="flex justify-center bg-white border-t border-(--border-gray) absolute bottom-0 w-full px-8">
+    <div className="flex justify-center bg-white border-t border-(--border-gray) sticky bottom-0 w-full px-8 h-20">
       <div className="flex justify-between w-full p-4">
         <Link href="/" className="flex flex-col items-center">
           <Home size={24} color={activeTab === 'home' ? 'var(--main-blue)' : 'var(--sub-text)'} />

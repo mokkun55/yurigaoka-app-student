@@ -3,7 +3,6 @@
 import { useForm, Controller, SubmitHandler } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
-import Header from '@/_components/ui/header'
 import InputLabel from '@/_components/ui/input-label'
 import { Button } from '@/_components/ui/button'
 import { CheckboxField } from '@/_components/ui/checkbox/checkbox-field'
@@ -132,7 +131,6 @@ export default function Meal() {
   if (!isConfirm) {
     return (
       <div className="bg-white h-full w-full max-w-screen overflow-x-hidden">
-        <Header title="欠食届を出す" type="close" />
         <form onSubmit={handleSubmit(onConfirm)} className="flex flex-col gap-4 p-3">
           <div className="flex gap-2">
             <InputLabel label="開始日" className="w-full">

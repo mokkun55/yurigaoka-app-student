@@ -1,5 +1,3 @@
-import Footer from '@/_components/ui/footer'
-import Header from '@/_components/ui/header'
 import { House, Utensils, History } from 'lucide-react'
 import Link from 'next/link'
 import ApplicationCard from '@/_components/ui/application-card'
@@ -10,8 +8,6 @@ export default async function Home() {
   const user = await getCurrentUser()
   return (
     <div>
-      <Header title="ホーム" />
-
       <div className="p-4 gap-4 flex flex-col text-center">
         <div>
           <h1 className="text-2xl font-bold">こんにちは{user!.name}さん</h1>
@@ -40,13 +36,13 @@ export default async function Home() {
           </Link>
         </div>
 
-        <div className="flex flex-col gap-2">
-          <h1 className="text-base font-bold">お知らせ</h1>
-          <NoticeList />
+        <div className="flex flex-col">
+          <h1 className="text-base font-bold my-2">お知らせ</h1>
+          <div className="gap-2 flex flex-col overflow-y-auto">
+            <NoticeList />
+          </div>
         </div>
       </div>
-
-      <Footer activeTab="home" />
     </div>
   )
 }

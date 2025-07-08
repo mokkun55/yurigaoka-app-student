@@ -1,5 +1,3 @@
-import Header from '@/_components/ui/header'
-import Footer from '@/_components/ui/footer'
 import HomeHistoryCard from './_components/history-card/HomeHistoryCard'
 import MealHistoryCard from './_components/history-card/MealHistoryCard'
 import { createClient } from '@/utils/supabase/server'
@@ -39,9 +37,7 @@ export default async function HistoryPage() {
   } catch {
     return (
       <div>
-        <Header title="申請履歴" type="back" />
         <div className="p-3 text-center">データの取得に失敗しました</div>
-        <Footer activeTab="history" />
       </div>
     )
   }
@@ -49,7 +45,6 @@ export default async function HistoryPage() {
   const homeIdToName = new Map(homes.map((h) => [h.id, h.name]))
   return (
     <div>
-      <Header title="申請履歴" type="back" />
       <div className="p-3">
         <p className="text-center text-sm">申請履歴をクリックで詳細を見ることができます</p>
         <div className="mt-3 flex flex-col gap-4 overflow-y-auto max-h-[calc(100vh-200px)] no-scrollbar">
@@ -105,7 +100,6 @@ export default async function HistoryPage() {
           )}
         </div>
       </div>
-      <Footer activeTab="history" />
     </div>
   )
 }
