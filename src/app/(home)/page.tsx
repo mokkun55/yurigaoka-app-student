@@ -42,10 +42,7 @@ export default async function Home() {
 
         <div className="flex flex-col gap-2">
           <h1 className="text-base font-bold">お知らせ</h1>
-
-          <div className="flex flex-col gap-2">
-            <NoticeList />
-          </div>
+          <NoticeList />
         </div>
       </div>
 
