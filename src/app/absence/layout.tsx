@@ -1,5 +1,4 @@
 import Header from '@/_components/ui/header'
-import Footer from '@/_components/ui/footer'
 import { Suspense } from 'react'
 import LoadingSpinner from '@/_components/ui/loading-spinner'
 
@@ -16,7 +15,6 @@ export default function AbsenceLayout({ children }: { children: React.ReactNode 
       >
         <div className="flex flex-col flex-grow overflow-y-auto">{children}</div>
       </Suspense>
-      <Footer activeTab="setting" />
     </>
   )
 }
