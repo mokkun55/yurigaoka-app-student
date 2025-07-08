@@ -3,8 +3,8 @@ import Header from '@/_components/ui/header'
 import { House, Utensils, History } from 'lucide-react'
 import Link from 'next/link'
 import ApplicationCard from '@/_components/ui/application-card'
-import NoticeCard from '@/_components/ui/notice-card'
 import { getCurrentUser } from '@/utils/supabase/getCurrentUser'
+import NoticeList from './_components/notice-list'
 
 export default async function Home() {
   const user = await getCurrentUser()
@@ -42,14 +42,7 @@ export default async function Home() {
 
         <div className="flex flex-col gap-2">
           <h1 className="text-base font-bold">お知らせ</h1>
-
-          <div>
-            <NoticeCard
-              title="[重要] 夏期帰省の申請期限について"
-              description="夏季休暇中の帰省届は7月15日までです。忘れずに提出してください"
-              date="2025/07/03"
-            />
-          </div>
+          <NoticeList />
         </div>
       </div>
 
