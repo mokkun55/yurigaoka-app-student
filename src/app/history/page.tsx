@@ -44,61 +44,59 @@ export default async function HistoryPage() {
   // home_id→nameのMap
   const homeIdToName = new Map(homes.map((h) => [h.id, h.name]))
   return (
-    <div>
-      <div className="p-3">
-        <p className="text-center text-sm">申請履歴をクリックで詳細を見ることができます</p>
-        <div className="mt-3 flex flex-col gap-4 overflow-y-auto max-h-[calc(100vh-200px)] no-scrollbar">
-          {absences.length === 0 ? (
-            <div className="text-center text-(--sub-text)">申請履歴がありません</div>
-          ) : (
-            absences.map((absence) => {
-              const status = (absence.status ?? 'pending') as 'pending' | 'approved' | 'rejected' | 'canceled'
-              const mealDepartureBreakfast = absence.meal_departure_breakfast ?? false
-              const mealDepartureDinner = absence.meal_departure_dinner ?? false
-              const mealReturnBreakfast = absence.meal_return_breakfast ?? false
-              const mealReturnDinner = absence.meal_return_dinner ?? false
-              // home_idからplace取得
-              const place = absence.home_id ? (homeIdToName.get(absence.home_id) ?? '') : ''
-              if (absence.type === 'homecoming') {
-                return (
-                  <HomeHistoryCard
-                    key={absence.id}
-                    status={status}
-                    createdAt={absence.created_at}
-                    period={{
-                      startDate: absence.start_date ?? absence.created_at,
-                      endDate: absence.end_date ?? absence.created_at,
-                    }}
-                    homecoming={{
-                      id: String(absence.home_id ?? ''),
-                      place,
-                    }}
-                    meal={{
-                      startDate: { morning: mealDepartureBreakfast, evening: mealDepartureDinner },
-                      endDate: { morning: mealReturnBreakfast, evening: mealReturnDinner },
-                    }}
-                  />
-                )
-              } else {
-                return (
-                  <MealHistoryCard
-                    key={absence.id}
-                    status={status}
-                    createdAt={absence.created_at}
-                    period={{
-                      startDate: absence.start_date ?? absence.created_at,
-                      endDate: absence.end_date ?? absence.created_at,
-                    }}
-                    meal={{
-                      startDate: { morning: mealDepartureBreakfast, evening: mealDepartureDinner },
-                      endDate: { morning: mealReturnBreakfast, evening: mealReturnDinner },
-                    }}
-                  />
-                )
-              }
-            })
-          )}
-        </div>
+    <div className="p-3 flex flex-col flex-grow overflow-y-auto">
+      <p className="text-center text-sm">申請履歴をクリックで詳細を見ることができます</p>
+      <div className="mt-3 flex flex-col gap-4 overflow-y-auto flex-grow">
+        {absences.length === 0 ? (
+          <div className="text-center text-(--sub-text)">申請履歴がありません</div>
+        ) : (
+          absences.map((absence) => {
+            const status = (absence.status ?? 'pending') as 'pending' | 'approved' | 'rejected' | 'canceled'
+            const mealDepartureBreakfast = absence.meal_departure_breakfast ?? false
+            const mealDepartureDinner = absence.meal_departure_dinner ?? false
+            const mealReturnBreakfast = absence.meal_return_breakfast ?? false
+            const mealReturnDinner = absence.meal_return_dinner ?? false
+            // home_idからplace取得
+            const place = absence.home_id ? (homeIdToName.get(absence.home_id) ?? '') : ''
+            if (absence.type === 'homecoming') {
+              return (
+                <HomeHistoryCard
+                  key={absence.id}
+                  status={status}
+                  createdAt={absence.created_at}
+                  period={{
+                    startDate: absence.start_date ?? absence.created_at,
+                    endDate: absence.end_date ?? absence.created_at,
+                  }}
+                  homecoming={{
+                    id: String(absence.home_id ?? ''),
+                    place,
+                  }}
+                  meal={{
+                    startDate: { morning: mealDepartureBreakfast, evening: mealDepartureDinner },
+                    endDate: { morning: mealReturnBreakfast, evening: mealReturnDinner },
+                  }}
+                />
+              )
+            } else {
+              return (
+                <MealHistoryCard
+                  key={absence.id}
+                  status={status}
+                  createdAt={absence.created_at}
+                  period={{
+                    startDate: absence.start_date ?? absence.created_at,
+                    endDate: absence.end_date ?? absence.created_at,
+                  }}
+                  meal={{
+                    startDate: { morning: mealDepartureBreakfast, evening: mealDepartureDinner },
+                    endDate: { morning: mealReturnBreakfast, evening: mealReturnDinner },
+                  }}
+                />
+              )
+            }
+          })
+        )}
       </div>
     </div>
   )

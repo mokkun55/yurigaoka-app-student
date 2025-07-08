@@ -14,7 +14,7 @@ export default function HomeLayout({ children }: { children: React.ReactNode }) 
           </div>
         }
       >
-        <div className="flex flex-col flex-grow overflow-y-auto no-scrollbar">{children}</div>
+        <div className="flex flex-col flex-grow overflow-y-auto">{children}</div>
       </Suspense>
       <Footer activeTab="home" />
     </>
