@@ -35,11 +35,7 @@ export default async function HistoryPage() {
       homes = homesData ?? []
     }
   } catch {
-    return (
-      <div>
-        <div className="p-3 text-center">データの取得に失敗しました</div>
-      </div>
-    )
+    return <div className="p-3 text-center">データの取得に失敗しました</div>
   }
   // home_id→nameのMap
   const homeIdToName = new Map(homes.map((h) => [h.id, h.name]))
