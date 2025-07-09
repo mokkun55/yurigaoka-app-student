@@ -1,9 +1,10 @@
 type Props = {
   type: 'pending' | 'approved' | 'rejected' | 'canceled'
   size: 'small' | 'big'
+  className?: string
 }
 
-export default function Badge({ type, size }: Props) {
+export default function Badge({ type, size, className }: Props) {
   let text = ''
   let color = ''
   let sizeClass = ''
@@ -36,5 +37,5 @@ export default function Badge({ type, size }: Props) {
       break
   }
 
-  return <div className={`${color} ${sizeClass} font-bold w-fit rounded-full`}>{text}</div>
+  return <div className={`${color} ${sizeClass} font-bold w-fit rounded-full ${className}`}>{text}</div>
 }
