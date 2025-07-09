@@ -3,6 +3,7 @@
 import { HomecomingFormValues } from './page'
 import { createClient } from '@/utils/supabase/server'
 import { TablesInsert } from '@/utils/supabase/database.types'
+import dayjs from 'dayjs'
 
 export async function submitHomecomingForm(data: HomecomingFormValues) {
   console.log('サーバーアクションで受け取ったデータ:', data)
@@ -35,13 +36,15 @@ export async function submitHomecomingForm(data: HomecomingFormValues) {
     throw new Error('帰省先が見つかりません')
   }
 
+  // start_date, end_date を日付＋時刻で結合（dayjsでフォーマット）
+  const startDateTime = dayjs(`${data.startDate}T${data.departureTime}`).format('YYYY-MM-DDTHH:mm')
+  const endDateTime = dayjs(`${data.endDate}T${data.returnTime}`).format('YYYY-MM-DDTHH:mm')
+
   // absencesテーブルにinsert
   const insertData: TablesInsert<'absences'> = {
     user_id: userData.user.id,
-    start_date: data.startDate,
-    end_date: data.endDate,
-    departure_time: data.departureTime,
-    return_time: data.returnTime,
+    start_date: startDateTime,
+    end_date: endDateTime,
     home_id: home.id,
     reason: data.reason,
     meal_departure_breakfast: data.mealDepartureBreakfast ?? null,
