@@ -3,7 +3,6 @@
 import { useForm, Controller, SubmitHandler } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
-import Header from '@/_components/ui/header'
 import InputLabel from '@/_components/ui/input-label'
 import { BaseSelect } from '@/_components/ui/input/base-select'
 import { Button } from '@/_components/ui/button'
@@ -322,7 +321,6 @@ export default function AbsenceHome() {
   if (isConfirm && formValues) {
     return (
       <div className="bg-white h-full">
-        <Header title="入力内容の確認" type="back" onClick={() => setIsConfirm(false)} />
         <div className="p-3 gap-4 flex flex-col">
           <div className="text-center bg-(--red) rounded-lg px-4 py-3 text-white font-bold text-lg">
             <p>本当に以下の日時・欠食・帰省先で大丈夫なのか</p>
