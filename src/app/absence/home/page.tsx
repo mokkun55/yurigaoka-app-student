@@ -247,9 +247,8 @@ export default function AbsenceHome() {
               {errors.specialReason && <div className="text-red-500 text-xs mt-1">{errors.specialReason.message}</div>}
             </InputLabel>
           )}
-          {/* TODO 朝 朝 とチェックつけると 自動で間の夕の欠食にするような処理 or バリデーション */}
           <InputLabel label={`帰省日（${formatDateWithWeekday(watch('startDate'))}）の食事`}>
-            <div className="flex gap-4">
+            <div className="flex gap-2">
               <CheckboxField
                 checked={mealStart === 'breakfast'}
                 onCheckedChange={(checked) => {
@@ -260,7 +259,7 @@ export default function AbsenceHome() {
                   }
                 }}
                 name="mealDepartureBreakfast"
-                label="朝食から欠食する"
+                label="朝食から"
               />
               <CheckboxField
                 checked={mealStart === 'dinner'}
@@ -272,12 +271,22 @@ export default function AbsenceHome() {
                   }
                 }}
                 name="mealDepartureDinner"
-                label="夕食から欠食する"
+                label="夕食から"
+              />
+              <CheckboxField
+                checked={mealStart === null}
+                onCheckedChange={(checked) => {
+                  if (checked) {
+                    setValue('meal_start', null)
+                  }
+                }}
+                name="mealDepartureNone"
+                label="欠食しない"
               />
             </div>
           </InputLabel>
           <InputLabel label={`帰寮日（${formatDateWithWeekday(watch('endDate'))}）の食事`}>
-            <div className="flex gap-4">
+            <div className="flex gap-2">
               <CheckboxField
                 checked={mealEnd === 'breakfast'}
                 onCheckedChange={(checked) => {
@@ -288,7 +297,7 @@ export default function AbsenceHome() {
                   }
                 }}
                 name="mealReturnBreakfast"
-                label="朝食まで欠食する"
+                label="朝食まで"
               />
               <CheckboxField
                 checked={mealEnd === 'dinner'}
@@ -300,7 +309,17 @@ export default function AbsenceHome() {
                   }
                 }}
                 name="mealReturnDinner"
-                label="夕食まで欠食する"
+                label="夕食まで"
+              />
+              <CheckboxField
+                checked={mealEnd === null}
+                onCheckedChange={(checked) => {
+                  if (checked) {
+                    setValue('meal_end', null)
+                  }
+                }}
+                name="mealReturnNone"
+                label="欠食しない"
               />
             </div>
           </InputLabel>

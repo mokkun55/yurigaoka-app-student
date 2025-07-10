@@ -26,6 +26,8 @@ const mealFormSchema = z
     start_meal: z.enum(['breakfast', 'dinner']).nullable(),
     end_meal: z.enum(['breakfast', 'dinner']).nullable(),
     reason: z.string().min(1, '理由を入力してください'),
+    oneDayBreakfast: z.boolean().optional(),
+    oneDayDinner: z.boolean().optional(),
   })
   .superRefine((data, ctx) => {
     // 開始日 <= 終了日
@@ -51,12 +53,23 @@ const mealFormSchema = z
     }
 
     // 食事選択
-    if (!data.start_meal && !data.end_meal) {
-      ctx.addIssue({
-        code: z.ZodIssueCode.custom,
-        path: ['meals'],
-        message: 'いずれかの食事を選択してください',
-      })
+    if (data.startDate === data.endDate) {
+      // 1日の場合、どちらもfalse/undefinedならエラー
+      if (!data.oneDayBreakfast && !data.oneDayDinner) {
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          path: ['oneDayBreakfast'],
+          message: 'いずれかの食事を選択してください',
+        })
+      }
+    } else {
+      if (!data.start_meal && !data.end_meal) {
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          path: ['start_meal'],
+          message: 'いずれかの食事を選択してください',
+        })
+      }
     }
   })
 
@@ -84,6 +97,8 @@ export default function Meal() {
       start_meal: null,
       end_meal: null,
       reason: '',
+      oneDayBreakfast: false,
+      oneDayDinner: false,
     },
   })
 
@@ -91,6 +106,8 @@ export default function Meal() {
   const endDate = watch('endDate')
   const startMeal = watch('start_meal')
   const endMeal = watch('end_meal')
+  const oneDayBreakfast = watch('oneDayBreakfast')
+  const oneDayDinner = watch('oneDayDinner')
   const isOneDay = startDate === endDate
 
   const onConfirm = (data: MealFormValues) => {
@@ -100,8 +117,20 @@ export default function Meal() {
 
   const onSubmit: SubmitHandler<MealFormValues> = async (data) => {
     setIsSubmitting(true)
+    // 送信データ整形
+    let submitData: MealFormValues = { ...data }
+    if (isOneDay) {
+      // 1日の場合はstart_meal, end_mealは使わずoneDayBreakfast/oneDayDinnerを送る
+      submitData = {
+        ...data,
+        start_meal: null,
+        end_meal: null,
+        oneDayBreakfast: data.oneDayBreakfast,
+        oneDayDinner: data.oneDayDinner,
+      }
+    }
     try {
-      await submitMealForm(data)
+      await submitMealForm(submitData)
       toast.success('提出しました')
       router.push('/')
     } catch (e) {
@@ -132,37 +161,25 @@ export default function Meal() {
           )}
           {isOneDay ? (
             <InputLabel label="欠食する食事">
-              <div className="flex gap-4">
+              <div className="flex gap-2">
                 <CheckboxField
-                  checked={startMeal === 'breakfast'}
-                  onCheckedChange={(checked) => {
-                    if (checked) {
-                      setValue('start_meal', 'breakfast')
-                    } else {
-                      setValue('start_meal', null)
-                    }
-                  }}
+                  checked={oneDayBreakfast}
+                  onCheckedChange={(checked) => setValue('oneDayBreakfast', checked)}
                   name="oneDayBreakfast"
-                  label="朝食を欠食する"
+                  label="朝食"
                 />
                 <CheckboxField
-                  checked={startMeal === 'dinner'}
-                  onCheckedChange={(checked) => {
-                    if (checked) {
-                      setValue('start_meal', 'dinner')
-                    } else {
-                      setValue('start_meal', null)
-                    }
-                  }}
+                  checked={oneDayDinner}
+                  onCheckedChange={(checked) => setValue('oneDayDinner', checked)}
                   name="oneDayDinner"
-                  label="夕食を欠食する"
+                  label="夕食"
                 />
               </div>
             </InputLabel>
           ) : (
             <>
               <InputLabel label={`開始日（${formatDateWithWeekday(startDate)}）の食事`}>
-                <div className="flex gap-4">
+                <div className="flex gap-2">
                   <CheckboxField
                     checked={startMeal === 'breakfast'}
                     onCheckedChange={(checked) => {
@@ -173,7 +190,7 @@ export default function Meal() {
                       }
                     }}
                     name="startBreakfast"
-                    label="朝食を欠食する"
+                    label="朝食から"
                   />
                   <CheckboxField
                     checked={startMeal === 'dinner'}
@@ -185,12 +202,22 @@ export default function Meal() {
                       }
                     }}
                     name="startDinner"
-                    label="夕食を欠食する"
+                    label="夕食から"
+                  />
+                  <CheckboxField
+                    checked={startMeal === null}
+                    onCheckedChange={(checked) => {
+                      if (checked) {
+                        setValue('start_meal', null)
+                      }
+                    }}
+                    name="startNone"
+                    label="欠食しない"
                   />
                 </div>
               </InputLabel>
               <InputLabel label={`終了日（${formatDateWithWeekday(endDate)}）の食事`}>
-                <div className="flex gap-4">
+                <div className="flex gap-2">
                   <CheckboxField
                     checked={endMeal === 'breakfast'}
                     onCheckedChange={(checked) => {
@@ -201,7 +228,7 @@ export default function Meal() {
                       }
                     }}
                     name="endBreakfast"
-                    label="朝食を欠食する"
+                    label="朝食まで"
                   />
                   <CheckboxField
                     checked={endMeal === 'dinner'}
@@ -213,12 +240,27 @@ export default function Meal() {
                       }
                     }}
                     name="endDinner"
-                    label="夕食を欠食する"
+                    label="夕食まで"
+                  />
+                  <CheckboxField
+                    checked={endMeal === null}
+                    onCheckedChange={(checked) => {
+                      if (checked) {
+                        setValue('end_meal', null)
+                      }
+                    }}
+                    name="endNone"
+                    label="欠食しない"
                   />
                 </div>
               </InputLabel>
             </>
           )}
+          {isOneDay
+            ? errors.oneDayBreakfast && (
+                <div className="text-red-500 text-xs mt-1">{errors.oneDayBreakfast.message}</div>
+              )
+            : errors.start_meal && <div className="text-red-500 text-xs mt-1">{errors.start_meal.message}</div>}
           <InputLabel label="欠食理由">
             <Controller
               name="reason"
@@ -257,11 +299,13 @@ export default function Meal() {
           {
             label: '欠食する食事',
             value:
-              formValues.start_meal === 'breakfast'
-                ? '朝食: 欠食 ／ 夕食: 喫食'
-                : formValues.start_meal === 'dinner'
-                  ? '朝食: 喫食 ／ 夕食: 欠食'
-                  : '朝食: 喫食 ／ 夕食: 喫食',
+              formValues.oneDayBreakfast && formValues.oneDayDinner
+                ? '朝食: 欠食 ／ 夕食: 欠食'
+                : formValues.oneDayBreakfast
+                  ? '朝食: 欠食 ／ 夕食: 喫食'
+                  : formValues.oneDayDinner
+                    ? '朝食: 喫食 ／ 夕食: 欠食'
+                    : '朝食: 喫食 ／ 夕食: 喫食',
           },
         ]
       : [
