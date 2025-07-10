@@ -76,6 +76,19 @@ const mealFormSchema = z
 
 export type MealFormValues = z.infer<typeof mealFormSchema>
 
+function getOneDayMealLabel(breakfast: boolean | undefined, dinner: boolean | undefined): string {
+  if (breakfast && dinner) return '朝食: 欠食 ／ 夕食: 欠食'
+  if (breakfast) return '朝食: 欠食 ／ 夕食: 喫食'
+  if (dinner) return '朝食: 喫食 ／ 夕食: 欠食'
+  return '朝食: 喫食 ／ 夕食: 喫食'
+}
+
+function getMealLabel(meal: 'breakfast' | 'dinner' | null | undefined): string {
+  if (meal === 'breakfast') return '朝食: 欠食 ／ 夕食: 喫食'
+  if (meal === 'dinner') return '朝食: 喫食 ／ 夕食: 欠食'
+  return '朝食: 喫食 ／ 夕食: 喫食'
+}
+
 export default function Meal() {
   const router = useRouter()
   const [formValues, setFormValues] = useState<MealFormValues | undefined>(undefined)
@@ -245,34 +258,17 @@ export default function Meal() {
       ? [
           {
             label: '欠食する食事',
-            value:
-              formValues.oneDayBreakfast && formValues.oneDayDinner
-                ? '朝食: 欠食 ／ 夕食: 欠食'
-                : formValues.oneDayBreakfast
-                  ? '朝食: 欠食 ／ 夕食: 喫食'
-                  : formValues.oneDayDinner
-                    ? '朝食: 喫食 ／ 夕食: 欠食'
-                    : '朝食: 喫食 ／ 夕食: 喫食',
+            value: getOneDayMealLabel(formValues.oneDayBreakfast, formValues.oneDayDinner),
           },
         ]
       : [
           {
             label: `開始日（${formatDateWithWeekday(formValues.startDate)}）の食事`,
-            value:
-              formValues.start_meal === 'breakfast'
-                ? '朝食: 欠食 ／ 夕食: 喫食'
-                : formValues.start_meal === 'dinner'
-                  ? '朝食: 喫食 ／ 夕食: 欠食'
-                  : '朝食: 喫食 ／ 夕食: 喫食',
+            value: getMealLabel(formValues.start_meal),
           },
           {
             label: `終了日（${formatDateWithWeekday(formValues.endDate)}）の食事`,
-            value:
-              formValues.end_meal === 'breakfast'
-                ? '朝食: 欠食 ／ 夕食: 喫食'
-                : formValues.end_meal === 'dinner'
-                  ? '朝食: 喫食 ／ 夕食: 欠食'
-                  : '朝食: 喫食 ／ 夕食: 喫食',
+            value: getMealLabel(formValues.end_meal),
           },
         ]
     return (
