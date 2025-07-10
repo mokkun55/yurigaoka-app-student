@@ -12,15 +12,13 @@ export type Database = {
         Row: {
           created_at: string
           end_date: string
+          end_meal: string | null
           home_id: number | null
           id: number
-          meal_departure_breakfast: boolean | null
-          meal_departure_dinner: boolean | null
-          meal_return_breakfast: boolean | null
-          meal_return_dinner: boolean | null
           reason: string
           special_reason: string | null
           start_date: string
+          start_meal: string | null
           status: string | null
           type: string
           updated_at: string
@@ -29,15 +27,13 @@ export type Database = {
         Insert: {
           created_at?: string
           end_date: string
+          end_meal?: string | null
           home_id?: number | null
           id?: number
-          meal_departure_breakfast?: boolean | null
-          meal_departure_dinner?: boolean | null
-          meal_return_breakfast?: boolean | null
-          meal_return_dinner?: boolean | null
           reason: string
           special_reason?: string | null
           start_date: string
+          start_meal?: string | null
           status?: string | null
           type: string
           updated_at?: string
@@ -46,15 +42,13 @@ export type Database = {
         Update: {
           created_at?: string
           end_date?: string
+          end_meal?: string | null
           home_id?: number | null
           id?: number
-          meal_departure_breakfast?: boolean | null
-          meal_departure_dinner?: boolean | null
-          meal_return_breakfast?: boolean | null
-          meal_return_dinner?: boolean | null
           reason?: string
           special_reason?: string | null
           start_date?: string
+          start_meal?: string | null
           status?: string | null
           type?: string
           updated_at?: string

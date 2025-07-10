@@ -17,10 +17,7 @@ import LoadingSpinner from '@/_components/ui/loading-spinner'
 import dayjs from 'dayjs'
 import { useRouter } from 'next/navigation'
 import { toast } from 'react-hot-toast'
-import ja from 'dayjs/locale/ja'
 import { formatDateWithWeekday } from '@/utils/dateUtils'
-
-dayjs.locale(ja)
 
 // TODO 平日は帰らせないなどの仕組みも追加する
 
@@ -53,10 +50,8 @@ const homecomingFormSchema = z
     returnTime: z.string().min(1, '帰寮予定時刻を入力してください'),
     destination: z.string().min(1, '帰省先を選択してください'),
     reason: z.string().min(1, '理由を入力してください'),
-    mealDepartureBreakfast: z.boolean().optional(),
-    mealDepartureDinner: z.boolean().optional(),
-    mealReturnBreakfast: z.boolean().optional(),
-    mealReturnDinner: z.boolean().optional(),
+    meal_start: z.enum(['breakfast', 'dinner']).nullable(),
+    meal_end: z.enum(['breakfast', 'dinner']).nullable(),
     specialReason: z.string().optional(),
   })
   .refine((data) => new Date(data.startDate) < new Date(data.endDate), {
@@ -115,6 +110,7 @@ export default function AbsenceHome() {
     handleSubmit,
     formState: { errors },
     watch,
+    setValue,
   } = useForm<HomecomingFormValues>({
     resolver: zodResolver(homecomingFormSchema),
     defaultValues: {
@@ -125,10 +121,8 @@ export default function AbsenceHome() {
       destination: '',
       specialReason: '',
       reason: '',
-      mealDepartureBreakfast: false,
-      mealDepartureDinner: false,
-      mealReturnBreakfast: false,
-      mealReturnDinner: false,
+      meal_start: null,
+      meal_end: null,
     },
   })
 
@@ -163,6 +157,10 @@ export default function AbsenceHome() {
   const departureTime = watch('departureTime')
   const returnTime = watch('returnTime')
   const showSpecialReason = isSpecialReasonRequired(departureTime, returnTime)
+
+  // チェックボックスの状態をmeal_start/meal_endと同期
+  const mealStart = watch('meal_start')
+  const mealEnd = watch('meal_end')
 
   if (!isConfirm) {
     return (
@@ -252,61 +250,57 @@ export default function AbsenceHome() {
           {/* TODO 朝 朝 とチェックつけると 自動で間の夕の欠食にするような処理 or バリデーション */}
           <InputLabel label={`帰省日（${formatDateWithWeekday(watch('startDate'))}）の食事`}>
             <div className="flex gap-4">
-              <Controller
+              <CheckboxField
+                checked={mealStart === 'breakfast'}
+                onCheckedChange={(checked) => {
+                  if (checked) {
+                    setValue('meal_start', 'breakfast')
+                  } else {
+                    setValue('meal_start', null)
+                  }
+                }}
                 name="mealDepartureBreakfast"
-                control={control}
-                render={({ field: { onChange, name, value, ...rest } }) => (
-                  <CheckboxField
-                    checked={value}
-                    onCheckedChange={onChange}
-                    name={name}
-                    label="朝食を欠食する"
-                    disabled={rest.disabled}
-                  />
-                )}
+                label="朝食から欠食する"
               />
-              <Controller
+              <CheckboxField
+                checked={mealStart === 'dinner'}
+                onCheckedChange={(checked) => {
+                  if (checked) {
+                    setValue('meal_start', 'dinner')
+                  } else {
+                    setValue('meal_start', null)
+                  }
+                }}
                 name="mealDepartureDinner"
-                control={control}
-                render={({ field: { onChange, name, value, ...rest } }) => (
-                  <CheckboxField
-                    checked={value}
-                    onCheckedChange={onChange}
-                    name={name}
-                    label="夕食を欠食する"
-                    disabled={rest.disabled}
-                  />
-                )}
+                label="夕食から欠食する"
               />
             </div>
           </InputLabel>
           <InputLabel label={`帰寮日（${formatDateWithWeekday(watch('endDate'))}）の食事`}>
             <div className="flex gap-4">
-              <Controller
+              <CheckboxField
+                checked={mealEnd === 'breakfast'}
+                onCheckedChange={(checked) => {
+                  if (checked) {
+                    setValue('meal_end', 'breakfast')
+                  } else {
+                    setValue('meal_end', null)
+                  }
+                }}
                 name="mealReturnBreakfast"
-                control={control}
-                render={({ field: { onChange, name, value, ...rest } }) => (
-                  <CheckboxField
-                    checked={value}
-                    onCheckedChange={onChange}
-                    name={name}
-                    label="朝食を欠食する"
-                    disabled={rest.disabled}
-                  />
-                )}
+                label="朝食まで欠食する"
               />
-              <Controller
+              <CheckboxField
+                checked={mealEnd === 'dinner'}
+                onCheckedChange={(checked) => {
+                  if (checked) {
+                    setValue('meal_end', 'dinner')
+                  } else {
+                    setValue('meal_end', null)
+                  }
+                }}
                 name="mealReturnDinner"
-                control={control}
-                render={({ field: { onChange, name, value, ...rest } }) => (
-                  <CheckboxField
-                    checked={value}
-                    onCheckedChange={onChange}
-                    name={name}
-                    label="夕食を欠食する"
-                    disabled={rest.disabled}
-                  />
-                )}
+                label="夕食まで欠食する"
               />
             </div>
           </InputLabel>
@@ -359,16 +353,23 @@ export default function AbsenceHome() {
             return null
           })()}
 
+          {/* TODO textLabelを使う */}
           <InputLabel label={`帰省日（${formatDateWithWeekday(formValues.startDate)}）の食事`}>
             <div>
-              朝食: {formValues.mealDepartureBreakfast ? '欠食' : '喫食'} ／ 夕食:{' '}
-              {formValues.mealDepartureDinner ? '欠食' : '喫食'}
+              {(() => {
+                if (formValues.meal_start === 'breakfast') return '朝食: 欠食 ／ 夕食: 欠食'
+                if (formValues.meal_start === 'dinner') return '朝食: 喫食 ／ 夕食: 欠食'
+                return '朝食: 喫食 ／ 夕食: 喫食'
+              })()}
             </div>
           </InputLabel>
           <InputLabel label={`帰寮日（${formatDateWithWeekday(formValues.endDate)}）の食事`}>
             <div>
-              朝食: {formValues.mealReturnBreakfast ? '欠食' : '喫食'} ／ 夕食:{' '}
-              {formValues.mealReturnDinner ? '欠食' : '喫食'}
+              {(() => {
+                if (formValues.meal_end === 'breakfast') return '朝食: 欠食 ／ 夕食: 喫食'
+                if (formValues.meal_end === 'dinner') return '朝食: 欠食 ／ 夕食: 欠食'
+                return '朝食: 喫食 ／ 夕食: 喫食'
+              })()}
             </div>
           </InputLabel>
 
