@@ -48,10 +48,17 @@ export default async function HistoryPage() {
         ) : (
           absences.map((absence) => {
             const status = (absence.status ?? 'pending') as 'pending' | 'approved' | 'rejected' | 'canceled'
-            const mealDepartureBreakfast = absence.meal_departure_breakfast ?? false
-            const mealDepartureDinner = absence.meal_departure_dinner ?? false
-            const mealReturnBreakfast = absence.meal_return_breakfast ?? false
-            const mealReturnDinner = absence.meal_return_dinner ?? false
+            // meal情報をstart_meal/end_mealから変換
+            const meal = {
+              startDate: {
+                morning: absence.start_meal === 'breakfast',
+                evening: absence.start_meal === 'dinner',
+              },
+              endDate: {
+                morning: absence.end_meal === 'breakfast',
+                evening: absence.end_meal === 'dinner',
+              },
+            }
             // home_idからplace取得
             const place = absence.home_id ? (homeIdToName.get(absence.home_id) ?? '') : ''
             if (absence.type === 'homecoming') {
@@ -68,10 +75,7 @@ export default async function HistoryPage() {
                     id: String(absence.home_id ?? ''),
                     place,
                   }}
-                  meal={{
-                    startDate: { morning: mealDepartureBreakfast, evening: mealDepartureDinner },
-                    endDate: { morning: mealReturnBreakfast, evening: mealReturnDinner },
-                  }}
+                  meal={meal}
                 />
               )
             } else {
@@ -84,10 +88,7 @@ export default async function HistoryPage() {
                     startDate: absence.start_date ?? absence.created_at,
                     endDate: absence.end_date ?? absence.created_at,
                   }}
-                  meal={{
-                    startDate: { morning: mealDepartureBreakfast, evening: mealDepartureDinner },
-                    endDate: { morning: mealReturnBreakfast, evening: mealReturnDinner },
-                  }}
+                  meal={meal}
                 />
               )
             }
