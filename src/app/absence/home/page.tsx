@@ -6,7 +6,6 @@ import { z } from 'zod'
 import InputLabel from '@/_components/ui/input-label'
 import { BaseSelect } from '@/_components/ui/input/base-select'
 import { Button } from '@/_components/ui/button'
-import { CheckboxField } from '@/_components/ui/checkbox/checkbox-field'
 import { useState, useEffect } from 'react'
 import { DateInput } from '@/_components/ui/input/date-input'
 import { TimeInput } from '@/_components/ui/input/time-input'
@@ -18,6 +17,7 @@ import dayjs from 'dayjs'
 import { useRouter } from 'next/navigation'
 import { toast } from 'react-hot-toast'
 import { formatDateWithWeekday } from '@/utils/dateUtils'
+import { MealCheckboxGroup } from '@/_components/ui/checkbox/checkbox-field/MealCheckboxGroup'
 
 // TODO 平日は帰らせないなどの仕組みも追加する
 
@@ -248,80 +248,26 @@ export default function AbsenceHome() {
             </InputLabel>
           )}
           <InputLabel label={`帰省日（${formatDateWithWeekday(watch('startDate'))}）の食事`}>
-            <div className="flex gap-2">
-              <CheckboxField
-                checked={mealStart === 'breakfast'}
-                onCheckedChange={(checked) => {
-                  if (checked) {
-                    setValue('meal_start', 'breakfast')
-                  } else {
-                    setValue('meal_start', null)
-                  }
-                }}
-                name="mealDepartureBreakfast"
-                label="朝食から"
-              />
-              <CheckboxField
-                checked={mealStart === 'dinner'}
-                onCheckedChange={(checked) => {
-                  if (checked) {
-                    setValue('meal_start', 'dinner')
-                  } else {
-                    setValue('meal_start', null)
-                  }
-                }}
-                name="mealDepartureDinner"
-                label="夕食から"
-              />
-              <CheckboxField
-                checked={mealStart === null}
-                onCheckedChange={(checked) => {
-                  if (checked) {
-                    setValue('meal_start', null)
-                  }
-                }}
-                name="mealDepartureNone"
-                label="欠食しない"
-              />
-            </div>
+            <MealCheckboxGroup
+              value={mealStart}
+              onChange={(val) => setValue('meal_start', val as 'breakfast' | 'dinner' | null)}
+              options={[
+                { value: 'breakfast', label: '朝食から', name: 'mealDepartureBreakfast' },
+                { value: 'dinner', label: '夕食から', name: 'mealDepartureDinner' },
+                { value: null, label: '欠食しない', name: 'mealDepartureNone' },
+              ]}
+            />
           </InputLabel>
           <InputLabel label={`帰寮日（${formatDateWithWeekday(watch('endDate'))}）の食事`}>
-            <div className="flex gap-2">
-              <CheckboxField
-                checked={mealEnd === 'breakfast'}
-                onCheckedChange={(checked) => {
-                  if (checked) {
-                    setValue('meal_end', 'breakfast')
-                  } else {
-                    setValue('meal_end', null)
-                  }
-                }}
-                name="mealReturnBreakfast"
-                label="朝食まで"
-              />
-              <CheckboxField
-                checked={mealEnd === 'dinner'}
-                onCheckedChange={(checked) => {
-                  if (checked) {
-                    setValue('meal_end', 'dinner')
-                  } else {
-                    setValue('meal_end', null)
-                  }
-                }}
-                name="mealReturnDinner"
-                label="夕食まで"
-              />
-              <CheckboxField
-                checked={mealEnd === null}
-                onCheckedChange={(checked) => {
-                  if (checked) {
-                    setValue('meal_end', null)
-                  }
-                }}
-                name="mealReturnNone"
-                label="欠食しない"
-              />
-            </div>
+            <MealCheckboxGroup
+              value={mealEnd}
+              onChange={(val) => setValue('meal_end', val as 'breakfast' | 'dinner' | null)}
+              options={[
+                { value: 'breakfast', label: '朝食まで', name: 'mealReturnBreakfast' },
+                { value: 'dinner', label: '夕食まで', name: 'mealReturnDinner' },
+                { value: null, label: '欠食しない', name: 'mealReturnNone' },
+              ]}
+            />
           </InputLabel>
           <p className="text-sm text-(--sub-text)">※期間中の欠食は自動で欠食されます</p>
           <Button className="w-full mt-4" type="submit">

@@ -16,6 +16,7 @@ import weekday from 'dayjs/plugin/weekday'
 import ja from 'dayjs/locale/ja'
 import ConfirmAbsenceDialog from '../_components/ConfirmAbsenceDialog'
 import { formatDateWithWeekday } from '@/utils/dateUtils'
+import { MealCheckboxGroup } from '@/_components/ui/checkbox/checkbox-field/MealCheckboxGroup'
 dayjs.extend(weekday)
 dayjs.locale(ja)
 
@@ -179,80 +180,26 @@ export default function Meal() {
           ) : (
             <>
               <InputLabel label={`開始日（${formatDateWithWeekday(startDate)}）の食事`}>
-                <div className="flex gap-2">
-                  <CheckboxField
-                    checked={startMeal === 'breakfast'}
-                    onCheckedChange={(checked) => {
-                      if (checked) {
-                        setValue('start_meal', 'breakfast')
-                      } else {
-                        setValue('start_meal', null)
-                      }
-                    }}
-                    name="startBreakfast"
-                    label="朝食から"
-                  />
-                  <CheckboxField
-                    checked={startMeal === 'dinner'}
-                    onCheckedChange={(checked) => {
-                      if (checked) {
-                        setValue('start_meal', 'dinner')
-                      } else {
-                        setValue('start_meal', null)
-                      }
-                    }}
-                    name="startDinner"
-                    label="夕食から"
-                  />
-                  <CheckboxField
-                    checked={startMeal === null}
-                    onCheckedChange={(checked) => {
-                      if (checked) {
-                        setValue('start_meal', null)
-                      }
-                    }}
-                    name="startNone"
-                    label="欠食しない"
-                  />
-                </div>
+                <MealCheckboxGroup
+                  value={startMeal}
+                  onChange={(val) => setValue('start_meal', val as 'breakfast' | 'dinner' | null)}
+                  options={[
+                    { value: 'breakfast', label: '朝食から', name: 'startBreakfast' },
+                    { value: 'dinner', label: '夕食から', name: 'startDinner' },
+                    { value: null, label: '欠食しない', name: 'startNone' },
+                  ]}
+                />
               </InputLabel>
               <InputLabel label={`終了日（${formatDateWithWeekday(endDate)}）の食事`}>
-                <div className="flex gap-2">
-                  <CheckboxField
-                    checked={endMeal === 'breakfast'}
-                    onCheckedChange={(checked) => {
-                      if (checked) {
-                        setValue('end_meal', 'breakfast')
-                      } else {
-                        setValue('end_meal', null)
-                      }
-                    }}
-                    name="endBreakfast"
-                    label="朝食まで"
-                  />
-                  <CheckboxField
-                    checked={endMeal === 'dinner'}
-                    onCheckedChange={(checked) => {
-                      if (checked) {
-                        setValue('end_meal', 'dinner')
-                      } else {
-                        setValue('end_meal', null)
-                      }
-                    }}
-                    name="endDinner"
-                    label="夕食まで"
-                  />
-                  <CheckboxField
-                    checked={endMeal === null}
-                    onCheckedChange={(checked) => {
-                      if (checked) {
-                        setValue('end_meal', null)
-                      }
-                    }}
-                    name="endNone"
-                    label="欠食しない"
-                  />
-                </div>
+                <MealCheckboxGroup
+                  value={endMeal}
+                  onChange={(val) => setValue('end_meal', val as 'breakfast' | 'dinner' | null)}
+                  options={[
+                    { value: 'breakfast', label: '朝食まで', name: 'endBreakfast' },
+                    { value: 'dinner', label: '夕食まで', name: 'endDinner' },
+                    { value: null, label: '欠食しない', name: 'endNone' },
+                  ]}
+                />
               </InputLabel>
             </>
           )}
