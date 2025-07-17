@@ -57,7 +57,7 @@ export default async function HistoryDetailPage({ params }: Props) {
         </div>
       </div>
 
-      {/* 規制情報 */}
+      {/* 帰省情報 */}
       {absence.type === 'homecoming' && (
         <div className="flex flex-col gap-4 bg-white rounded-md p-4 border border-(--border-gray)">
           <div className="flex items-center gap-1">
@@ -99,14 +99,22 @@ export default async function HistoryDetailPage({ params }: Props) {
         </div>
 
         <div className="flex flex-col gap-2">
-          <div>
-            <TextLabel label="欠食期間" />
-            <p className="text-(--main-text)">
-              {dayjs(absence.start_date).format('YYYY年MM月DD日')}
-              {absence.start_meal === 'breakfast' ? '朝食' : '夕食'}
-              <span className="mx-1">~</span>
-              {dayjs(absence.end_date).format('YYYY年MM月DD日')} {absence.end_meal === 'breakfast' ? '朝食' : '夕食'}
-            </p>
+          <div className="flex flex-col gap-2">
+            <div>
+              <TextLabel label="欠食期間" />
+              <p className="text-(--main-text)">
+                {dayjs(absence.start_date).format('YYYY年MM月DD日')}
+                {absence.start_meal === 'breakfast' ? '朝食' : '夕食'}
+                <span className="mx-1">~</span>
+                {dayjs(absence.end_date).format('YYYY年MM月DD日')} {absence.end_meal === 'breakfast' ? '朝食' : '夕食'}
+              </p>
+            </div>
+            {absence.type !== 'homecoming' && (
+              <div>
+                <TextLabel label="欠食理由" />
+                <p className="text-(--main-text)">{absence.reason}</p>
+              </div>
+            )}
           </div>
         </div>
       </div>

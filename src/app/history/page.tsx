@@ -50,6 +50,7 @@ export default async function HistoryPage() {
             // home_idからplace取得
             const place = absence.home_id ? (homeIdToName.get(absence.home_id) ?? '') : ''
             if (absence.type === 'homecoming') {
+              // 帰省届 & 欠食届
               return (
                 <Link href={`/history/${absence.id}`} key={absence.id} className="block">
                   <HomeHistoryCard
@@ -69,6 +70,7 @@ export default async function HistoryPage() {
                 </Link>
               )
             } else {
+              // 欠食届
               return (
                 <Link href={`/history/${absence.id}`} key={absence.id} className="block">
                   <MealHistoryCard
