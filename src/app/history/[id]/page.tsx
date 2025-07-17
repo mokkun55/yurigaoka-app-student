@@ -18,7 +18,8 @@ type Props = {
 }
 
 export default async function HistoryDetailPage({ params }: Props) {
-  const { id } = params
+  const resolvedParams = await params
+  const { id } = resolvedParams
   let absence: Absence | null = null
   try {
     absence = await fetchAbsenceById(Number(id))
@@ -102,8 +103,9 @@ export default async function HistoryDetailPage({ params }: Props) {
             <TextLabel label="欠食期間" />
             <p className="text-(--main-text)">
               {dayjs(absence.start_date).format('YYYY年MM月DD日')}
+              {absence.start_meal === 'breakfast' ? '朝食' : '夕食'}
               <span className="mx-1">~</span>
-              {dayjs(absence.end_date).format('YYYY年MM月DD日')}
+              {dayjs(absence.end_date).format('YYYY年MM月DD日')} {absence.end_meal === 'breakfast' ? '朝食' : '夕食'}
             </p>
           </div>
         </div>
