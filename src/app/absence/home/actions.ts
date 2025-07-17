@@ -47,10 +47,8 @@ export async function submitHomecomingForm(data: HomecomingFormValues) {
     end_date: endDateTime,
     home_id: home.id,
     reason: data.reason,
-    meal_departure_breakfast: data.mealDepartureBreakfast ?? null,
-    meal_departure_dinner: data.mealDepartureDinner ?? null,
-    meal_return_breakfast: data.mealReturnBreakfast ?? null,
-    meal_return_dinner: data.mealReturnDinner ?? null,
+    start_meal: data.meal_start ?? null,
+    end_meal: data.meal_end ?? null,
     special_reason: data.specialReason ?? null,
     type: 'homecoming',
   }
