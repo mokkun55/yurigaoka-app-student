@@ -2,20 +2,8 @@ import HomeHistoryCard from './_components/history-card/HomeHistoryCard'
 import MealHistoryCard from './_components/history-card/MealHistoryCard'
 import { createClient } from '@/utils/supabase/server'
 import type { Database } from '@/utils/supabase/database.types'
-
-// ログイン中のユーザーの申請一覧を取得する
-const fetchAbsences = async () => {
-  const supabase = await createClient()
-  const { data: user } = await supabase.auth.getUser()
-  if (!user.user) {
-    throw new Error('ユーザーが存在しません')
-  }
-  const { data, error } = await supabase.from('absences').select('*').eq('user_id', user.user.id)
-  if (error) {
-    throw error
-  }
-  return data
-}
+import { fetchAbsences } from './hooks/use-fetch-absences'
+import Link from 'next/link'
 
 type Absence = Database['public']['Tables']['absences']['Row']
 
@@ -62,34 +50,38 @@ export default async function HistoryPage() {
             // home_idからplace取得
             const place = absence.home_id ? (homeIdToName.get(absence.home_id) ?? '') : ''
             if (absence.type === 'homecoming') {
+              // 帰省届 & 欠食届
               return (
-                <HomeHistoryCard
-                  key={absence.id}
-                  status={status}
-                  createdAt={absence.created_at}
-                  period={{
-                    startDate: absence.start_date ?? absence.created_at,
-                    endDate: absence.end_date ?? absence.created_at,
-                  }}
-                  homecoming={{
-                    id: String(absence.home_id ?? ''),
-                    place,
-                  }}
-                  meal={meal}
-                />
+                <Link href={`/history/${absence.id}`} key={absence.id} className="block">
+                  <HomeHistoryCard
+                    status={status}
+                    createdAt={absence.created_at}
+                    period={{
+                      startDate: absence.start_date ?? absence.created_at,
+                      endDate: absence.end_date ?? absence.created_at,
+                    }}
+                    homecoming={{
+                      id: String(absence.home_id ?? ''),
+                      place,
+                    }}
+                    meal={meal}
+                  />
+                </Link>
               )
             } else {
+              // 欠食届
               return (
-                <MealHistoryCard
-                  key={absence.id}
-                  status={status}
-                  createdAt={absence.created_at}
-                  period={{
-                    startDate: absence.start_date ?? absence.created_at,
-                    endDate: absence.end_date ?? absence.created_at,
-                  }}
-                  meal={meal}
-                />
+                <Link href={`/history/${absence.id}`} key={absence.id} className="block">
+                  <MealHistoryCard
+                    status={status}
+                    createdAt={absence.created_at}
+                    period={{
+                      startDate: absence.start_date ?? absence.created_at,
+                      endDate: absence.end_date ?? absence.created_at,
+                    }}
+                    meal={meal}
+                  />
+                </Link>
               )
             }
           })
