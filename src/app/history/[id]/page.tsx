@@ -12,9 +12,9 @@ type Absence = Database['public']['Tables']['absences']['Row']
 type Home = Database['public']['Tables']['homes']['Row']
 
 type Props = {
-  params: {
+  params: Promise<{
     id: string
-  }
+  }>
 }
 
 export default async function HistoryDetailPage({ params }: Props) {
