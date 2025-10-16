@@ -1,3 +1,5 @@
+import { cn } from '@/lib/utils'
+
 type Props = {
   type: 'pending' | 'approved' | 'rejected' | 'canceled'
   size: 'small' | 'big'
@@ -37,5 +39,5 @@ export default function Badge({ type, size, className }: Props) {
       break
   }
 
-  return <div className={`${color} ${sizeClass} font-bold w-fit rounded-full ${className}`}>{text}</div>
+  return <div className={cn(color, sizeClass, 'font-bold w-fit rounded-full', className)}>{text}</div>
 }

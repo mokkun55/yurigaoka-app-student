@@ -54,7 +54,6 @@ export default async function HistoryPage() {
               return (
                 <Link href={`/history/${absence.id}`} key={absence.id} className="block">
                   <HomeHistoryCard
-                    key={absence.id}
                     status={status}
                     createdAt={absence.created_at}
                     period={{
@@ -74,7 +73,6 @@ export default async function HistoryPage() {
               return (
                 <Link href={`/history/${absence.id}`} key={absence.id} className="block">
                   <MealHistoryCard
-                    key={absence.id}
                     status={status}
                     createdAt={absence.created_at}
                     period={{
